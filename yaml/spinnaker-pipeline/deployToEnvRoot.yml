@@ -1,0 +1,368 @@
+schema: '1'
+
+id: deployToEnvRoot
+
+metadata:
+  name: Deploy to Target Env Root Template
+  description: |-
+    Defines a deploy pipeline that pushes to the target account, gated by a 
+    manual judgement. This template should not be used directly.
+  owner: example@example.com
+
+protect: false
+
+configuration:
+  concurrentExecutions:
+    parallel: true
+    limitConcurrent: true
+  triggers: []
+  parameters: []
+  notifications:
+  - address: example@example.com
+    level: pipeline
+    name: email0
+    type: email
+    when:
+    - pipeline.failed
+
+pipeline:
+  application: orca
+  name: Simple Configuraiton Inheritance Example
+  template:
+    source: file://template.yml
+  variables:
+    myCustomFirstStageName: "Find Image"
+    waitTime: 20
+    childWaitTime: 15
+
+variables:
+- name: targetCredentials
+  description: The account credentials where the application will be deployed to
+  defaultValue: mgmt
+- name: clusters
+  description: A list of cluster-specific configuration options
+  type: object
+  example: |
+    - name: orca-test
+      region: us-west-2
+      availabilityZones: [] # Omitted from example
+      capacity: 1
+      keyPair: example-keypair
+      loadBalancers:
+      - orca-test
+      securityGroups: [] # Omitted from example
+      strategy: highlander
+      instanceType: m3.xlarge
+- name: deployToFailover
+  description: Whether or not to deploy into the failover region.
+  defaultValue: false
+
+stages:
+# IMPORTANT: Templates extending this root template must inject a stage before
+# manual judgement to ensure the images are found (either from tags, or cluster)
+- id: manualJudgment
+  type: manualJudgment
+  name: Approve {{ targetCredentials }}
+  config:
+    failPipeline: true
+    instructions: Do you approve of this pipeline, which will push {{ application }} to {{ targetCredentials }}?
+    judgmentInputs: []
+    notifications:
+    - address: spinnaker
+      level: stage
+      type: slack
+      when:
+      - manualJudgment
+    propagateAuthenticationContext: true
+    sendNotifications: true
+- id: deploy
+  type: deploy
+  dependsOn:
+  - manualJudgment
+  name: Deploy
+  config:
+    clusters: |
+      {% for c in clusters %}
+      - {% module deployCluster 
+        account=targetCredentials,
+        cluster=c.name,
+        region=c.region,
+        availabilityZones=c.availabilityZones,
+        capacity=c.capacity,
+        keyPair=c.keyPair,
+        loadBalancers=c.loadBalancers,
+        securityGroups=c.securityGroups,
+        strategy=c.strategy,
+        instanceType=c.instanceType %}
+      {% endfor %}
+- id: bake1
+  type: bake
+  name: "{{ myCustomFirstStageName }}"
+  config:
+    baseLabel: release
+    baseOs: trusty
+    cloudProviderType: aws
+    enhancedNetworking: false
+    extendedAttributes: {}
+    overrideTimeout: true
+    package: orca
+    regions:
+    - us-east-1
+    - us-west-1
+    - us-west-2
+    - eu-west-1
+    sendNotifications: true
+    showAdvancedOptions: true
+    stageTimeoutMs: 900000
+    storeType: ebs
+    user: example@example.com
+    vmType: hvm
+- id: deploy2
+  type: deploy
+  dependsOn:
+  - bake1
+  name: Deploy
+  config:
+    clusters:
+    - account: test
+      application: orca
+      availabilityZones:
+        us-west-1:
+        - us-west-1a
+        - us-west-1c
+      capacity:
+        desired: 1
+        max: 1
+        min: 1
+      cloudProvider: aws
+      cooldown: 10
+      copySourceCustomBlockDeviceMappings: true
+      ebsOptimized: false
+      enabledMetrics: []
+      freeFormDetails: demo
+      healthCheckGracePeriod: 600
+      healthCheckType: EC2
+      iamRole: myIAMRole
+      instanceMonitoring: false
+      instanceType: m3.large
+      interestingHealthProviderNames:
+      - Amazon
+      keyPair: keypair
+      loadBalancers:
+      - orca-demo-frontend
+      maxRemainingAsgs: 2
+      preferSourceCapacity: true
+      provider: aws
+      scaleDown: true
+      securityGroups: []
+      stack: test
+      strategy: redblack
+      subnetType: mySubnet
+      suspendedProcesses: []
+      tags: {}
+      targetGroups: []
+      targetHealthyDeployPercentage: 100
+      terminationPolicies:
+      - Default
+      useAmiBlockDeviceMappings: false
+      useSourceCapacity: true
+    - account: test
+      application: orca
+      availabilityZones:
+        us-east-1:
+        - us-east-1c
+        - us-east-1d
+        - us-east-1e
+      capacity:
+        desired: 0
+        max: 0
+        min: 0
+      cloudProvider: aws
+      cooldown: 10
+      ebsOptimized: false
+      freeFormDetails: demo
+      healthCheckGracePeriod: 600
+      healthCheckType: EC2
+      iamRole: myIAMRole
+      instanceMonitoring: false
+      instanceType: m3.large
+      interestingHealthProviderNames:
+      - Amazon
+      keyPair: keypair
+      provider: aws
+      securityGroups: []
+      stack: test
+      strategy: highlander
+      subnetType: mySubnet
+      suspendedProcesses: []
+      tags: {}
+      targetHealthyDeployPercentage: 100
+      terminationPolicies:
+      - Default
+      useSourceCapacity: false
+- id: wait1
+  type: wait
+  config:
+    waitTime: "{{ waitTime }}"
+- id: waitChild1
+  type: wait
+  dependsOn:
+  - wait1
+  config:
+    waitTime: "{{ waitTime }}"
+- id: waitChild2
+  type: wait
+  dependsOn:
+  - wait1
+  config:
+    waitTime: "{{ childWaitTime }}"
+- id: finalWait
+  type: wait
+  dependsOn:
+  - waitChild1
+  - waitChild2
+  config:
+    waitTime: 10
+- id: inheritanceControlDeploy
+  type: deploy
+  inheritanceControl:
+    merge:
+    - path: $.clusters[?(@.provider==aws)].loadBalancers
+      value:
+        instancePort: 9000
+        instanceProtocol: http
+        lbPort: 9000
+        lbProtocol: http
+    replace:
+    - path: $.clusters[?(@.provider==aws)].loadBalancers[?(@.instancePort==80)]
+      value:
+        instancePort: 8080
+        instanceProtocol: http
+        lbPort: 80
+        lbProtocol: http
+    remove:
+    - path: $.clusters[?(@.provider==aws)].loadBalancers[?(@.instancePort==8443)]
+- id: manualJudgmentBefore
+  type: manualJudgment
+  inject:
+    before: 
+    - deploy
+  config:
+    propagateAuthentication: true
+    notifications:
+    - type: slack
+      channel: "#spinnaker"
+      when:
+      - awaiting
+- id: manualJudgmentAfter
+  type: manualJudgment
+  inject:
+    after: 
+    - deploy
+  config:
+    propagateAuthentication: true
+    notifications:
+    - type: slack
+      channel: "#spinnaker"
+      when:
+      - awaiting
+- id: manualJudgmentFirst
+  type: manualJudgment
+  inject:
+    first: 
+    - deploy
+  config:
+    propagateAuthentication: true
+    notifications:
+    - type: slack
+      channel: "#spinnaker"
+      when:
+      - awaiting
+- id: manualJudgmentLast
+  type: manualJudgment
+  inject:
+    last: 
+    - deploy
+  config:
+    propagateAuthentication: true
+    notifications:
+    - type: slack
+      channel: "#spinnaker"
+      when:
+      - awaiting
+
+modules:
+- id: deployCluster
+  variables:
+  - name: account
+  - name: cluster
+  - name: region
+  - name: availabilityZones
+    type: list
+  - name: capacity
+  - name: keyPair
+  - name: loadBalancers
+    type: list
+  - name: securityGroups
+    type: list
+  - name: strategy
+  - name: instanceType
+  definition:
+    account: "{{ account }}"
+    application: "{{ application }}"
+    availabilityZones: |
+      {{ region }}:
+      {% for az in availabilityZones %}
+      - {{ az }}
+      {% endfor %}
+    capacity:
+      desired: "{{ capacity }}"
+      max: "{{ capacity }}"
+      min: "{{ capacity }}"
+    cloudProvider: aws
+    cooldown: 300
+    ebsOptimized: false
+    freeFormDetails: "{{ cluster|frigga('detail') }}"
+    healthCheckGracePeriod: 0
+    healthCheckType: EC2
+    iamRole: "{{ application }}ExampleRole" # Omitted from example
+    instanceMonitoring: true
+    instanceType: "{{ instanceType }}"
+    keyPair: "{{ keyPair }}"
+    loadBalancers: |
+      {% for lb in loadBalancers %}
+      - {{ lb }}
+      {% endfor %}
+    maxRemainingAsgs: "{% if application == 'orca' %}3{% else %}1{% endif %}"
+    provider: aws
+    securityGroups: |
+      {% for sg in securityGroups %}
+      - {{ sg }}
+      {% endfor %}
+    stack: "{{ cluster|frigga('stack') }}"
+    strategy: "{{ strategy }}"
+    subnetType: example # Omitted from example
+    suspendedProcesses: []
+    tags: {}
+    targetHealthyDeployPercentage: 100
+    terminationPolicies:
+    - Default
+    useSourceCapacity: false
+
+partials:
+- id: buildBrowser
+  usage: Builds the pipeline artifact targeting the a specified browser.
+  variables:
+  - name: target
+    description: The target browser to build for
+  stages:
+  - id: buildTarget
+    type: jenkins
+    name: Build {{ target }}
+    config:
+      # etc...
+  - id: publishTarget
+    type: jenkins
+    name: Publish {{ target }}
+    dependsOn:
+    - buildTarget
