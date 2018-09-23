@@ -1,32 +1,32 @@
 {
-  "codecov": {
-    "notify": {
-      "require_ci_to_pass": true
+    "codecov": {
+        "notify": {
+            "require_ci_to_pass": true
+        }
+    },
+    "comment": {
+        "behavior": "default",
+        "layout": "header, diff",
+        "require_changes": false
+    },
+    "coverage": {
+        "precision": 2,
+        "range": "70...100",
+        "round": "down",
+        "status": {
+            "changes": false,
+            "patch": true,
+            "project": true
+        }
+    },
+    "parsers": {
+        "gcov": {
+            "branch_detection": {
+                "conditional": true,
+                "loop": true,
+                "macro": false,
+                "method": false
+            }
+        }
     }
-  },
-  "comment": {
-    "behavior": "default",
-    "layout": "header, diff",
-    "require_changes": false
-  },
-  "coverage": {
-    "precision": 2,
-    "range": "70...100",
-    "round": "down",
-    "status": {
-      "changes": false,
-      "patch": true,
-      "project": true
-    }
-  },
-  "parsers": {
-    "gcov": {
-      "branch_detection": {
-        "conditional": true,
-        "loop": true,
-        "macro": false,
-        "method": false
-      }
-    }
-  }
 }
