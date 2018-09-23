@@ -2,3 +2,4 @@
 # https://github.com/github/linguist#using-gitattributes
 
 *.jsonschema linguist-language=jsonc
+json/**/*.json linguist-language=jsonc
