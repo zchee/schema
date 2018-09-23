@@ -1,0 +1,4 @@
+# jsonschema project gitattributes file
+# https://github.com/github/linguist#using-gitattributes
+
+*.jsonschema linguist-language=jsonc
