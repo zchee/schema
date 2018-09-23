@@ -1,1766 +1,552 @@
 {
   "title": "Spinnaker Pipeline Templates",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "definitions": {},
-  "type": "object",
-  "required": [
-    "schema"
-  ],
-  "properties": {
-    "schema": {
-      "type": "string"
-    },
-    "id": {
-      "type": "string"
-    },
-    "source": {
-      "type": "string"
-    },
-    "protect": {
-      "type": "boolean"
-    },
-    "metadata": {
+  "$ref": "#/definitions/SpinnakerPipeline",
+  "definitions": {
+    "SpinnakerPipeline": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
+        "configuration": {
+          "$ref": "#/definitions/Configuration"
+        },
+        "id": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "protect": {
+          "type": "boolean"
+        },
+        "schema": {
+          "type": "string",
+          "format": "integer"
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stage"
+          }
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Variable"
+          }
+        }
+      },
+      "required": [
+        "schema"
+      ]
+    },
+    "Configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "concurrentExecutions": {
+          "$ref": "#/definitions/ConcurrentExecutions"
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Trigger"
+          }
+        }
+      },
+      "required": [
+        "concurrentExecutions",
+        "triggers"
+      ],
+      "title": "Configuration"
+    },
+    "ConcurrentExecutions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "limitConcurrent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "limitConcurrent"
+      ],
+      "title": "ConcurrentExecutions"
+    },
+    "Trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
         "name": {
           "type": "string"
         },
+        "organization": {
+          "type": "string"
+        },
+        "registry": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "account",
+        "enabled",
+        "name",
+        "organization",
+        "registry",
+        "repository",
+        "type"
+      ],
+      "title": "Trigger"
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
         "description": {
+          "type": "string"
+        },
+        "name": {
           "type": "string"
         },
         "owner": {
           "type": "string"
         },
         "scopes": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
-      }
+      },
+      "required": [
+        "description",
+        "name",
+        "owner",
+        "scopes"
+      ],
+      "title": "Metadata"
     },
-    "pipeline": {
+    "Stage": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
+        "config": {
+          "$ref": "#/definitions/Config"
+        },
+        "id": {
+          "type": "string"
+        },
+        "inheritanceControl": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "inject": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "config",
+        "id",
+        "inheritanceControl",
+        "inject",
+        "name",
+        "type"
+      ],
+      "title": "Stage"
+    },
+    "Config": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cluster"
+          }
+        }
+      },
+      "required": [
+        "clusters"
+      ],
+      "title": "Config"
+    },
+    "Cluster": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "type": "string"
+        },
         "application": {
+          "type": "string"
+        },
+        "cloudProvider": {
+          "type": "string"
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Container"
+          }
+        },
+        "dnsPolicy": {
+          "type": "string"
+        },
+        "events": {
+          "type": "array",
+          "items": {}
+        },
+        "initContainers": {
+          "type": "array",
+          "items": {}
+        },
+        "interestingHealthProviderNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loadBalancers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "nodeSelector": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "podAnnotations": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "replicaSetAnnotations": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "securityGroups": {
+          "type": "array",
+          "items": {}
+        },
+        "stack": {
+          "type": "string"
+        },
+        "strategy": {
+          "type": "string"
+        },
+        "targetSize": {
+          "type": "integer"
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer"
+        },
+        "tolerations": {
+          "type": "array",
+          "items": {}
+        },
+        "volumeSources": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "account",
+        "application",
+        "cloudProvider",
+        "containers",
+        "dnsPolicy",
+        "events",
+        "initContainers",
+        "interestingHealthProviderNames",
+        "loadBalancers",
+        "namespace",
+        "nodeSelector",
+        "podAnnotations",
+        "provider",
+        "region",
+        "replicaSetAnnotations",
+        "securityGroups",
+        "stack",
+        "strategy",
+        "targetSize",
+        "terminationGracePeriodSeconds",
+        "tolerations",
+        "volumeSources"
+      ],
+      "title": "Cluster"
+    },
+    "Container": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "type": "array",
+          "items": {}
+        },
+        "command": {
+          "type": "array",
+          "items": {}
+        },
+        "envFrom": {
+          "type": "array",
+          "items": {}
+        },
+        "envVars": {
+          "type": "array",
+          "items": {}
+        },
+        "imageDescription": {
+          "$ref": "#/definitions/ImageDescription"
+        },
+        "imagePullPolicy": {
+          "type": "string"
+        },
+        "limits": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Port"
+          }
+        },
+        "readinessProbe": {
+          "$ref": "#/definitions/ReadinessProbe"
+        },
+        "requests": {
+          "$ref": "#/definitions/InheritanceControl"
+        },
+        "volumeMounts": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "args",
+        "command",
+        "envFrom",
+        "envVars",
+        "imageDescription",
+        "imagePullPolicy",
+        "limits",
+        "name",
+        "ports",
+        "readinessProbe",
+        "requests",
+        "volumeMounts"
+      ],
+      "title": "Container"
+    },
+    "ImageDescription": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "imageId": {
+          "type": "string"
+        },
+        "registry": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "account",
+        "imageId",
+        "registry",
+        "repository",
+        "tag"
+      ],
+      "title": "ImageDescription"
+    },
+    "InheritanceControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "InheritanceControl"
+    },
+    "Port": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "containerPort": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "containerPort",
+        "name",
+        "protocol"
+      ],
+      "title": "Port"
+    },
+    "ReadinessProbe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "failureThreshold": {
+          "type": "integer"
+        },
+        "handler": {
+          "$ref": "#/definitions/Handler"
+        },
+        "initialDelaySeconds": {
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "type": "integer"
+        },
+        "successThreshold": {
+          "type": "integer"
+        },
+        "timeoutSeconds": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "failureThreshold",
+        "handler",
+        "initialDelaySeconds",
+        "periodSeconds",
+        "successThreshold",
+        "timeoutSeconds"
+      ],
+      "title": "ReadinessProbe"
+    },
+    "Handler": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "execAction": {
+          "$ref": "#/definitions/ExecAction"
+        },
+        "httpGetAction": {
+          "$ref": "#/definitions/HTTPGetAction"
+        },
+        "tcpSocketAction": {
+          "$ref": "#/definitions/TCPSocketAction"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "execAction",
+        "httpGetAction",
+        "tcpSocketAction",
+        "type"
+      ],
+      "title": "Handler"
+    },
+    "ExecAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commands": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "required": [
+        "commands"
+      ],
+      "title": "ExecAction"
+    },
+    "HTTPGetAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "uriScheme": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "port",
+        "uriScheme"
+      ],
+      "title": "HTTPGetAction"
+    },
+    "TCPSocketAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "port": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "port"
+      ],
+      "title": "TCPSocketAction"
+    },
+    "Variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultValue": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "name": {
           "type": "string"
         },
-        "template": {
-          "type": "object",
-          "properties": {
-            "source": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "source"
-          ]
-        },
-        "variables": {
-          "type": "object",
-          "properties": {
-            "childWaitTime": {
-              "type": "integer"
-            },
-            "myCustomFirstStageName": {
-              "type": "string"
-            },
-            "waitTime": {
-              "type": "integer"
-            }
-          },
-          "required": [
-            "childWaitTime",
-            "myCustomFirstStageName",
-            "waitTime"
-          ]
+        "example": {
+          "type": "string"
         }
       },
       "required": [
-        "application",
-        "name",
-        "template",
-        "variables"
-      ]
-    },
-    "variables": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "defaultValue": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "defaultValue",
-            "description",
-            "name"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "description": {
-              "type": "string"
-            },
-            "example": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "description",
-            "example",
-            "name",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "defaultValue": {
-              "type": "boolean"
-            },
-            "description": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "defaultValue",
-            "description",
-            "name"
-          ]
-        }
-      ]
-    },
-    "configuration": {
-      "type": "object",
-      "properties": {
-        "concurrentExecutions": {
-          "type": "object",
-          "properties": {
-            "limitConcurrent": {
-              "type": "boolean"
-            },
-            "parallel": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "limitConcurrent",
-            "parallel"
-          ]
-        },
-        "notifications": {
-          "type": "array",
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "address": {
-                  "type": "string"
-                },
-                "level": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "when": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "address",
-                "level",
-                "name",
-                "type",
-                "when"
-              ]
-            }
-          ]
-        },
-        "parameters": {
-          "type": "array",
-          "items": {}
-        },
-        "triggers": {
-          "type": "array",
-          "items": {}
-        }
-      },
-      "required": [
-        "concurrentExecutions",
-        "notifications",
-        "parameters",
-        "triggers"
-      ]
-    },
-    "stages": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "failPipeline": {
-                  "type": "boolean"
-                },
-                "instructions": {
-                  "type": "string"
-                },
-                "judgmentInputs": {
-                  "type": "array",
-                  "items": {}
-                },
-                "notifications": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "address": {
-                          "type": "string"
-                        },
-                        "level": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "when": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "address",
-                        "level",
-                        "type",
-                        "when"
-                      ]
-                    }
-                  ]
-                },
-                "propagateAuthenticationContext": {
-                  "type": "boolean"
-                },
-                "sendNotifications": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "failPipeline",
-                "instructions",
-                "judgmentInputs",
-                "notifications",
-                "propagateAuthenticationContext",
-                "sendNotifications"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "name",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "clusters": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "clusters"
-              ]
-            },
-            "dependsOn": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "dependsOn",
-            "id",
-            "name",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "baseLabel": {
-                  "type": "string"
-                },
-                "baseOs": {
-                  "type": "string"
-                },
-                "cloudProviderType": {
-                  "type": "string"
-                },
-                "enhancedNetworking": {
-                  "type": "boolean"
-                },
-                "extendedAttributes": {
-                  "type": "object"
-                },
-                "overrideTimeout": {
-                  "type": "boolean"
-                },
-                "package": {
-                  "type": "string"
-                },
-                "regions": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "string"
-                    }
-                  ]
-                },
-                "sendNotifications": {
-                  "type": "boolean"
-                },
-                "showAdvancedOptions": {
-                  "type": "boolean"
-                },
-                "stageTimeoutMs": {
-                  "type": "integer"
-                },
-                "storeType": {
-                  "type": "string"
-                },
-                "user": {
-                  "type": "string"
-                },
-                "vmType": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "baseLabel",
-                "baseOs",
-                "cloudProviderType",
-                "enhancedNetworking",
-                "extendedAttributes",
-                "overrideTimeout",
-                "package",
-                "regions",
-                "sendNotifications",
-                "showAdvancedOptions",
-                "stageTimeoutMs",
-                "storeType",
-                "user",
-                "vmType"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "name",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "clusters": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "account": {
-                          "type": "string"
-                        },
-                        "application": {
-                          "type": "string"
-                        },
-                        "availabilityZones": {
-                          "type": "object",
-                          "properties": {
-                            "us-west-1": {
-                              "type": "array",
-                              "items": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            }
-                          },
-                          "required": [
-                            "us-west-1"
-                          ]
-                        },
-                        "capacity": {
-                          "type": "object",
-                          "properties": {
-                            "desired": {
-                              "type": "integer"
-                            },
-                            "max": {
-                              "type": "integer"
-                            },
-                            "min": {
-                              "type": "integer"
-                            }
-                          },
-                          "required": [
-                            "desired",
-                            "max",
-                            "min"
-                          ]
-                        },
-                        "cloudProvider": {
-                          "type": "string"
-                        },
-                        "cooldown": {
-                          "type": "integer"
-                        },
-                        "copySourceCustomBlockDeviceMappings": {
-                          "type": "boolean"
-                        },
-                        "ebsOptimized": {
-                          "type": "boolean"
-                        },
-                        "enabledMetrics": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "freeFormDetails": {
-                          "type": "string"
-                        },
-                        "healthCheckGracePeriod": {
-                          "type": "integer"
-                        },
-                        "healthCheckType": {
-                          "type": "string"
-                        },
-                        "iamRole": {
-                          "type": "string"
-                        },
-                        "instanceMonitoring": {
-                          "type": "boolean"
-                        },
-                        "instanceType": {
-                          "type": "string"
-                        },
-                        "interestingHealthProviderNames": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "keyPair": {
-                          "type": "string"
-                        },
-                        "loadBalancers": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "maxRemainingAsgs": {
-                          "type": "integer"
-                        },
-                        "preferSourceCapacity": {
-                          "type": "boolean"
-                        },
-                        "provider": {
-                          "type": "string"
-                        },
-                        "scaleDown": {
-                          "type": "boolean"
-                        },
-                        "securityGroups": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "stack": {
-                          "type": "string"
-                        },
-                        "strategy": {
-                          "type": "string"
-                        },
-                        "subnetType": {
-                          "type": "string"
-                        },
-                        "suspendedProcesses": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "tags": {
-                          "type": "object"
-                        },
-                        "targetGroups": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "targetHealthyDeployPercentage": {
-                          "type": "integer"
-                        },
-                        "terminationPolicies": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "useAmiBlockDeviceMappings": {
-                          "type": "boolean"
-                        },
-                        "useSourceCapacity": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "account",
-                        "application",
-                        "availabilityZones",
-                        "capacity",
-                        "cloudProvider",
-                        "cooldown",
-                        "copySourceCustomBlockDeviceMappings",
-                        "ebsOptimized",
-                        "enabledMetrics",
-                        "freeFormDetails",
-                        "healthCheckGracePeriod",
-                        "healthCheckType",
-                        "iamRole",
-                        "instanceMonitoring",
-                        "instanceType",
-                        "interestingHealthProviderNames",
-                        "keyPair",
-                        "loadBalancers",
-                        "maxRemainingAsgs",
-                        "preferSourceCapacity",
-                        "provider",
-                        "scaleDown",
-                        "securityGroups",
-                        "stack",
-                        "strategy",
-                        "subnetType",
-                        "suspendedProcesses",
-                        "tags",
-                        "targetGroups",
-                        "targetHealthyDeployPercentage",
-                        "terminationPolicies",
-                        "useAmiBlockDeviceMappings",
-                        "useSourceCapacity"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "account": {
-                          "type": "string"
-                        },
-                        "application": {
-                          "type": "string"
-                        },
-                        "availabilityZones": {
-                          "type": "object",
-                          "properties": {
-                            "us-east-1": {
-                              "type": "array",
-                              "items": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            }
-                          },
-                          "required": [
-                            "us-east-1"
-                          ]
-                        },
-                        "capacity": {
-                          "type": "object",
-                          "properties": {
-                            "desired": {
-                              "type": "integer"
-                            },
-                            "max": {
-                              "type": "integer"
-                            },
-                            "min": {
-                              "type": "integer"
-                            }
-                          },
-                          "required": [
-                            "desired",
-                            "max",
-                            "min"
-                          ]
-                        },
-                        "cloudProvider": {
-                          "type": "string"
-                        },
-                        "cooldown": {
-                          "type": "integer"
-                        },
-                        "ebsOptimized": {
-                          "type": "boolean"
-                        },
-                        "freeFormDetails": {
-                          "type": "string"
-                        },
-                        "healthCheckGracePeriod": {
-                          "type": "integer"
-                        },
-                        "healthCheckType": {
-                          "type": "string"
-                        },
-                        "iamRole": {
-                          "type": "string"
-                        },
-                        "instanceMonitoring": {
-                          "type": "boolean"
-                        },
-                        "instanceType": {
-                          "type": "string"
-                        },
-                        "interestingHealthProviderNames": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "keyPair": {
-                          "type": "string"
-                        },
-                        "provider": {
-                          "type": "string"
-                        },
-                        "securityGroups": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "stack": {
-                          "type": "string"
-                        },
-                        "strategy": {
-                          "type": "string"
-                        },
-                        "subnetType": {
-                          "type": "string"
-                        },
-                        "suspendedProcesses": {
-                          "type": "array",
-                          "items": {}
-                        },
-                        "tags": {
-                          "type": "object"
-                        },
-                        "targetHealthyDeployPercentage": {
-                          "type": "integer"
-                        },
-                        "terminationPolicies": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "useSourceCapacity": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "account",
-                        "application",
-                        "availabilityZones",
-                        "capacity",
-                        "cloudProvider",
-                        "cooldown",
-                        "ebsOptimized",
-                        "freeFormDetails",
-                        "healthCheckGracePeriod",
-                        "healthCheckType",
-                        "iamRole",
-                        "instanceMonitoring",
-                        "instanceType",
-                        "interestingHealthProviderNames",
-                        "keyPair",
-                        "provider",
-                        "securityGroups",
-                        "stack",
-                        "strategy",
-                        "subnetType",
-                        "suspendedProcesses",
-                        "tags",
-                        "targetHealthyDeployPercentage",
-                        "terminationPolicies",
-                        "useSourceCapacity"
-                      ]
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "clusters"
-              ]
-            },
-            "dependsOn": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "dependsOn",
-            "id",
-            "name",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "waitTime": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "waitTime"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "waitTime": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "waitTime"
-              ]
-            },
-            "dependsOn": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "dependsOn",
-            "id",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "waitTime": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "waitTime"
-              ]
-            },
-            "dependsOn": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "dependsOn",
-            "id",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "waitTime": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "waitTime"
-              ]
-            },
-            "dependsOn": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "dependsOn",
-            "id",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "inheritanceControl": {
-              "type": "object",
-              "properties": {
-                "merge": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "path": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "object",
-                          "properties": {
-                            "instancePort": {
-                              "type": "integer"
-                            },
-                            "instanceProtocol": {
-                              "type": "string"
-                            },
-                            "lbPort": {
-                              "type": "integer"
-                            },
-                            "lbProtocol": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "instancePort",
-                            "instanceProtocol",
-                            "lbPort",
-                            "lbProtocol"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "path",
-                        "value"
-                      ]
-                    }
-                  ]
-                },
-                "remove": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "path": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "path"
-                      ]
-                    }
-                  ]
-                },
-                "replace": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "path": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "object",
-                          "properties": {
-                            "instancePort": {
-                              "type": "integer"
-                            },
-                            "instanceProtocol": {
-                              "type": "string"
-                            },
-                            "lbPort": {
-                              "type": "integer"
-                            },
-                            "lbProtocol": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "instancePort",
-                            "instanceProtocol",
-                            "lbPort",
-                            "lbProtocol"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "path",
-                        "value"
-                      ]
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "merge",
-                "remove",
-                "replace"
-              ]
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "id",
-            "inheritanceControl",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "notifications": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "channel": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "when": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "channel",
-                        "type",
-                        "when"
-                      ]
-                    }
-                  ]
-                },
-                "propagateAuthentication": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "notifications",
-                "propagateAuthentication"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "inject": {
-              "type": "object",
-              "properties": {
-                "before": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "before"
-              ]
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "inject",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "notifications": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "channel": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "when": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "channel",
-                        "type",
-                        "when"
-                      ]
-                    }
-                  ]
-                },
-                "propagateAuthentication": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "notifications",
-                "propagateAuthentication"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "inject": {
-              "type": "object",
-              "properties": {
-                "after": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "after"
-              ]
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "inject",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "notifications": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "channel": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "when": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "channel",
-                        "type",
-                        "when"
-                      ]
-                    }
-                  ]
-                },
-                "propagateAuthentication": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "notifications",
-                "propagateAuthentication"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "inject": {
-              "type": "object",
-              "properties": {
-                "first": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "first"
-              ]
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "inject",
-            "type"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "config": {
-              "type": "object",
-              "properties": {
-                "notifications": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "channel": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "when": {
-                          "type": "array",
-                          "items": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "channel",
-                        "type",
-                        "when"
-                      ]
-                    }
-                  ]
-                },
-                "propagateAuthentication": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "notifications",
-                "propagateAuthentication"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "inject": {
-              "type": "object",
-              "properties": {
-                "last": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "required": [
-                "last"
-              ]
-            },
-            "type": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "config",
-            "id",
-            "inject",
-            "type"
-          ]
-        }
-      ]
-    },
-    "modules": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "definition": {
-              "type": "object",
-              "properties": {
-                "account": {
-                  "type": "string"
-                },
-                "application": {
-                  "type": "string"
-                },
-                "availabilityZones": {
-                  "type": "string"
-                },
-                "capacity": {
-                  "type": "object",
-                  "properties": {
-                    "desired": {
-                      "type": "string"
-                    },
-                    "max": {
-                      "type": "string"
-                    },
-                    "min": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "desired",
-                    "max",
-                    "min"
-                  ]
-                },
-                "cloudProvider": {
-                  "type": "string"
-                },
-                "cooldown": {
-                  "type": "integer"
-                },
-                "ebsOptimized": {
-                  "type": "boolean"
-                },
-                "freeFormDetails": {
-                  "type": "string"
-                },
-                "healthCheckGracePeriod": {
-                  "type": "integer"
-                },
-                "healthCheckType": {
-                  "type": "string"
-                },
-                "iamRole": {
-                  "type": "string"
-                },
-                "instanceMonitoring": {
-                  "type": "boolean"
-                },
-                "instanceType": {
-                  "type": "string"
-                },
-                "keyPair": {
-                  "type": "string"
-                },
-                "loadBalancers": {
-                  "type": "string"
-                },
-                "maxRemainingAsgs": {
-                  "type": "string"
-                },
-                "provider": {
-                  "type": "string"
-                },
-                "securityGroups": {
-                  "type": "string"
-                },
-                "stack": {
-                  "type": "string"
-                },
-                "strategy": {
-                  "type": "string"
-                },
-                "subnetType": {
-                  "type": "string"
-                },
-                "suspendedProcesses": {
-                  "type": "array",
-                  "items": {}
-                },
-                "tags": {
-                  "type": "object"
-                },
-                "targetHealthyDeployPercentage": {
-                  "type": "integer"
-                },
-                "terminationPolicies": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "string"
-                    }
-                  ]
-                },
-                "useSourceCapacity": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "account",
-                "application",
-                "availabilityZones",
-                "capacity",
-                "cloudProvider",
-                "cooldown",
-                "ebsOptimized",
-                "freeFormDetails",
-                "healthCheckGracePeriod",
-                "healthCheckType",
-                "iamRole",
-                "instanceMonitoring",
-                "instanceType",
-                "keyPair",
-                "loadBalancers",
-                "maxRemainingAsgs",
-                "provider",
-                "securityGroups",
-                "stack",
-                "strategy",
-                "subnetType",
-                "suspendedProcesses",
-                "tags",
-                "targetHealthyDeployPercentage",
-                "terminationPolicies",
-                "useSourceCapacity"
-              ]
-            },
-            "id": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "type"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "type"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "type"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ]
-                }
-              ]
-            }
-          },
-          "required": [
-            "definition",
-            "id",
-            "variables"
-          ]
-        }
-      ]
-    },
-    "partials": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "stages": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "config": {
-                      "type": "null"
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "config",
-                    "id",
-                    "name",
-                    "type"
-                  ]
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "dependsOn": {
-                      "type": "array",
-                      "items": [
-                        {
-                          "type": "string"
-                        }
-                      ]
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "dependsOn",
-                    "id",
-                    "name",
-                    "type"
-                  ]
-                }
-              ]
-            },
-            "usage": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "description": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "description",
-                    "name"
-                  ]
-                }
-              ]
-            }
-          },
-          "required": [
-            "id",
-            "stages",
-            "usage",
-            "variables"
-          ]
-        }
-      ]
+        "defaultValue",
+        "description",
+        "name"
+      ],
+      "title": "Variable"
     }
   }
 }
