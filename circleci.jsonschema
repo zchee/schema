@@ -105,7 +105,8 @@
       "description": "The version field is intended to be used in order to issue warnings for deprecation or breaking changes.",
       "default": 2,
       "enum": [
-        2
+        2,
+        2.1
       ]
     },
     "jobs": {
@@ -183,7 +184,11 @@
                                 "17.07.0-ce",
                                 "17.09.0-ce",
                                 "17.10.0-ce",
-                                "17.11.0-ce"
+                                "17.11.0-ce",
+                                "18.03.0-ce",
+                                "18.03.1-ce",
+                                "18.05.0-ce",
+                                "18.06.0-ce"
                               ],
                               "default": "17.03.0-ce"
                             }
