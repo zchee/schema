@@ -565,7 +565,19 @@
                       },
                       "image": {
                         "description": "The image to use",
-                        "type": "string",
+                        // https://circleci.com/docs/2.0/configuration-reference/#machine
+                        "enum": [
+                            "circleci/classic:latest",
+                            "circleci/classic:edge",
+                            "circleci/classic:201703-01",
+                            "circleci/classic:201707-01",
+                            "circleci/classic:201708-01",
+                            "circleci/classic:201709-01",
+                            "circleci/classic:201710-01",
+                            "circleci/classic:201710-02",
+                            "circleci/classic:201711-01",
+                            "circleci/classic:201808-01"
+                        ],
                         "default": "circleci/classic:latest"
                       }
                     }
