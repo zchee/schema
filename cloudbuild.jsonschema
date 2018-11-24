@@ -1,0 +1,242 @@
+{
+  "title": "GCP Cloud Build yaml JSON Schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Cloudbuild": {
+      "title": "Cloudbuild",
+      "description": "Build config files are modeled using the Cloud Build API's Build resource.",
+      "type": "object",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          }
+        },
+        "timeout": {
+          "type": "string"
+        },
+        "logsBucket": {
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/definitions/Options"
+        },
+        "substitutions": {
+          "$ref": "#/definitions/Substitutions"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "secrets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Secret"
+          }
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "artifacts": {
+          "$ref": "#/definitions/Artifacts"
+        }
+      }
+    },
+    "Step": {
+      "title": "Step",
+      "description": "A build step specifies an action that you want Cloud Build to perform.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "env": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dir": {
+          "type": "string"
+        },
+        "timeout": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "waitFor": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entrypoint": {
+          "type": "string"
+        },
+        "volumes": {
+          "$ref": "#/definitions/Volumes"
+        },
+        "logsBucket": {
+          "type": "string"
+        },
+        "secretEnv": {
+          "$ref": "#/definitions/SecretEnvUnion"
+        },
+        "options": {
+          "$ref": "#/definitions/Options"
+        }
+      }
+    },
+    "SecretEnvUnion": {
+      "title": "SecretEnvUnion",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "Options": {
+      "title": "Options",
+      "description": "Specify the following optional arguments for your build:",
+      "type": "object",
+      "properties": {
+        "diskSizeGb": {
+          "type": "integer"
+        },
+        "logStreamingOption": {
+          "type": "string"
+        },
+        "logging": {
+          "type": "string"
+        },
+        "machineType": {
+          "type": "string"
+        },
+        "sourceProvenanceHash": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "substitution_option": {
+          "type": "string"
+        },
+        "substitutionOption": {
+          "type": "string"
+        }
+      }
+    },
+    "Substitutions": {
+      "title": "Substitutions",
+      "description": "Build config file to substitute specific variables at build time.",
+      "type": "object",
+      "properties": {
+        "_SUB_VALUE": {
+          "type": "string"
+        }
+      }
+    },
+    "Secret": {
+      "title": "Secret",
+      "description": "A set of secret environment variables containing encrypted values with the Cloud KMS key to use to decrypt the value.",
+      "type": "object",
+      "properties": {
+        "kmsKeyName": {
+          "type": "string"
+        },
+        "secretEnv": {
+          "$ref": "#/definitions/SecretEnvClass"
+        }
+      }
+    },
+    "SecretEnvClass": {
+      "title": "SecretEnvClass",
+      "type": "object",
+      "properties": {
+        "PASSWORD": {
+          "type": "string"
+        }
+      }
+    },
+    "Artifacts": {
+      "title": "Artifacts",
+      "description": "Build config file specifies one or more non-container artifacts to be stored in Cloud Storage.",
+      "type": "object",
+      "properties": {
+        "objects": {
+          "$ref": "#/definitions/Objects"
+        }
+      }
+    },
+    "Objects": {
+      "title": "Objects",
+      "description": "A build step specifies an action that you want Cloud Build to perform.",
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Volumes": {
+      "title": "Volumes",
+      "description": "A Docker container that is mounted into build steps to persist files across build steps. ",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Volume"
+          }
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "Volume": {
+      "title": "Volume",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/Cloudbuild"
+    }
+  ]
+}
