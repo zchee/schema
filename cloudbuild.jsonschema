@@ -1,56 +1,55 @@
 {
-  "title": "GCP Cloud Build yaml JSON Schema",
+  "title": "JSON schema for CircleCI configuration files",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "definitions": {
-    "Cloudbuild": {
-      "title": "Cloudbuild",
-      "description": "Build config files are modeled using the Cloud Build API's Build resource.",
-      "type": "object",
-      "properties": {
-        "steps": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Step"
-          }
-        },
-        "timeout": {
+  "type": "object",
+  "required": [
+    "steps"
+  ],
+  "properties": {
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Step"
+      }
+    },
+    "timeout": {
+      "type": "string"
+    },
+    "logsBucket": {
+      "type": "string"
+    },
+    "options": {
+      "$ref": "#/definitions/Options"
+    },
+    "substitutions": {
+      "$ref": "#/definitions/Substitutions"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "secrets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Secret"
+      }
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
           "type": "string"
-        },
-        "logsBucket": {
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/definitions/Options"
-        },
-        "substitutions": {
-          "$ref": "#/definitions/Substitutions"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "secrets": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Secret"
-          }
-        },
-        "images": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "artifacts": {
-          "$ref": "#/definitions/Artifacts"
         }
       }
     },
+    "artifacts": {
+      "$ref": "#/definitions/Artifacts"
+    }
+  },
+  "definitions": {
     "Step": {
       "title": "Step",
       "description": "A build step specifies an action that you want Cloud Build to perform.",
@@ -119,32 +118,50 @@
     },
     "Options": {
       "title": "Options",
-      "description": "Specify the following optional arguments for your build:",
+      "description": "Specify the following optional arguments for cloudbuild",
       "type": "object",
       "properties": {
+        "description": "Custom disk size for cloudbuild.",
         "diskSizeGb": {
           "type": "integer"
         },
         "logStreamingOption": {
-          "type": "string"
+          "description": "Specifies the behavior when writing build logs to Google Cloud Storage.",
+          "enum": [
+            "STREAM_DEFAULT",
+            "STREAM_ON",
+            "STREAM_OFF"
+          ]
         },
         "logging": {
-          "type": "string"
+          "description": "Specifies the logging mode.",
+          "enum": [
+            "LOGGING_UNSPECIFIED",
+            "LEGACY",
+            "GCS_ONLY"
+          ]
         },
         "machineType": {
-          "type": "string"
+          "description": "VM sizes.",
+          "enum": [
+            "N1_HIGHCPU_8",
+            "N1_HIGHCPU_32"
+          ]
         },
         "sourceProvenanceHash": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "substitution_option": {
-          "type": "string"
+          "description": "Specifies the hash algorithm",
+          "enum": [
+            "NONE",
+            "SHA256",
+            "MD5"
+          ]
         },
         "substitutionOption": {
-          "type": "string"
+          "description": "Specifies the behavior when there is an error in the substitution checks.",
+          "enum": [
+            "MUST_MATCH",
+            "ALLOW_LOOSE"
+          ]
         }
       }
     },
@@ -233,10 +250,5 @@
         }
       }
     }
-  },
-  "oneOf": [
-    {
-      "$ref": "#/definitions/Cloudbuild"
-    }
-  ]
+  }
 }
