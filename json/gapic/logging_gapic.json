@@ -1,0 +1,955 @@
+{
+  "collection_oneofs": [
+    {
+      "collection_names": [
+        "project",
+        "organization",
+        "folder",
+        "billing"
+      ],
+      "oneof_name": "parent_oneof"
+    },
+    {
+      "collection_names": [
+        "sink",
+        "organization_sink",
+        "folder_sink",
+        "billing_sink"
+      ],
+      "oneof_name": "sink_oneof"
+    },
+    {
+      "collection_names": [
+        "exclusion",
+        "organization_exclusion",
+        "folder_exclusion",
+        "billing_exclusion"
+      ],
+      "oneof_name": "exclusion_oneof"
+    },
+    {
+      "collection_names": [
+        "log",
+        "organization_log",
+        "folder_log",
+        "billing_log"
+      ],
+      "oneof_name": "log_oneof"
+    },
+    {
+      "collection_names": [
+        "metric"
+      ],
+      "oneof_name": "metric_oneof"
+    }
+  ],
+  "collections": [
+    {
+      "entity_name": "project",
+      "name_pattern": "projects/{project}"
+    },
+    {
+      "entity_name": "log",
+      "language_overrides": [
+        {
+          "entity_name": "project_log",
+          "language": "java"
+        }
+      ],
+      "name_pattern": "projects/{project}/logs/{log}"
+    },
+    {
+      "entity_name": "sink",
+      "language_overrides": [
+        {
+          "entity_name": "project_sink",
+          "language": "java"
+        }
+      ],
+      "name_pattern": "projects/{project}/sinks/{sink}"
+    },
+    {
+      "entity_name": "metric",
+      "language_overrides": [
+        {
+          "entity_name": "project_metric",
+          "language": "java"
+        }
+      ],
+      "name_pattern": "projects/{project}/metrics/{metric}"
+    },
+    {
+      "entity_name": "exclusion",
+      "language_overrides": [
+        {
+          "entity_name": "project_exclusion",
+          "language": "java"
+        }
+      ],
+      "name_pattern": "projects/{project}/exclusions/{exclusion}"
+    },
+    {
+      "entity_name": "organization",
+      "name_pattern": "organizations/{organization}"
+    },
+    {
+      "entity_name": "organization_log",
+      "name_pattern": "organizations/{organization}/logs/{log}"
+    },
+    {
+      "entity_name": "organization_sink",
+      "name_pattern": "organizations/{organization}/sinks/{sink}"
+    },
+    {
+      "entity_name": "organization_exclusion",
+      "name_pattern": "organizations/{organization}/exclusions/{exclusion}"
+    },
+    {
+      "entity_name": "folder",
+      "name_pattern": "folders/{folder}"
+    },
+    {
+      "entity_name": "folder_log",
+      "name_pattern": "folders/{folder}/logs/{log}"
+    },
+    {
+      "entity_name": "folder_sink",
+      "name_pattern": "folders/{folder}/sinks/{sink}"
+    },
+    {
+      "entity_name": "folder_exclusion",
+      "name_pattern": "folders/{folder}/exclusions/{exclusion}"
+    },
+    {
+      "entity_name": "billing",
+      "name_pattern": "billingAccounts/{billing_account}"
+    },
+    {
+      "entity_name": "billing_log",
+      "name_pattern": "billingAccounts/{billing_account}/logs/{log}"
+    },
+    {
+      "entity_name": "billing_sink",
+      "name_pattern": "billingAccounts/{billing_account}/sinks/{sink}"
+    },
+    {
+      "entity_name": "billing_exclusion",
+      "name_pattern": "billingAccounts/{billing_account}/exclusions/{exclusion}"
+    }
+  ],
+  "config_schema_version": "1.0.0",
+  "interfaces": [
+    {
+      "methods": [
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent"
+                ]
+              }
+            ]
+          },
+          "name": "ListSinks",
+          "page_streaming": {
+            "request": {
+              "page_size_field": "page_size",
+              "token_field": "page_token"
+            },
+            "response": {
+              "resources_field": "sinks",
+              "token_field": "next_page_token"
+            }
+          },
+          "required_fields": [
+            "parent"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "sink_name": "sink_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "sink_name"
+                ]
+              }
+            ]
+          },
+          "name": "GetSink",
+          "required_fields": [
+            "sink_name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent",
+                  "sink"
+                ]
+              }
+            ]
+          },
+          "name": "CreateSink",
+          "required_fields": [
+            "parent",
+            "sink"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "non_idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 120000
+        },
+        {
+          "field_name_patterns": {
+            "sink_name": "sink_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "sink_name",
+                  "sink",
+                  "update_mask"
+                ]
+              },
+              {
+                "parameters": [
+                  "sink_name",
+                  "sink"
+                ]
+              }
+            ]
+          },
+          "name": "UpdateSink",
+          "required_fields": [
+            "sink_name",
+            "sink"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 120000
+        },
+        {
+          "field_name_patterns": {
+            "sink_name": "sink_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "sink_name"
+                ]
+              }
+            ]
+          },
+          "name": "DeleteSink",
+          "required_fields": [
+            "sink_name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent"
+                ]
+              }
+            ]
+          },
+          "name": "ListExclusions",
+          "page_streaming": {
+            "request": {
+              "page_size_field": "page_size",
+              "token_field": "page_token"
+            },
+            "response": {
+              "resources_field": "exclusions",
+              "token_field": "next_page_token"
+            }
+          },
+          "required_fields": [
+            "parent"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "name": "exclusion_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "name"
+                ]
+              }
+            ]
+          },
+          "name": "GetExclusion",
+          "required_fields": [
+            "name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent",
+                  "exclusion"
+                ]
+              }
+            ]
+          },
+          "name": "CreateExclusion",
+          "required_fields": [
+            "parent",
+            "exclusion"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "non_idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "name": "exclusion_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "name",
+                  "exclusion",
+                  "update_mask"
+                ]
+              }
+            ]
+          },
+          "name": "UpdateExclusion",
+          "required_fields": [
+            "name",
+            "exclusion",
+            "update_mask"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "non_idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "name": "exclusion_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "name"
+                ]
+              }
+            ]
+          },
+          "name": "DeleteExclusion",
+          "required_fields": [
+            "name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        }
+      ],
+      "name": "google.logging.v2.ConfigServiceV2",
+      "retry_codes_def": [
+        {
+          "name": "idempotent",
+          "retry_codes": [
+            "UNAVAILABLE",
+            "DEADLINE_EXCEEDED",
+            "INTERNAL"
+          ]
+        },
+        {
+          "name": "non_idempotent",
+          "retry_codes": []
+        }
+      ],
+      "retry_params_def": [
+        {
+          "initial_retry_delay_millis": 100,
+          "initial_rpc_timeout_millis": 20000,
+          "max_retry_delay_millis": 60000,
+          "max_rpc_timeout_millis": 20000,
+          "name": "default",
+          "retry_delay_multiplier": 1.3,
+          "rpc_timeout_multiplier": 1,
+          "total_timeout_millis": 600000
+        },
+        {
+          "initial_retry_delay_millis": 100,
+          "initial_rpc_timeout_millis": 20000,
+          "max_retry_delay_millis": 60000,
+          "max_rpc_timeout_millis": 20000,
+          "name": "write_sink",
+          "retry_delay_multiplier": 1.3,
+          "rpc_timeout_multiplier": 1,
+          "total_timeout_millis": 600000
+        }
+      ]
+    },
+    {
+      "methods": [
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent"
+                ]
+              }
+            ]
+          },
+          "name": "ListLogMetrics",
+          "page_streaming": {
+            "request": {
+              "page_size_field": "page_size",
+              "token_field": "page_token"
+            },
+            "response": {
+              "resources_field": "metrics",
+              "token_field": "next_page_token"
+            }
+          },
+          "required_fields": [
+            "parent"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "metric_name": "metric_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "metric_name"
+                ]
+              }
+            ]
+          },
+          "name": "GetLogMetric",
+          "required_fields": [
+            "metric_name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent",
+                  "metric"
+                ]
+              }
+            ]
+          },
+          "name": "CreateLogMetric",
+          "required_fields": [
+            "parent",
+            "metric"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "non_idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "metric_name": "metric_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "metric_name",
+                  "metric"
+                ]
+              }
+            ]
+          },
+          "name": "UpdateLogMetric",
+          "required_fields": [
+            "metric_name",
+            "metric"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "metric_name": "metric_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "metric_name"
+                ]
+              }
+            ]
+          },
+          "name": "DeleteLogMetric",
+          "required_fields": [
+            "metric_name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        }
+      ],
+      "name": "google.logging.v2.MetricsServiceV2",
+      "retry_codes_def": [
+        {
+          "name": "idempotent",
+          "retry_codes": [
+            "UNAVAILABLE",
+            "DEADLINE_EXCEEDED",
+            "INTERNAL"
+          ]
+        },
+        {
+          "name": "non_idempotent",
+          "retry_codes": []
+        }
+      ],
+      "retry_params_def": [
+        {
+          "initial_retry_delay_millis": 100,
+          "initial_rpc_timeout_millis": 20000,
+          "max_retry_delay_millis": 60000,
+          "max_rpc_timeout_millis": 20000,
+          "name": "default",
+          "retry_delay_multiplier": 1.3,
+          "rpc_timeout_multiplier": 1,
+          "total_timeout_millis": 600000
+        }
+      ]
+    },
+    {
+      "methods": [
+        {
+          "field_name_patterns": {
+            "log_name": "log_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "log_name"
+                ]
+              }
+            ]
+          },
+          "name": "DeleteLog",
+          "required_fields": [
+            "log_name"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "batching": {
+            "batch_descriptor": {
+              "batched_field": "entries",
+              "discriminator_fields": [
+                "log_name",
+                "resource",
+                "labels"
+              ]
+            },
+            "thresholds": {
+              "delay_threshold_millis": 50,
+              "element_count_threshold": 1000,
+              "flow_control_byte_limit": 10485760,
+              "flow_control_element_limit": 100000,
+              "flow_control_limit_exceeded_behavior": "THROW_EXCEPTION",
+              "request_byte_threshold": 1048576
+            }
+          },
+          "field_name_patterns": {
+            "log_name": "log_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "log_name",
+                  "resource",
+                  "labels",
+                  "entries"
+                ]
+              }
+            ]
+          },
+          "name": "WriteLogEntries",
+          "required_fields": [
+            "entries"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "resource_names": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "resource_names",
+                  "filter",
+                  "order_by"
+                ]
+              }
+            ]
+          },
+          "name": "ListLogEntries",
+          "page_streaming": {
+            "request": {
+              "page_size_field": "page_size",
+              "token_field": "page_token"
+            },
+            "response": {
+              "resources_field": "entries",
+              "token_field": "next_page_token"
+            }
+          },
+          "required_fields": [
+            "resource_names"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 10000
+        },
+        {
+          "name": "ListMonitoredResourceDescriptors",
+          "page_streaming": {
+            "request": {
+              "page_size_field": "page_size",
+              "token_field": "page_token"
+            },
+            "response": {
+              "resources_field": "resource_descriptors",
+              "token_field": "next_page_token"
+            }
+          },
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        },
+        {
+          "field_name_patterns": {
+            "parent": "parent_oneof"
+          },
+          "flattening": {
+            "groups": [
+              {
+                "parameters": [
+                  "parent"
+                ]
+              }
+            ]
+          },
+          "name": "ListLogs",
+          "page_streaming": {
+            "request": {
+              "page_size_field": "page_size",
+              "token_field": "page_token"
+            },
+            "response": {
+              "resources_field": "log_names",
+              "token_field": "next_page_token"
+            }
+          },
+          "required_fields": [
+            "parent"
+          ],
+          "resource_name_treatment": "STATIC_TYPES",
+          "retry_codes_name": "idempotent",
+          "retry_params_name": "default",
+          "timeout_millis": 60000
+        }
+      ],
+      "name": "google.logging.v2.LoggingServiceV2",
+      "retry_codes_def": [
+        {
+          "name": "idempotent",
+          "retry_codes": [
+            "UNAVAILABLE",
+            "DEADLINE_EXCEEDED",
+            "INTERNAL"
+          ]
+        },
+        {
+          "name": "non_idempotent",
+          "retry_codes": []
+        }
+      ],
+      "retry_params_def": [
+        {
+          "initial_retry_delay_millis": 100,
+          "initial_rpc_timeout_millis": 20000,
+          "max_retry_delay_millis": 60000,
+          "max_rpc_timeout_millis": 20000,
+          "name": "default",
+          "retry_delay_multiplier": 1.3,
+          "rpc_timeout_multiplier": 1,
+          "total_timeout_millis": 600000
+        },
+        {
+          "initial_retry_delay_millis": 100,
+          "initial_rpc_timeout_millis": 20000,
+          "max_retry_delay_millis": 60000,
+          "max_rpc_timeout_millis": 20000,
+          "name": "list",
+          "retry_delay_multiplier": 1.3,
+          "rpc_timeout_multiplier": 1,
+          "total_timeout_millis": 600000
+        }
+      ]
+    }
+  ],
+  "language_settings": {
+    "csharp": {
+      "package_name": "Google.Cloud.Logging.V2",
+      "release_level": "GA"
+    },
+    "go": {
+      "domain_layer_location": "cloud.google.com/go/logging",
+      "package_name": "cloud.google.com/go/logging/apiv2"
+    },
+    "java": {
+      "interface_names": {
+        "google.logging.v2.ConfigServiceV2": "Config",
+        "google.logging.v2.LoggingServiceV2": "Logging",
+        "google.logging.v2.MetricsServiceV2": "Metrics"
+      },
+      "package_name": "com.google.cloud.logging.v2"
+    },
+    "nodejs": {
+      "domain_layer_location": "google-cloud",
+      "package_name": "logging.v2"
+    },
+    "php": {
+      "package_name": "Google\\Cloud\\Logging\\V2"
+    },
+    "python": {
+      "package_name": "google.cloud.logging_v2.gapic"
+    },
+    "ruby": {
+      "package_name": "Google::Cloud::Logging::V2"
+    }
+  },
+  "license_header": {
+    "copyright_file": "copyright-google.txt",
+    "license_file": "license-header-apache-2.0.txt"
+  },
+  "resource_name_generation": [
+    {
+      "field_entity_map": {
+        "name": "metric_oneof"
+      },
+      "message_name": "LogMetric"
+    },
+    {
+      "field_entity_map": {
+        "log_name": "log_oneof"
+      },
+      "message_name": "DeleteLogRequest"
+    },
+    {
+      "field_entity_map": {
+        "log_name": "log_oneof"
+      },
+      "message_name": "WriteLogEntriesRequest"
+    },
+    {
+      "field_entity_map": {
+        "resource_names": "parent_oneof"
+      },
+      "message_name": "ListLogEntriesRequest"
+    },
+    {
+      "field_entity_map": {
+        "log_name": "log_oneof"
+      },
+      "message_name": "LogEntry"
+    },
+    {
+      "field_entity_map": {
+        "destination": "*"
+      },
+      "message_name": "LogSink"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "ListSinksRequest"
+    },
+    {
+      "field_entity_map": {
+        "sink_name": "sink_oneof"
+      },
+      "message_name": "GetSinkRequest"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "CreateSinkRequest"
+    },
+    {
+      "field_entity_map": {
+        "sink_name": "sink_oneof"
+      },
+      "message_name": "UpdateSinkRequest"
+    },
+    {
+      "field_entity_map": {
+        "sink_name": "sink_oneof"
+      },
+      "message_name": "DeleteSinkRequest"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "ListLogMetricsRequest"
+    },
+    {
+      "field_entity_map": {
+        "metric_name": "metric_oneof"
+      },
+      "message_name": "GetLogMetricRequest"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "CreateLogMetricRequest"
+    },
+    {
+      "field_entity_map": {
+        "metric_name": "metric_oneof"
+      },
+      "message_name": "UpdateLogMetricRequest"
+    },
+    {
+      "field_entity_map": {
+        "metric_name": "metric_oneof"
+      },
+      "message_name": "DeleteLogMetricRequest"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "ListLogsRequest"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "ListExclusionsRequest"
+    },
+    {
+      "field_entity_map": {
+        "name": "exclusion_oneof"
+      },
+      "message_name": "GetExclusionRequest"
+    },
+    {
+      "field_entity_map": {
+        "parent": "parent_oneof"
+      },
+      "message_name": "CreateExclusionRequest"
+    },
+    {
+      "field_entity_map": {
+        "name": "exclusion_oneof"
+      },
+      "message_name": "UpdateExclusionRequest"
+    },
+    {
+      "field_entity_map": {
+        "name": "exclusion_oneof"
+      },
+      "message_name": "DeleteExclusionRequest"
+    }
+  ],
+  "type": "com.google.api.codegen.ConfigProto"
+}
