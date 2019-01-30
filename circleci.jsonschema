@@ -1,101 +1,6 @@
 {
   "title": "JSON schema for CircleCI configuration files",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "definitions": {
-    "runStep": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "command"
-          ],
-          "properties": {
-            "name": {
-              "description": "Title of the step to be shown in the CircleCI UI (default: full `command`)",
-              "type": "string"
-            },
-            "command": {
-              "description": "Command to run via the shell",
-              "type": "string"
-            },
-            "shell": {
-              "description": "Shell to use for execution command",
-              "type": "string"
-            },
-            "environment": {
-              "description": "Additional environmental variables, locally scoped to command",
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            },
-            "background": {
-              "description": "Whether or not this step should run in the background (default: false)",
-              "default": false,
-              "type": "boolean"
-            },
-            "working_directory": {
-              "description": "In which directory to run this step (default: `working_directory` of the job",
-              "type": "string"
-            },
-            "no_output_timeout": {
-              "description": "Elapsed time the command can run without output. The string is a decimal with unit suffix, such as \"20m\", \"1.25h\", \"5s\" (default: 10 minutes)",
-              "type": "string",
-              "pattern": "\\d+(\\.\\d+)?[mhs]",
-              "default": "10m"
-            },
-            "when": {
-              "description": "Specify when to enable or disable the step. Takes the following values: `always`, `on_success`, `on_fail` (default: `on_success`)",
-              "enum": [
-                "always",
-                "on_success",
-                "on_fail"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "filter": {
-      "description": "A map defining rules for execution on specific branches",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "only": {
-          "description": "Either a single branch specifier, or a list of branch specifiers",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "ignore": {
-          "description": "Either a single branch specifier, or a list of branch specifiers",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
   "type": "object",
   "required": [
     "version"
@@ -179,28 +84,50 @@
                               "enum": [
                                 "17.03.0-ce",
                                 "17.03.0-ce-git",
+                                "17.03.1-ce",
+                                "17.03.1-ce-git",
+                                "17.03.2-ce",
+                                "17.03.2-ce-git",
+                                "17.04.0-ce",
+                                "17.04.0-ce-git",
                                 "17.05.0-ce",
                                 "17.05.0-ce-git",
                                 "17.06.0-ce",
                                 "17.06.0-ce-git",
                                 "17.06.1-ce",
                                 "17.06.1-ce-git",
+                                "17.06.2-ce",
+                                "17.06.2-ce-git",
                                 "17.07.0-ce",
                                 "17.07.0-ce-git",
                                 "17.09.0-ce",
                                 "17.09.0-ce-git",
+                                "17.09.1-ce",
+                                "17.09.1-ce-git",
                                 "17.10.0-ce",
                                 "17.10.0-ce-git",
                                 "17.11.0-ce",
                                 "17.11.0-ce-git",
+                                "17.12.0-ce",
+                                "17.12.0-ce-git",
+                                "17.12.1-ce",
+                                "17.12.1-ce-git",
+                                "18.01.0-ce",
+                                "18.01.0-ce-git",
+                                "18.02.0-ce",
+                                "18.02.0-ce-git",
                                 "18.03.0-ce",
                                 "18.03.0-ce-git",
                                 "18.03.1-ce",
                                 "18.03.1-ce-git",
+                                "18.04.0-ce",
+                                "18.04.0-ce-git",
                                 "18.05.0-ce",
                                 "18.05.0-ce-git",
                                 "18.06.0-ce",
-                                "18.06.0-ce-git"
+                                "18.06.0-ce-git",
+                                "18.06.1-ce",
+                                "18.06.1-ce-git"
                               ],
                               "default": "17.03.0-ce"
                             }
@@ -565,7 +492,6 @@
                       },
                       "image": {
                         "description": "The image to use",
-                        // https://circleci.com/docs/2.0/configuration-reference/#machine
                         "enum": [
                             "circleci/classic:latest",
                             "circleci/classic:edge",
@@ -602,7 +528,6 @@
                 "properties": {
                   "xcode": {
                     "description": "The version of Xcode that is installed on the virtual machine",
-                    // https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions
                     "enum": [
                         "10.0.0",
                         "9.4.1",
@@ -710,6 +635,110 @@
               ]
             }
           }
+        }
+      }
+    },
+    "orbs": {
+      "type": "array"
+    },
+    "commands": {
+      "type": "object"
+    },
+    "executors": {
+      "type": "object"
+    }
+  },
+  "definitions": {
+    "runStep": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command"
+          ],
+          "properties": {
+            "name": {
+              "description": "Title of the step to be shown in the CircleCI UI (default: full `command`)",
+              "type": "string"
+            },
+            "command": {
+              "description": "Command to run via the shell",
+              "type": "string"
+            },
+            "shell": {
+              "description": "Shell to use for execution command",
+              "type": "string"
+            },
+            "environment": {
+              "description": "Additional environmental variables, locally scoped to command",
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "background": {
+              "description": "Whether or not this step should run in the background (default: false)",
+              "default": false,
+              "type": "boolean"
+            },
+            "working_directory": {
+              "description": "In which directory to run this step (default: `working_directory` of the job",
+              "type": "string"
+            },
+            "no_output_timeout": {
+              "description": "Elapsed time the command can run without output. The string is a decimal with unit suffix, such as \"20m\", \"1.25h\", \"5s\" (default: 10 minutes)",
+              "type": "string",
+              "pattern": "\\d+(\\.\\d+)?[mhs]",
+              "default": "10m"
+            },
+            "when": {
+              "description": "Specify when to enable or disable the step. Takes the following values: `always`, `on_success`, `on_fail` (default: `on_success`)",
+              "enum": [
+                "always",
+                "on_success",
+                "on_fail"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "filter": {
+      "description": "A map defining rules for execution on specific branches",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "only": {
+          "description": "Either a single branch specifier, or a list of branch specifiers",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "ignore": {
+          "description": "Either a single branch specifier, or a list of branch specifiers",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
         }
       }
     }
