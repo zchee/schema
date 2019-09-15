@@ -1,0 +1,254 @@
+{
+  "title": "App Engine app.yaml JSON Schema",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/AppengineGo",
+  "definitions": {
+    "AppengineGo": {
+      "title": "AppengineGo",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runtime": {
+          "type": "string",
+          "enum": [
+            "go",
+            "go111",
+            "go112"
+          ]
+        },
+        "api_version": {
+          "type": "string",
+          "enum": [
+            "go1",
+            "go1.9"
+          ]
+        },
+        "default_expiration": {
+          "type": "string"
+        },
+        "env_variables": {
+          "$ref": "#/definitions/EnvVariables"
+        },
+        "error_handlers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ErrorHandler"
+          }
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Handler"
+          }
+        },
+        "inbound_services": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "warmup"
+            ]
+          }
+        },
+        "instance_class": {
+          "type": "string",
+          "enum": [
+            "F1",
+            "F2",
+            "F4",
+            "F4_1G",
+            "B1",
+            "B2",
+            "B4",
+            "B4_1G",
+            "B8"
+          ]
+        },
+        "main": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "vpc_access_connector": {
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "automatic_scaling": {
+          "$ref": "#/definitions/AutomaticScaling"
+        },
+        "basic_scaling": {
+          "$ref": "#/definitions/BasicScaling"
+        },
+        "manual_scaling": {
+          "$ref": "#/definitions/ManualScaling"
+        }
+      },
+      "required": [
+        "runtime",
+        "handlers"
+      ]
+    },
+    "EnvVariables": {
+      "type": "array",
+      "additionalProperties": false,
+      "items": {
+        "type": "string"
+      },
+      "required": [],
+      "title": "EnvVariables"
+    },
+    "ErrorHandler": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "error_code": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "ErrorHandler"
+    },
+    "Handler": {
+      "title": "Handler",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "http_headers": {
+          "$ref": "#/definitions/HTTPHeaders",
+          "description": "You can set HTTP headers for responses of your static file or directory handlers."
+        },
+        "mime_type": {
+          "type": "string",
+          "description": "The IANA MIME Media Types [RFC6838]"
+        },
+        "redirect_http_response_code": {
+          "type": "integer",
+          "description": " redirect_http_response_code is used with the secure setting to set the HTTP response code returned when performing a redirect required by how the secure setting is configured. redirect_http_response_code element has the following possible values.",
+          "enum": [
+            "301",
+            "302",
+            "303",
+            "307"
+          ]
+        },
+        "script": {
+          "type": "string",
+          "description": "Specifies that requests to the specific handler should target your app. The only accepted value for the script element is auto because all traffic is served using the entrypoint command. In order to use static handlers",
+          "enum": [
+            "auto",
+            "entrypoint"
+          ]
+        },
+        "secure": {
+          "type": "string",
+          "description": "Any URL handler can use the secure setting, including script handlers and static file handlers",
+          "enum": [
+            "optional",
+            "never",
+            "always"
+          ]
+        },
+        "static_dir": {
+          "type": "string",
+          "description": "The path to the directory containing the static files, from the application root directory."
+        },
+        "static_files": {
+          "type": "string",
+          "description": "A static file pattern handler associates a URL pattern with paths to static files uploaded with the application."
+        },
+        "upload": {
+          "type": "string",
+          "description": "A regular expression that matches the file paths for all files that will be referenced by this handler."
+        },
+        "url": {
+          "type": "string",
+          "description": "Required element under handlers. The URL pattern, as a regular expression. The expression can contain groupings that can be referred to in the file path to the script with regular expression back-references."
+        }
+      },
+      "required": []
+    },
+    "HTTPHeaders": {
+      "title": "HTTPHeaders",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "AutomaticScaling": {
+      "title": "AutomaticScaling",
+      "type": "object",
+      "description": "Automatic scaling is assumed by default with a default instance class of F1 unless specified otherwise.",
+      "additionalProperties": false,
+      "properties": {
+        "target_cpu_utilization": {
+          "type": "number",
+          "default": 0.6
+        },
+        "target_throughput_utilization": {
+          "type": "number",
+          "default": 0.6
+        },
+        "max_instances": {
+          "type": "integer"
+        },
+        "min_instances": {
+          "type": "integer"
+        },
+        "max_concurrent_requests": {
+          "type": "integer"
+        },
+        "max_idle_instances": {
+          "type": "string",
+          "default": "automatic"
+        },
+        "max_pending_latency": {
+          "type": "string"
+        },
+        "min_idle_instances": {
+          "type": "integer"
+        },
+        "min_pending_latency": {
+          "type": "string",
+          "default": "30ms"
+        }
+      },
+      "required": []
+    },
+    "BasicScaling": {
+      "title": "BasicScaling",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "idle_timeout": {
+          "type": "string",
+          "default": "5ms"
+        },
+        "max_instances": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "ManualScaling": {
+      "title": "ManualScaling",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instances": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    }
+  }
+}
