@@ -1,0 +1,219 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Mkdocs",
+  "title": "Mkdocs",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "site_name": {
+      "type": "string",
+      "description": "This is a required setting, and should be a string that is used as the main title for the project documentation"
+    },
+    "site_url": {
+      "type": "string",
+      "description": "Set the canonical URL of the site. This will add a link tag with the canonical URL to the generated HTML header"
+    },
+    "repo_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "When set, provides a link to your repository \(GitHub, Bitbucket, GitLab or etc\) on each page",
+      "qt-uri-protocols": [
+        "https"
+      ]
+    },
+    "repo_name": {
+      "type": "string",
+      "description": "When set, provides the name for the link to your repository on each page"
+    },
+    "edit_uri": {
+      "type": "string",
+      "description": "Path from the base repo_url to the docs directory when directly viewing a page, accounting for specifics of the repository host, the branch, and the docs directory itself"
+    },
+    "site_description": {
+      "type": "string",
+      "description": "Set the site description. This will add a meta tag to the generated HTML header"
+    },
+    "site_author": {
+      "type": "string",
+      "description": "Set the name of the author. This will add a meta tag to the generated HTML header"
+    },
+    "copyrigh": {
+      "type": "string",
+      "description": "Set the copyright information to be included in the documentation by the theme"
+    },
+    "google_analytics": {
+      "type": "object",
+      "description": "Set the Google analytics tracking configuration"
+    },
+    "remote_branch": {
+      "type": "string",
+      "description": "Set the remote branch to commit to when using gh-deploy to deploy to Github Pages, This option can be overridden by a command line option in gh-deploy"
+    },
+    "remote_name": {
+      "type": "string",
+      "description": "Set the remote name to push to when using gh-deploy to deploy to Github Pages"
+    },
+    "nav": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Nav"
+      },
+      "description": "This setting is used to determine the format and layout of the global navigation for the site"
+    },
+    "theme": {
+      "$ref": "#/definitions/Theme",
+      "description": "Sets the theme and theme specific configuration of your documentation site"
+    },
+    "docs_dir": {
+      "type": "string",
+      "description": "The directory containing the documentation source markdown files"
+    },
+    "site_dir": {
+      "type": "string",
+      "description": "The directory where the output HTML and other files are created"
+    },
+    "extra_css": {
+      "type": "array",
+      "description": "Set a list of CSS files in your docs_dir to be included by the theme"
+    },
+    "extra_javascript": {
+      "type": "array",
+      "description": "Set a list of JavaScript files in your docs_dir to be included by the theme"
+    },
+    "extra_templates": {
+      "type": "array",
+      "description": "Set a list of templates in your docs_dir to be built by MkDocs"
+    },
+    "extra": {
+      "$ref": "#/definitions/Extra",
+      "description": "A set of key value pairs, where the values can be any valid YAML construct, that will be passed to the template"
+    },
+    "use_directory_urls": {
+      "type": "boolean",
+      "description": "This setting controls the style used for linking to pages within the documentation"
+    },
+    "strict": {
+      "type": "boolean",
+      "description": "Determines how warnings are handled"
+    },
+    "dev_addr": {
+      "type": "string",
+      "description": "Determines the address used when running mkdocs serve"
+    },
+    "markdown_extensions": {
+      "type": "array",
+      "description": "MkDocs uses the Python Markdown library to translate Markdown files into HTML. Python Markdown supports a variety of extensions that customize how pages are formatted"
+    },
+    "plugins": {
+      "type": "array",
+      "description": "A list of plugins with optional configuration settings to use when building the site",
+      "items": {
+        "$ref": "#/definitions/Plugin"
+      }
+    },
+    "prebuild_index": {
+      "type": "boolean",
+      "description": "Optionally generates a pre-built index of all pages, which provides some performance improvements for larger sites"
+    }
+  },
+  "required": [
+    "site_name"
+  ],
+  "definitions": {
+    "Nav": {
+      "title": "Nav",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Home": {
+          "type": "string"
+        },
+        "User Guide": {
+          "type": "string"
+        },
+        "Bug Tracker": {
+          "type": "string",
+          "format": "uri",
+          "qt-uri-protocols": [
+            "https"
+          ]
+        }
+      },
+      "required": []
+    },
+    "Theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "custom_dir": {
+          "type": "string"
+        },
+        "static_templates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "include_sidebar": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "custom_dir",
+        "include_sidebar",
+        "name",
+        "static_templates"
+      ],
+      "title": "Theme"
+    },
+    "Extra": {
+      "title": "Extra",
+      "type": "object",
+      "additionalProperties": false
+    },
+    "Plugin": {
+      "title": "Plugin",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "search": {
+          "type": "object",
+          "default": ["search"],
+          "description": "A search plugin is provided by default with MkDocs which uses lunr.js as a search engine"
+        },
+        "separator": {
+          "type": "string",
+          "default": "[\\s\\-]+",
+          "description": "A regular expression which matches the characters used as word separators when building the index"
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "da",
+            "du",
+            "en",
+            "fi",
+            "fr",
+            "de",
+            "hu",
+            "it",
+            "jp",
+            "no",
+            "pt",
+            "ro",
+            "ru",
+            "es",
+            "sv",
+            "th",
+            "tr"
+          ],
+          "description": "A list of languages to use when building the search index as identified by their ISO 639-1 language codes"
+        }
+      },
+      "required": []
+    }
+  }
+}
