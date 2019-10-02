@@ -1,5 +1,5 @@
 {
-  "title": "Spinnaker Pipeline Templates",
+  "title": "Spinnaker Pipeline Templates v1 JSON Schema",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$ref": "#/definitions/SpinnakerPipeline",
   "definitions": {
@@ -54,10 +54,7 @@
           }
         }
       },
-      "required": [
-        "concurrentExecutions",
-        "triggers"
-      ],
+      "required": [],
       "title": "Configuration"
     },
     "ConcurrentExecutions": {
@@ -68,9 +65,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "limitConcurrent"
-      ],
+      "required": [],
       "title": "ConcurrentExecutions"
     },
     "Trigger": {
@@ -99,15 +94,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "account",
-        "enabled",
-        "name",
-        "organization",
-        "registry",
-        "repository",
-        "type"
-      ],
+      "required": [],
       "title": "Trigger"
     },
     "Metadata": {
@@ -130,12 +117,7 @@
           }
         }
       },
-      "required": [
-        "description",
-        "name",
-        "owner",
-        "scopes"
-      ],
+      "required": [],
       "title": "Metadata"
     },
     "Stage": {
@@ -161,14 +143,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "config",
-        "id",
-        "inheritanceControl",
-        "inject",
-        "name",
-        "type"
-      ],
+      "required": [],
       "title": "Stage"
     },
     "Config": {
@@ -182,9 +157,7 @@
           }
         }
       },
-      "required": [
-        "clusters"
-      ],
+      "required": [],
       "title": "Config"
     },
     "Cluster": {
@@ -272,30 +245,7 @@
           "items": {}
         }
       },
-      "required": [
-        "account",
-        "application",
-        "cloudProvider",
-        "containers",
-        "dnsPolicy",
-        "events",
-        "initContainers",
-        "interestingHealthProviderNames",
-        "loadBalancers",
-        "namespace",
-        "nodeSelector",
-        "podAnnotations",
-        "provider",
-        "region",
-        "replicaSetAnnotations",
-        "securityGroups",
-        "stack",
-        "strategy",
-        "targetSize",
-        "terminationGracePeriodSeconds",
-        "tolerations",
-        "volumeSources"
-      ],
+      "required": [],
       "title": "Cluster"
     },
     "Container": {
@@ -347,20 +297,7 @@
           "items": {}
         }
       },
-      "required": [
-        "args",
-        "command",
-        "envFrom",
-        "envVars",
-        "imageDescription",
-        "imagePullPolicy",
-        "limits",
-        "name",
-        "ports",
-        "readinessProbe",
-        "requests",
-        "volumeMounts"
-      ],
+      "required": [],
       "title": "Container"
     },
     "ImageDescription": {
@@ -383,13 +320,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "account",
-        "imageId",
-        "registry",
-        "repository",
-        "tag"
-      ],
+      "required": [],
       "title": "ImageDescription"
     },
     "InheritanceControl": {
@@ -411,11 +342,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "containerPort",
-        "name",
-        "protocol"
-      ],
+      "required": [],
       "title": "Port"
     },
     "ReadinessProbe": {
@@ -441,14 +368,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "failureThreshold",
-        "handler",
-        "initialDelaySeconds",
-        "periodSeconds",
-        "successThreshold",
-        "timeoutSeconds"
-      ],
+      "required": [],
       "title": "ReadinessProbe"
     },
     "Handler": {
@@ -468,12 +388,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "execAction",
-        "httpGetAction",
-        "tcpSocketAction",
-        "type"
-      ],
+      "required": [],
       "title": "Handler"
     },
     "ExecAction": {
@@ -485,9 +400,7 @@
           "items": {}
         }
       },
-      "required": [
-        "commands"
-      ],
+      "required": [],
       "title": "ExecAction"
     },
     "HTTPGetAction": {
@@ -504,11 +417,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "path",
-        "port",
-        "uriScheme"
-      ],
+      "required": [],
       "title": "HTTPGetAction"
     },
     "TCPSocketAction": {
@@ -519,9 +428,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "port"
-      ],
+      "required": [],
       "title": "TCPSocketAction"
     },
     "Variable": {
@@ -541,11 +448,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "defaultValue",
-        "description",
-        "name"
-      ],
+      "required": [],
       "title": "Variable"
     }
   }
