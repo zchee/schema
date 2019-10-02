@@ -1,1837 +1,1837 @@
 {
   "oneOf": [
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.MutatingWebhookConfiguration"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.MutatingWebhookConfiguration"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.MutatingWebhookConfigurationList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.MutatingWebhookConfigurationList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.RuleWithOperations"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.RuleWithOperations"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.ServiceReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.ServiceReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.ValidatingWebhookConfiguration"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.ValidatingWebhookConfiguration"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.ValidatingWebhookConfigurationList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.ValidatingWebhookConfigurationList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.Webhook"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.Webhook"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.WebhookClientConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.WebhookClientConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ControllerRevision"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ControllerRevision"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ControllerRevisionList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ControllerRevisionList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetUpdateStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DaemonSetUpdateStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.Deployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.Deployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.DeploymentStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.ReplicaSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.RollingUpdateDaemonSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.RollingUpdateDaemonSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.RollingUpdateDeployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.RollingUpdateDeployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.RollingUpdateStatefulSetStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.RollingUpdateStatefulSetStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetUpdateStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1.StatefulSetUpdateStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ControllerRevision"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ControllerRevision"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ControllerRevisionList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ControllerRevisionList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.Deployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.Deployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentRollback"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentRollback"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.DeploymentStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.RollbackConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.RollbackConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.RollingUpdateDeployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.RollingUpdateDeployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.RollingUpdateStatefulSetStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.RollingUpdateStatefulSetStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.Scale"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.Scale"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ScaleSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ScaleSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ScaleStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.ScaleStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetUpdateStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta1.StatefulSetUpdateStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ControllerRevision"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ControllerRevision"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ControllerRevisionList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ControllerRevisionList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetUpdateStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DaemonSetUpdateStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.Deployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.Deployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.DeploymentStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ReplicaSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.RollingUpdateDaemonSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.RollingUpdateDaemonSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.RollingUpdateDeployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.RollingUpdateDeployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.RollingUpdateStatefulSetStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.RollingUpdateStatefulSetStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.Scale"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.Scale"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ScaleSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ScaleSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ScaleStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.ScaleStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetUpdateStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.apps.v1beta2.StatefulSetUpdateStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.AuditSink"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.AuditSink"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.AuditSinkList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.AuditSinkList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.AuditSinkSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.AuditSinkSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.Policy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.Policy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.ServiceReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.ServiceReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.Webhook"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.Webhook"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.WebhookClientConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.WebhookClientConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.WebhookThrottleConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.auditregistration.v1alpha1.WebhookThrottleConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1.TokenReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1.TokenReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1.TokenReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1.TokenReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1.TokenReviewStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1.TokenReviewStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1.UserInfo"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1.UserInfo"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.TokenReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.TokenReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.TokenReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.TokenReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.TokenReviewStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.TokenReviewStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.UserInfo"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authentication.v1beta1.UserInfo"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.LocalSubjectAccessReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.LocalSubjectAccessReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.NonResourceAttributes"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.NonResourceAttributes"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.NonResourceRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.NonResourceRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.ResourceAttributes"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.ResourceAttributes"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.ResourceRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.ResourceRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectAccessReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectAccessReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectAccessReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectAccessReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectRulesReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectRulesReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectRulesReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SelfSubjectRulesReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectAccessReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectAccessReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectAccessReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectAccessReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectAccessReviewStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectAccessReviewStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectRulesReviewStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1.SubjectRulesReviewStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.LocalSubjectAccessReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.LocalSubjectAccessReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.NonResourceAttributes"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.NonResourceAttributes"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.NonResourceRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.NonResourceRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.ResourceAttributes"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.ResourceAttributes"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.ResourceRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.ResourceRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectAccessReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectAccessReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectAccessReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectAccessReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectRulesReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectRulesReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectRulesReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SelfSubjectRulesReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectAccessReview"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectAccessReview"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectAccessReviewSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectAccessReviewSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectAccessReviewStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectAccessReviewStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectRulesReviewStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.authorization.v1beta1.SubjectRulesReviewStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.CrossVersionObjectReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.CrossVersionObjectReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscaler"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscaler"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscalerList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscalerList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscalerSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscalerSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscalerStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.HorizontalPodAutoscalerStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.Scale"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.Scale"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.ScaleSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.ScaleSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v1.ScaleStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v1.ScaleStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.CrossVersionObjectReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.CrossVersionObjectReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ExternalMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ExternalMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ExternalMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ExternalMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscaler"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscaler"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.HorizontalPodAutoscalerStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.MetricSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.MetricSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.MetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.MetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ObjectMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ObjectMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ObjectMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ObjectMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.PodsMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.PodsMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.PodsMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.PodsMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ResourceMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ResourceMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ResourceMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta1.ResourceMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.CrossVersionObjectReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.CrossVersionObjectReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ExternalMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ExternalMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ExternalMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ExternalMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscaler"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscaler"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.HorizontalPodAutoscalerStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricIdentifier"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricIdentifier"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricTarget"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricTarget"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricValueStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.MetricValueStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ObjectMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ObjectMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ObjectMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ObjectMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.PodsMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.PodsMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.PodsMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.PodsMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ResourceMetricSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ResourceMetricSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ResourceMetricStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.autoscaling.v2beta2.ResourceMetricStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1.Job"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1.Job"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1.JobCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1.JobCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1.JobList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1.JobList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1.JobSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1.JobSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1.JobStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1.JobStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJob"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJob"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJobList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJobList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJobSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJobSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJobStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1beta1.CronJobStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v1beta1.JobTemplateSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v1beta1.JobTemplateSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJob"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJob"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJobList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJobList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJobSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJobSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJobStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.CronJobStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.JobTemplateSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.batch.v2alpha1.JobTemplateSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequest"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequest"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.certificates.v1beta1.CertificateSigningRequestStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.coordination.v1.Lease"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.coordination.v1.Lease"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.coordination.v1.LeaseList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.coordination.v1.LeaseList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.coordination.v1.LeaseSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.coordination.v1.LeaseSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.coordination.v1beta1.Lease"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.coordination.v1beta1.Lease"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.coordination.v1beta1.LeaseList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.coordination.v1beta1.LeaseList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.coordination.v1beta1.LeaseSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.coordination.v1beta1.LeaseSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.AWSElasticBlockStoreVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.AWSElasticBlockStoreVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Affinity"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Affinity"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.AttachedVolume"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.AttachedVolume"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.AzureDiskVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.AzureDiskVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.AzureFilePersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.AzureFilePersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.AzureFileVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.AzureFileVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Binding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Binding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.CSIPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.CSIPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.CSIVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.CSIVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Capabilities"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Capabilities"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.CephFSPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.CephFSPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.CephFSVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.CephFSVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.CinderPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.CinderPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.CinderVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.CinderVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ClientIPConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ClientIPConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ComponentCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ComponentCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ComponentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ComponentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ComponentStatusList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ComponentStatusList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMap"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMap"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapEnvSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapEnvSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapKeySelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapKeySelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapNodeConfigSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapNodeConfigSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapProjection"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapProjection"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ConfigMapVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Container"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Container"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerImage"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerImage"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerPort"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerPort"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerState"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerState"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStateRunning"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStateRunning"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStateTerminated"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStateTerminated"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStateWaiting"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStateWaiting"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ContainerStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.DaemonEndpoint"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.DaemonEndpoint"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.DownwardAPIProjection"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.DownwardAPIProjection"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.DownwardAPIVolumeFile"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.DownwardAPIVolumeFile"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.DownwardAPIVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.DownwardAPIVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EmptyDirVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EmptyDirVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EndpointAddress"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EndpointAddress"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EndpointPort"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EndpointPort"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EndpointSubset"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EndpointSubset"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Endpoints"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Endpoints"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EndpointsList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EndpointsList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EnvFromSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EnvFromSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EnvVar"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EnvVar"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EnvVarSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EnvVarSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Event"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Event"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EventList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EventList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EventSeries"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EventSeries"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.EventSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.EventSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ExecAction"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ExecAction"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.FCVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.FCVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.FlexPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.FlexPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.FlexVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.FlexVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.FlockerVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.FlockerVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.GCEPersistentDiskVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.GCEPersistentDiskVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.GitRepoVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.GitRepoVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.GlusterfsPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.GlusterfsPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.GlusterfsVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.GlusterfsVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.HTTPGetAction"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.HTTPGetAction"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.HTTPHeader"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.HTTPHeader"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Handler"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Handler"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.HostAlias"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.HostAlias"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.HostPathVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.HostPathVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ISCSIPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ISCSIPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ISCSIVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ISCSIVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.KeyToPath"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.KeyToPath"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Lifecycle"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Lifecycle"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LimitRange"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LimitRange"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LimitRangeItem"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LimitRangeItem"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LimitRangeList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LimitRangeList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LimitRangeSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LimitRangeSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LoadBalancerIngress"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LoadBalancerIngress"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LoadBalancerStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LoadBalancerStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LocalObjectReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LocalObjectReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.LocalVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.LocalVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NFSVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NFSVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Namespace"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Namespace"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NamespaceList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NamespaceList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NamespaceSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NamespaceSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NamespaceStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NamespaceStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Node"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Node"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeAddress"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeAddress"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeAffinity"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeAffinity"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeConfigSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeConfigSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeConfigStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeConfigStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeDaemonEndpoints"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeDaemonEndpoints"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeSelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeSelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeSelectorRequirement"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeSelectorRequirement"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeSelectorTerm"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeSelectorTerm"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.NodeSystemInfo"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.NodeSystemInfo"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ObjectFieldSelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ObjectFieldSelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ObjectReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ObjectReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolume"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolume"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaim"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaim"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeClaimVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PersistentVolumeStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PhotonPersistentDiskVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PhotonPersistentDiskVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Pod"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Pod"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodAffinity"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodAffinity"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodAffinityTerm"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodAffinityTerm"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodAntiAffinity"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodAntiAffinity"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodDNSConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodDNSConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodDNSConfigOption"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodDNSConfigOption"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodReadinessGate"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodReadinessGate"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodSecurityContext"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodSecurityContext"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodTemplate"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodTemplate"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodTemplateList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodTemplateList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodTemplateSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PodTemplateSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PortworxVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PortworxVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PreferredSchedulingTerm"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.PreferredSchedulingTerm"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Probe"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Probe"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ProjectedVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ProjectedVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.QuobyteVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.QuobyteVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.RBDPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.RBDPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.RBDVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.RBDVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationController"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationController"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ReplicationControllerStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ResourceFieldSelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ResourceFieldSelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuota"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuota"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuotaList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuotaList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuotaSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuotaSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuotaStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ResourceQuotaStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ResourceRequirements"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ResourceRequirements"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SELinuxOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SELinuxOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ScaleIOPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ScaleIOPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ScaleIOVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ScaleIOVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ScopeSelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ScopeSelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ScopedResourceSelectorRequirement"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ScopedResourceSelectorRequirement"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Secret"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Secret"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecretEnvSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecretEnvSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecretKeySelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecretKeySelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecretList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecretList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecretProjection"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecretProjection"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecretReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecretReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecretVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecretVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SecurityContext"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SecurityContext"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Service"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Service"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServiceAccount"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServiceAccount"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServiceAccountList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServiceAccountList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServiceAccountTokenProjection"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServiceAccountTokenProjection"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServiceList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServiceList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServicePort"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServicePort"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServiceSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServiceSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.ServiceStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.ServiceStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.SessionAffinityConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.SessionAffinityConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.StorageOSPersistentVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.StorageOSPersistentVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.StorageOSVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.StorageOSVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Sysctl"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Sysctl"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.TCPSocketAction"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.TCPSocketAction"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Taint"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Taint"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Toleration"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Toleration"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.TopologySelectorLabelRequirement"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.TopologySelectorLabelRequirement"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.TopologySelectorTerm"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.TopologySelectorTerm"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.TypedLocalObjectReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.TypedLocalObjectReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Volume"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.Volume"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.VolumeDevice"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.VolumeDevice"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.VolumeMount"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.VolumeMount"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.VolumeNodeAffinity"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.VolumeNodeAffinity"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.VolumeProjection"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.VolumeProjection"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.VsphereVirtualDiskVolumeSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.VsphereVirtualDiskVolumeSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.WeightedPodAffinityTerm"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.core.v1.WeightedPodAffinityTerm"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.events.v1beta1.Event"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.events.v1beta1.Event"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.events.v1beta1.EventList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.events.v1beta1.EventList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.events.v1beta1.EventSeries"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.events.v1beta1.EventSeries"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.AllowedCSIDriver"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.AllowedCSIDriver"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.AllowedFlexVolume"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.AllowedFlexVolume"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.AllowedHostPath"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.AllowedHostPath"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetUpdateStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DaemonSetUpdateStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.Deployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.Deployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentRollback"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentRollback"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentStrategy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.DeploymentStrategy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.FSGroupStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.FSGroupStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.HTTPIngressPath"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.HTTPIngressPath"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.HTTPIngressRuleValue"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.HTTPIngressRuleValue"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.HostPortRange"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.HostPortRange"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IDRange"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IDRange"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IPBlock"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IPBlock"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.Ingress"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.Ingress"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressBackend"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressBackend"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressTLS"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.IngressTLS"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyEgressRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyEgressRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyIngressRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyIngressRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyPeer"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyPeer"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyPort"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicyPort"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicySpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.NetworkPolicySpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.PodSecurityPolicy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.PodSecurityPolicy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.PodSecurityPolicyList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.PodSecurityPolicyList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.PodSecurityPolicySpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.PodSecurityPolicySpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ReplicaSetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RollbackConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RollbackConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RollingUpdateDaemonSet"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RollingUpdateDaemonSet"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RollingUpdateDeployment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RollingUpdateDeployment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RunAsGroupStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RunAsGroupStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RunAsUserStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.RunAsUserStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.SELinuxStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.SELinuxStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.Scale"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.Scale"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ScaleSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ScaleSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ScaleStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.ScaleStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.SupplementalGroupsStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.extensions.v1beta1.SupplementalGroupsStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.IPBlock"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.IPBlock"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyEgressRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyEgressRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyIngressRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyIngressRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyPeer"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyPeer"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyPort"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicyPort"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicySpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1.NetworkPolicySpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.HTTPIngressPath"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.HTTPIngressPath"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.HTTPIngressRuleValue"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.HTTPIngressRuleValue"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.Ingress"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.Ingress"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressBackend"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressBackend"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressTLS"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.networking.v1beta1.IngressTLS"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.node.v1alpha1.RuntimeClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.node.v1alpha1.RuntimeClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.node.v1alpha1.RuntimeClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.node.v1alpha1.RuntimeClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.node.v1alpha1.RuntimeClassSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.node.v1alpha1.RuntimeClassSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.node.v1beta1.RuntimeClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.node.v1beta1.RuntimeClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.node.v1beta1.RuntimeClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.node.v1beta1.RuntimeClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.AllowedCSIDriver"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.AllowedCSIDriver"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.AllowedFlexVolume"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.AllowedFlexVolume"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.AllowedHostPath"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.AllowedHostPath"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.Eviction"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.Eviction"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.FSGroupStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.FSGroupStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.HostPortRange"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.HostPortRange"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.IDRange"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.IDRange"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudget"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudget"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudgetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudgetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudgetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudgetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudgetStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodDisruptionBudgetStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodSecurityPolicy"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodSecurityPolicy"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodSecurityPolicyList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodSecurityPolicyList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodSecurityPolicySpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.PodSecurityPolicySpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.RunAsGroupStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.RunAsGroupStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.RunAsUserStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.RunAsUserStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.SELinuxStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.SELinuxStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.policy.v1beta1.SupplementalGroupsStrategyOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.policy.v1beta1.SupplementalGroupsStrategyOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.AggregationRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.AggregationRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRole"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRole"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRoleBinding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRoleBinding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRoleBindingList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRoleBindingList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRoleList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.ClusterRoleList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.PolicyRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.PolicyRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.Role"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.Role"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleBinding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleBinding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleBindingList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleBindingList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleRef"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.RoleRef"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1.Subject"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1.Subject"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.AggregationRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.AggregationRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRole"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRole"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRoleBinding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRoleBinding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRoleBindingList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRoleBindingList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRoleList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.ClusterRoleList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.PolicyRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.PolicyRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.Role"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.Role"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleBinding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleBinding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleBindingList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleBindingList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleRef"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.RoleRef"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.Subject"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1alpha1.Subject"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.AggregationRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.AggregationRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRole"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRole"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRoleBinding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRoleBinding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRoleBindingList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRoleBindingList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRoleList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.ClusterRoleList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.PolicyRule"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.PolicyRule"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.Role"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.Role"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleBinding"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleBinding"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleBindingList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleBindingList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleRef"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.RoleRef"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.Subject"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.rbac.v1beta1.Subject"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.scheduling.v1.PriorityClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.scheduling.v1.PriorityClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.scheduling.v1.PriorityClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.scheduling.v1.PriorityClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.scheduling.v1alpha1.PriorityClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.scheduling.v1alpha1.PriorityClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.scheduling.v1alpha1.PriorityClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.scheduling.v1alpha1.PriorityClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.scheduling.v1beta1.PriorityClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.scheduling.v1beta1.PriorityClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.scheduling.v1beta1.PriorityClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.scheduling.v1beta1.PriorityClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.settings.v1alpha1.PodPreset"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.settings.v1alpha1.PodPreset"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.settings.v1alpha1.PodPresetList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.settings.v1alpha1.PodPresetList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.settings.v1alpha1.PodPresetSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.settings.v1alpha1.PodPresetSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.StorageClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.StorageClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.StorageClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.StorageClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeAttachmentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeError"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1.VolumeError"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeAttachmentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeError"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1alpha1.VolumeError"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSIDriver"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSIDriver"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSIDriverList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSIDriverList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSIDriverSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSIDriverSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINode"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINode"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINodeDriver"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINodeDriver"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINodeList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINodeList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINodeSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.CSINodeSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.StorageClass"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.StorageClass"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.StorageClassList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.StorageClassList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachment"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachment"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentSource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentSource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeAttachmentStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeError"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.api.storage.v1beta1.VolumeError"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceColumnDefinition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceColumnDefinition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceConversion"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceConversion"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionNames"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionNames"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionVersion"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceDefinitionVersion"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceSubresourceScale"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceSubresourceScale"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceSubresourceStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceSubresourceStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceSubresources"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceSubresources"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceValidation"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.CustomResourceValidation"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.ExternalDocumentation"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.ExternalDocumentation"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSON"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSON"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaProps"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaPropsOrArray"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaPropsOrArray"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaPropsOrBool"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaPropsOrBool"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaPropsOrStringArray"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.JSONSchemaPropsOrStringArray"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.ServiceReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.ServiceReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.WebhookClientConfig"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apiextensions-apiserver.pkg.apis.apiextensions.v1beta1.WebhookClientConfig"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIGroup"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIGroup"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIGroupList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIGroupList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIResource"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIResource"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIResourceList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIResourceList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIVersions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.APIVersions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Fields"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Fields"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Initializer"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Initializer"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Initializers"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Initializers"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ManagedFieldsEntry"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ManagedFieldsEntry"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.MicroTime"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.MicroTime"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.OwnerReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.OwnerReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Preconditions"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Preconditions"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusCause"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusCause"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusDetails"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusDetails"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.runtime.RawExtension"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.runtime.RawExtension"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.util.intstr.IntOrString"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.util.intstr.IntOrString"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.apimachinery.pkg.version.Info"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.apimachinery.pkg.version.Info"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIService"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIService"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.APIServiceStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.ServiceReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1.ServiceReference"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIService"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIService"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceCondition"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceCondition"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceList"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceList"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceSpec"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceSpec"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceStatus"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.APIServiceStatus"
     },
     {
-      "$ref": "_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.ServiceReference"
+      "$ref": "kubernetes_definitions.json#/definitions/io.k8s.kube-aggregator.pkg.apis.apiregistration.v1beta1.ServiceReference"
     }
   ]
 }
