@@ -1,533 +1,533 @@
 {
-  "title": "GAPIC yaml JSON Schema",
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "$ref": "#/definitions/LoggingGapicYAML",
-  "definitions": {
-    "LoggingGapicYAML": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "collection_oneofs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CollectionOneof"
-          }
+    "title": "GAPIC yaml JSON Schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/LoggingGapicYAML",
+    "definitions": {
+        "LoggingGapicYAML": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "collection_oneofs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CollectionOneof"
+                    }
+                },
+                "collections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Collection"
+                    }
+                },
+                "config_schema_version": {
+                    "type": "string"
+                },
+                "interfaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Interface"
+                    }
+                },
+                "language_settings": {
+                    "$ref": "#/definitions/LanguageSettings"
+                },
+                "license_header": {
+                    "$ref": "#/definitions/LicenseHeader"
+                },
+                "resource_name_generation": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ResourceNameGeneration"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "LoggingGapicYAML"
         },
-        "collections": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Collection"
-          }
+        "CollectionOneof": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "collection_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "oneof_name": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "CollectionOneof"
         },
-        "config_schema_version": {
-          "type": "string"
+        "Collection": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "entity_name": {
+                    "type": "string"
+                },
+                "name_pattern": {
+                    "type": "string"
+                },
+                "language_overrides": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/LanguageOverride"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Collection"
         },
-        "interfaces": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Interface"
-          }
+        "LanguageOverride": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "entity_name": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "LanguageOverride"
         },
-        "language_settings": {
-          "$ref": "#/definitions/LanguageSettings"
+        "Interface": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "methods": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Method"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "retry_codes_def": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RetryCodesDef"
+                    }
+                },
+                "retry_params_def": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RetryParamsDef"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Interface"
         },
-        "license_header": {
-          "$ref": "#/definitions/LicenseHeader"
+        "Method": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "field_name_patterns": {
+                    "$ref": "#/definitions/Field"
+                },
+                "flattening": {
+                    "$ref": "#/definitions/Flattening"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page_streaming": {
+                    "$ref": "#/definitions/PageStreaming"
+                },
+                "required_fields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "resource_name_treatment": {
+                    "$ref": "#/definitions/ResourceNameTreatment"
+                },
+                "retry_codes_name": {
+                    "$ref": "#/definitions/Name"
+                },
+                "retry_params_name": {
+                    "$ref": "#/definitions/RetryParamsName"
+                },
+                "timeout_millis": {
+                    "type": "integer"
+                },
+                "batching": {
+                    "$ref": "#/definitions/Batching"
+                }
+            },
+            "required": [],
+            "title": "Method"
         },
-        "resource_name_generation": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ResourceNameGeneration"
-          }
+        "Batching": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "batch_descriptor": {
+                    "$ref": "#/definitions/BatchDescriptor"
+                },
+                "thresholds": {
+                    "$ref": "#/definitions/Thresholds"
+                }
+            },
+            "required": [],
+            "title": "Batching"
         },
-        "type": {
-          "type": "string"
+        "BatchDescriptor": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "batched_field": {
+                    "type": "string"
+                },
+                "discriminator_fields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [],
+            "title": "BatchDescriptor"
+        },
+        "Thresholds": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "delay_threshold_millis": {
+                    "type": "integer"
+                },
+                "element_count_threshold": {
+                    "type": "integer"
+                },
+                "flow_control_byte_limit": {
+                    "type": "integer"
+                },
+                "flow_control_element_limit": {
+                    "type": "integer"
+                },
+                "flow_control_limit_exceeded_behavior": {
+                    "type": "string"
+                },
+                "request_byte_threshold": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "title": "Thresholds"
+        },
+        "Field": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "parent": {
+                    "$ref": "#/definitions/Parent"
+                },
+                "sink_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "metric_name": {
+                    "type": "string"
+                },
+                "log_name": {
+                    "type": "string"
+                },
+                "resource_names": {
+                    "$ref": "#/definitions/Parent"
+                },
+                "destination": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Field"
+        },
+        "Flattening": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Group"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Flattening"
+        },
+        "Group": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Group"
+        },
+        "PageStreaming": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "request": {
+                    "$ref": "#/definitions/Request"
+                },
+                "response": {
+                    "$ref": "#/definitions/Response"
+                }
+            },
+            "required": [],
+            "title": "PageStreaming"
+        },
+        "Request": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "page_size_field": {
+                    "type": "string"
+                },
+                "token_field": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Request"
+        },
+        "Response": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "resources_field": {
+                    "type": "string"
+                },
+                "token_field": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Response"
+        },
+        "RetryCodesDef": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/Name"
+                },
+                "retry_codes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [],
+            "title": "RetryCodesDef"
+        },
+        "RetryParamsDef": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "initial_retry_delay_millis": {
+                    "type": "integer"
+                },
+                "initial_rpc_timeout_millis": {
+                    "type": "integer"
+                },
+                "max_retry_delay_millis": {
+                    "type": "integer"
+                },
+                "max_rpc_timeout_millis": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "retry_delay_multiplier": {
+                    "type": "number"
+                },
+                "rpc_timeout_multiplier": {
+                    "type": "integer"
+                },
+                "total_timeout_millis": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "title": "RetryParamsDef"
+        },
+        "LanguageSettings": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "csharp": {
+                    "$ref": "#/definitions/Csharp"
+                },
+                "go": {
+                    "$ref": "#/definitions/Go"
+                },
+                "java": {
+                    "$ref": "#/definitions/Java"
+                },
+                "nodejs": {
+                    "$ref": "#/definitions/Go"
+                },
+                "php": {
+                    "$ref": "#/definitions/PHP"
+                },
+                "python": {
+                    "$ref": "#/definitions/PHP"
+                },
+                "ruby": {
+                    "$ref": "#/definitions/PHP"
+                }
+            },
+            "required": [],
+            "title": "LanguageSettings"
+        },
+        "Csharp": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "package_name": {
+                    "type": "string"
+                },
+                "release_level": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Csharp"
+        },
+        "Go": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "domain_layer_location": {
+                    "type": "string"
+                },
+                "package_name": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Go"
+        },
+        "Java": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "interface_names": {
+                    "$ref": "#/definitions/InterfaceNames"
+                },
+                "package_name": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Java"
+        },
+        "InterfaceNames": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "google.logging.v2.ConfigServiceV2": {
+                    "type": "string"
+                },
+                "google.logging.v2.LoggingServiceV2": {
+                    "type": "string"
+                },
+                "google.logging.v2.MetricsServiceV2": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "InterfaceNames"
+        },
+        "PHP": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "package_name": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "PHP"
+        },
+        "LicenseHeader": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "copyright_file": {
+                    "type": "string"
+                },
+                "license_file": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "LicenseHeader"
+        },
+        "ResourceNameGeneration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "field_entity_map": {
+                    "$ref": "#/definitions/Field"
+                },
+                "message_name": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "ResourceNameGeneration"
+        },
+        "Parent": {
+            "type": "string",
+            "enum": [
+                "parent_oneof"
+            ],
+            "title": "Parent"
+        },
+        "ResourceNameTreatment": {
+            "type": "string",
+            "enum": [
+                "STATIC_TYPES"
+            ],
+            "title": "ResourceNameTreatment"
+        },
+        "Name": {
+            "type": "string",
+            "enum": [
+                "idempotent",
+                "non_idempotent"
+            ],
+            "title": "Name"
+        },
+        "RetryParamsName": {
+            "type": "string",
+            "enum": [
+                "default"
+            ],
+            "title": "RetryParamsName"
         }
-      },
-      "required": [],
-      "title": "LoggingGapicYAML"
-    },
-    "CollectionOneof": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "collection_names": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "oneof_name": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "CollectionOneof"
-    },
-    "Collection": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "entity_name": {
-          "type": "string"
-        },
-        "name_pattern": {
-          "type": "string"
-        },
-        "language_overrides": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/LanguageOverride"
-          }
-        }
-      },
-      "required": [],
-      "title": "Collection"
-    },
-    "LanguageOverride": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "entity_name": {
-          "type": "string"
-        },
-        "language": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "LanguageOverride"
-    },
-    "Interface": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "methods": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Method"
-          }
-        },
-        "name": {
-          "type": "string"
-        },
-        "retry_codes_def": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RetryCodesDef"
-          }
-        },
-        "retry_params_def": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RetryParamsDef"
-          }
-        }
-      },
-      "required": [],
-      "title": "Interface"
-    },
-    "Method": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "field_name_patterns": {
-          "$ref": "#/definitions/Field"
-        },
-        "flattening": {
-          "$ref": "#/definitions/Flattening"
-        },
-        "name": {
-          "type": "string"
-        },
-        "page_streaming": {
-          "$ref": "#/definitions/PageStreaming"
-        },
-        "required_fields": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "resource_name_treatment": {
-          "$ref": "#/definitions/ResourceNameTreatment"
-        },
-        "retry_codes_name": {
-          "$ref": "#/definitions/Name"
-        },
-        "retry_params_name": {
-          "$ref": "#/definitions/RetryParamsName"
-        },
-        "timeout_millis": {
-          "type": "integer"
-        },
-        "batching": {
-          "$ref": "#/definitions/Batching"
-        }
-      },
-      "required": [],
-      "title": "Method"
-    },
-    "Batching": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "batch_descriptor": {
-          "$ref": "#/definitions/BatchDescriptor"
-        },
-        "thresholds": {
-          "$ref": "#/definitions/Thresholds"
-        }
-      },
-      "required": [],
-      "title": "Batching"
-    },
-    "BatchDescriptor": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "batched_field": {
-          "type": "string"
-        },
-        "discriminator_fields": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [],
-      "title": "BatchDescriptor"
-    },
-    "Thresholds": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "delay_threshold_millis": {
-          "type": "integer"
-        },
-        "element_count_threshold": {
-          "type": "integer"
-        },
-        "flow_control_byte_limit": {
-          "type": "integer"
-        },
-        "flow_control_element_limit": {
-          "type": "integer"
-        },
-        "flow_control_limit_exceeded_behavior": {
-          "type": "string"
-        },
-        "request_byte_threshold": {
-          "type": "integer"
-        }
-      },
-      "required": [],
-      "title": "Thresholds"
-    },
-    "Field": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "parent": {
-          "$ref": "#/definitions/Parent"
-        },
-        "sink_name": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "metric_name": {
-          "type": "string"
-        },
-        "log_name": {
-          "type": "string"
-        },
-        "resource_names": {
-          "$ref": "#/definitions/Parent"
-        },
-        "destination": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Field"
-    },
-    "Flattening": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "groups": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Group"
-          }
-        }
-      },
-      "required": [],
-      "title": "Flattening"
-    },
-    "Group": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "parameters": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [],
-      "title": "Group"
-    },
-    "PageStreaming": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "request": {
-          "$ref": "#/definitions/Request"
-        },
-        "response": {
-          "$ref": "#/definitions/Response"
-        }
-      },
-      "required": [],
-      "title": "PageStreaming"
-    },
-    "Request": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "page_size_field": {
-          "type": "string"
-        },
-        "token_field": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Request"
-    },
-    "Response": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "resources_field": {
-          "type": "string"
-        },
-        "token_field": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Response"
-    },
-    "RetryCodesDef": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "$ref": "#/definitions/Name"
-        },
-        "retry_codes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [],
-      "title": "RetryCodesDef"
-    },
-    "RetryParamsDef": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "initial_retry_delay_millis": {
-          "type": "integer"
-        },
-        "initial_rpc_timeout_millis": {
-          "type": "integer"
-        },
-        "max_retry_delay_millis": {
-          "type": "integer"
-        },
-        "max_rpc_timeout_millis": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        },
-        "retry_delay_multiplier": {
-          "type": "number"
-        },
-        "rpc_timeout_multiplier": {
-          "type": "integer"
-        },
-        "total_timeout_millis": {
-          "type": "integer"
-        }
-      },
-      "required": [],
-      "title": "RetryParamsDef"
-    },
-    "LanguageSettings": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "csharp": {
-          "$ref": "#/definitions/Csharp"
-        },
-        "go": {
-          "$ref": "#/definitions/Go"
-        },
-        "java": {
-          "$ref": "#/definitions/Java"
-        },
-        "nodejs": {
-          "$ref": "#/definitions/Go"
-        },
-        "php": {
-          "$ref": "#/definitions/PHP"
-        },
-        "python": {
-          "$ref": "#/definitions/PHP"
-        },
-        "ruby": {
-          "$ref": "#/definitions/PHP"
-        }
-      },
-      "required": [],
-      "title": "LanguageSettings"
-    },
-    "Csharp": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "package_name": {
-          "type": "string"
-        },
-        "release_level": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Csharp"
-    },
-    "Go": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "domain_layer_location": {
-          "type": "string"
-        },
-        "package_name": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Go"
-    },
-    "Java": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "interface_names": {
-          "$ref": "#/definitions/InterfaceNames"
-        },
-        "package_name": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Java"
-    },
-    "InterfaceNames": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "google.logging.v2.ConfigServiceV2": {
-          "type": "string"
-        },
-        "google.logging.v2.LoggingServiceV2": {
-          "type": "string"
-        },
-        "google.logging.v2.MetricsServiceV2": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "InterfaceNames"
-    },
-    "PHP": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "package_name": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "PHP"
-    },
-    "LicenseHeader": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "copyright_file": {
-          "type": "string"
-        },
-        "license_file": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "LicenseHeader"
-    },
-    "ResourceNameGeneration": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "field_entity_map": {
-          "$ref": "#/definitions/Field"
-        },
-        "message_name": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "ResourceNameGeneration"
-    },
-    "Parent": {
-      "type": "string",
-      "enum": [
-        "parent_oneof"
-      ],
-      "title": "Parent"
-    },
-    "ResourceNameTreatment": {
-      "type": "string",
-      "enum": [
-        "STATIC_TYPES"
-      ],
-      "title": "ResourceNameTreatment"
-    },
-    "Name": {
-      "type": "string",
-      "enum": [
-        "idempotent",
-        "non_idempotent"
-      ],
-      "title": "Name"
-    },
-    "RetryParamsName": {
-      "type": "string",
-      "enum": [
-        "default"
-      ],
-      "title": "RetryParamsName"
     }
-  }
 }

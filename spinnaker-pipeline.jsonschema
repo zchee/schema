@@ -1,455 +1,455 @@
 {
-  "title": "Spinnaker Pipeline Templates v1 JSON Schema",
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$ref": "#/definitions/SpinnakerPipeline",
-  "definitions": {
-    "SpinnakerPipeline": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "configuration": {
-          "$ref": "#/definitions/Configuration"
+    "title": "Spinnaker Pipeline Templates v1 JSON Schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/SpinnakerPipeline",
+    "definitions": {
+        "SpinnakerPipeline": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/Configuration"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/Metadata"
+                },
+                "protect": {
+                    "type": "boolean"
+                },
+                "schema": {
+                    "type": "string",
+                    "format": "integer"
+                },
+                "stages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Stage"
+                    }
+                },
+                "variables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Variable"
+                    }
+                }
+            },
+            "required": [
+                "schema"
+            ]
         },
-        "id": {
-          "type": "string"
+        "Configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "concurrentExecutions": {
+                    "$ref": "#/definitions/ConcurrentExecutions"
+                },
+                "triggers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Trigger"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Configuration"
         },
-        "metadata": {
-          "$ref": "#/definitions/Metadata"
+        "ConcurrentExecutions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "limitConcurrent": {
+                    "type": "boolean"
+                }
+            },
+            "required": [],
+            "title": "ConcurrentExecutions"
         },
-        "protect": {
-          "type": "boolean"
+        "Trigger": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "registry": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Trigger"
         },
-        "schema": {
-          "type": "string",
-          "format": "integer"
+        "Metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner": {
+                    "type": "string"
+                },
+                "scopes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Metadata"
         },
-        "stages": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Stage"
-          }
+        "Stage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/Config"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "inheritanceControl": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "inject": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Stage"
         },
-        "variables": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Variable"
-          }
+        "Config": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "clusters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Cluster"
+                    }
+                }
+            },
+            "required": [],
+            "title": "Config"
+        },
+        "Cluster": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "application": {
+                    "type": "string"
+                },
+                "cloudProvider": {
+                    "type": "string"
+                },
+                "containers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Container"
+                    }
+                },
+                "dnsPolicy": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "items": {}
+                },
+                "interestingHealthProviderNames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "loadBalancers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "namespace": {
+                    "type": "string"
+                },
+                "nodeSelector": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "podAnnotations": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "replicaSetAnnotations": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "securityGroups": {
+                    "type": "array",
+                    "items": {}
+                },
+                "stack": {
+                    "type": "string"
+                },
+                "strategy": {
+                    "type": "string"
+                },
+                "targetSize": {
+                    "type": "integer"
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "integer"
+                },
+                "tolerations": {
+                    "type": "array",
+                    "items": {}
+                },
+                "volumeSources": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [],
+            "title": "Cluster"
+        },
+        "Container": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "args": {
+                    "type": "array",
+                    "items": {}
+                },
+                "command": {
+                    "type": "array",
+                    "items": {}
+                },
+                "envFrom": {
+                    "type": "array",
+                    "items": {}
+                },
+                "envVars": {
+                    "type": "array",
+                    "items": {}
+                },
+                "imageDescription": {
+                    "$ref": "#/definitions/ImageDescription"
+                },
+                "imagePullPolicy": {
+                    "type": "string"
+                },
+                "limits": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ports": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Port"
+                    }
+                },
+                "readinessProbe": {
+                    "$ref": "#/definitions/ReadinessProbe"
+                },
+                "requests": {
+                    "$ref": "#/definitions/InheritanceControl"
+                },
+                "volumeMounts": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [],
+            "title": "Container"
+        },
+        "ImageDescription": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "imageId": {
+                    "type": "string"
+                },
+                "registry": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "ImageDescription"
+        },
+        "InheritanceControl": {
+            "type": "object",
+            "additionalProperties": false,
+            "title": "InheritanceControl"
+        },
+        "Port": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "containerPort": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "protocol": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Port"
+        },
+        "ReadinessProbe": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "failureThreshold": {
+                    "type": "integer"
+                },
+                "handler": {
+                    "$ref": "#/definitions/Handler"
+                },
+                "initialDelaySeconds": {
+                    "type": "integer"
+                },
+                "periodSeconds": {
+                    "type": "integer"
+                },
+                "successThreshold": {
+                    "type": "integer"
+                },
+                "timeoutSeconds": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "title": "ReadinessProbe"
+        },
+        "Handler": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "execAction": {
+                    "$ref": "#/definitions/ExecAction"
+                },
+                "httpGetAction": {
+                    "$ref": "#/definitions/HTTPGetAction"
+                },
+                "tcpSocketAction": {
+                    "$ref": "#/definitions/TCPSocketAction"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Handler"
+        },
+        "ExecAction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "commands": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [],
+            "title": "ExecAction"
+        },
+        "HTTPGetAction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "uriScheme": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "HTTPGetAction"
+        },
+        "TCPSocketAction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "port": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "title": "TCPSocketAction"
+        },
+        "Variable": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "defaultValue": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "example": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "Variable"
         }
-      },
-      "required": [
-        "schema"
-      ]
-    },
-    "Configuration": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "concurrentExecutions": {
-          "$ref": "#/definitions/ConcurrentExecutions"
-        },
-        "triggers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Trigger"
-          }
-        }
-      },
-      "required": [],
-      "title": "Configuration"
-    },
-    "ConcurrentExecutions": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "limitConcurrent": {
-          "type": "boolean"
-        }
-      },
-      "required": [],
-      "title": "ConcurrentExecutions"
-    },
-    "Trigger": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "organization": {
-          "type": "string"
-        },
-        "registry": {
-          "type": "string"
-        },
-        "repository": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Trigger"
-    },
-    "Metadata": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "owner": {
-          "type": "string"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [],
-      "title": "Metadata"
-    },
-    "Stage": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "config": {
-          "$ref": "#/definitions/Config"
-        },
-        "id": {
-          "type": "string"
-        },
-        "inheritanceControl": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "inject": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Stage"
-    },
-    "Config": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "clusters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Cluster"
-          }
-        }
-      },
-      "required": [],
-      "title": "Config"
-    },
-    "Cluster": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "application": {
-          "type": "string"
-        },
-        "cloudProvider": {
-          "type": "string"
-        },
-        "containers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Container"
-          }
-        },
-        "dnsPolicy": {
-          "type": "string"
-        },
-        "events": {
-          "type": "array",
-          "items": {}
-        },
-        "initContainers": {
-          "type": "array",
-          "items": {}
-        },
-        "interestingHealthProviderNames": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "loadBalancers": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "namespace": {
-          "type": "string"
-        },
-        "nodeSelector": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "podAnnotations": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "replicaSetAnnotations": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "securityGroups": {
-          "type": "array",
-          "items": {}
-        },
-        "stack": {
-          "type": "string"
-        },
-        "strategy": {
-          "type": "string"
-        },
-        "targetSize": {
-          "type": "integer"
-        },
-        "terminationGracePeriodSeconds": {
-          "type": "integer"
-        },
-        "tolerations": {
-          "type": "array",
-          "items": {}
-        },
-        "volumeSources": {
-          "type": "array",
-          "items": {}
-        }
-      },
-      "required": [],
-      "title": "Cluster"
-    },
-    "Container": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "args": {
-          "type": "array",
-          "items": {}
-        },
-        "command": {
-          "type": "array",
-          "items": {}
-        },
-        "envFrom": {
-          "type": "array",
-          "items": {}
-        },
-        "envVars": {
-          "type": "array",
-          "items": {}
-        },
-        "imageDescription": {
-          "$ref": "#/definitions/ImageDescription"
-        },
-        "imagePullPolicy": {
-          "type": "string"
-        },
-        "limits": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "name": {
-          "type": "string"
-        },
-        "ports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Port"
-          }
-        },
-        "readinessProbe": {
-          "$ref": "#/definitions/ReadinessProbe"
-        },
-        "requests": {
-          "$ref": "#/definitions/InheritanceControl"
-        },
-        "volumeMounts": {
-          "type": "array",
-          "items": {}
-        }
-      },
-      "required": [],
-      "title": "Container"
-    },
-    "ImageDescription": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "account": {
-          "type": "string"
-        },
-        "imageId": {
-          "type": "string"
-        },
-        "registry": {
-          "type": "string"
-        },
-        "repository": {
-          "type": "string"
-        },
-        "tag": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "ImageDescription"
-    },
-    "InheritanceControl": {
-      "type": "object",
-      "additionalProperties": false,
-      "title": "InheritanceControl"
-    },
-    "Port": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "containerPort": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        },
-        "protocol": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Port"
-    },
-    "ReadinessProbe": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "failureThreshold": {
-          "type": "integer"
-        },
-        "handler": {
-          "$ref": "#/definitions/Handler"
-        },
-        "initialDelaySeconds": {
-          "type": "integer"
-        },
-        "periodSeconds": {
-          "type": "integer"
-        },
-        "successThreshold": {
-          "type": "integer"
-        },
-        "timeoutSeconds": {
-          "type": "integer"
-        }
-      },
-      "required": [],
-      "title": "ReadinessProbe"
-    },
-    "Handler": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "execAction": {
-          "$ref": "#/definitions/ExecAction"
-        },
-        "httpGetAction": {
-          "$ref": "#/definitions/HTTPGetAction"
-        },
-        "tcpSocketAction": {
-          "$ref": "#/definitions/TCPSocketAction"
-        },
-        "type": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Handler"
-    },
-    "ExecAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "commands": {
-          "type": "array",
-          "items": {}
-        }
-      },
-      "required": [],
-      "title": "ExecAction"
-    },
-    "HTTPGetAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "path": {
-          "type": "string"
-        },
-        "port": {
-          "type": "integer"
-        },
-        "uriScheme": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "HTTPGetAction"
-    },
-    "TCPSocketAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "port": {
-          "type": "integer"
-        }
-      },
-      "required": [],
-      "title": "TCPSocketAction"
-    },
-    "Variable": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "defaultValue": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "example": {
-          "type": "string"
-        }
-      },
-      "required": [],
-      "title": "Variable"
     }
-  }
 }
