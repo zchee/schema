@@ -1,0 +1,191 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/DexElement"
+    },
+    "definitions": {
+        "DexElement": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "CanonicalDeclaration": {
+                    "$ref": "#/definitions/Location"
+                },
+                "CompletionSnippetSuffix": {
+                    "type": "string"
+                },
+                "Definition": {
+                    "$ref": "#/definitions/Location"
+                },
+                "Documentation": {
+                    "type": "string"
+                },
+                "Flags": {
+                    "type": "integer"
+                },
+                "ID": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Origin": {
+                    "type": "integer"
+                },
+                "ReturnType": {
+                    "type": "string"
+                },
+                "Scope": {
+                    "type": "string"
+                },
+                "Signature": {
+                    "type": "string"
+                },
+                "SymInfo": {
+                    "$ref": "#/definitions/SymInfo"
+                },
+                "Type": {
+                    "type": "string"
+                },
+                "References": {
+                    "$ref": "#/definitions/References"
+                },
+                "IncludeHeaders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/IncludeHeader"
+                    }
+                }
+            },
+            "required": [
+                "ID"
+            ],
+            "title": "DexElement"
+        },
+        "Location": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "FileURI": {
+                    "type": "string"
+                },
+                "Start": {
+                    "$ref": "#/definitions/Position"
+                },
+                "End": {
+                    "$ref": "#/definitions/Position"
+                }
+            },
+            "required": [
+                "FileURI",
+                "Start",
+                "End"
+            ],
+            "title": "Location"
+        },
+        "Position": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Line": {
+                    "type": "integer"
+                },
+                "Column": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "Line",
+                "Column"
+            ],
+            "title": "Position"
+        },
+        "IncludeHeader": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Header": {
+                    "type": "string"
+                },
+                "References": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "Header",
+                "References"
+            ],
+            "title": "IncludeHeader"
+        },
+        "Reference": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Kind": {
+                    "type": "integer"
+                },
+                "Location": {
+                    "$ref": "#/definitions/Location"
+                }
+            },
+            "required": [
+                "Kind",
+                "Location"
+            ],
+            "title": "Reference"
+        },
+        "SymInfo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Kind": {
+                    "$ref": "#/definitions/Kind"
+                },
+                "Lang": {
+                    "$ref": "#/definitions/Lang"
+                }
+            },
+            "required": [
+                "Kind",
+                "Lang"
+            ],
+            "title": "SymInfo"
+        },
+        "References": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Reference"
+                    }
+                },
+                {
+                    "type": "integer"
+                }
+            ],
+            "title": "References"
+        },
+        "Kind": {
+            "type": "string",
+            "enum": [
+                "Field",
+                "Function",
+                "EnumConstant",
+                "TypeAlias",
+                "Variable",
+                "Struct",
+                "Enum",
+                "Union"
+            ],
+            "title": "Kind"
+        },
+        "Lang": {
+            "type": "string",
+            "enum": [
+                "C"
+            ],
+            "title": "Lang"
+        }
+    }
+}
