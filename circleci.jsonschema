@@ -351,6 +351,7 @@
                 "image": {
                     "description": "The VM image to use. View [available images](https://circleci.com/docs/2.0/configuration-reference/#available-machine-images). **Note:** This key is **not** supported on the installable CircleCI. For information about customizing machine executor images on CircleCI installed on your servers, see our [VM Service documentation](https://circleci.com/docs/2.0/vm-service).",
                     "enum": [
+                        "ubuntu-1604:202004-01",
                         "ubuntu-1604:201903-01",
                         "circleci/classic:latest",
                         "circleci/classic:edge",
