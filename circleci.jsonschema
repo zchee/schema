@@ -1,6 +1,6 @@
 {
     "title": "CircleCI configuration JSON schema",
-    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
         "filter": {
             "description": "A map defining rules for execution on specific branches",
@@ -541,6 +541,9 @@
                 },
                 "add_ssh_keys": {
                     "description": "https://circleci.com/docs/2.0/configuration-reference/#add_ssh_keys\n\nSpecial step that adds SSH keys from a project’s settings to a container. Also configures SSH to use these keys."
+                },
+                "when": {
+                    "description": "https://circleci.com/docs/2.0/configuration-reference/#the-when-step-requires-version-21\n\nA conditional step consists of a step with the key when or unless. Under the when key are the subkeys condition and steps."
                 }
             },
             "configuration": {
@@ -665,7 +668,8 @@
                                 "18.04.0-ce",
                                 "18.05.0-ce",
                                 "18.06.0-ce",
-                                "18.09.3"
+                                "18.09.3",
+                                "19.03.8"
                             ],
                             "default": "17.09.0-ce"
                         }
@@ -881,6 +885,96 @@
                         },
                         "fingerprints": {
                             "description": "Directory to attach the workspace to",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "run": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/builtinSteps/documentation/run"
+                        }
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "command"
+                            ],
+                            "properties": {
+                                "command": {
+                                    "description": "Command to run via the shell",
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": "Title of the step to be shown in the CircleCI UI (default: full `command`)",
+                                    "type": "string"
+                                },
+                                "shell": {
+                                    "description": "Shell to use for execution command",
+                                    "type": "string"
+                                },
+                                "environment": {
+                                    "description": "Additional environmental variables, locally scoped to command",
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    }
+                                },
+                                "background": {
+                                    "description": "Whether or not this step should run in the background (default: false)",
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "working_directory": {
+                                    "description": "In which directory to run this step (default: `working_directory` of the job",
+                                    "type": "string"
+                                },
+                                "no_output_timeout": {
+                                    "description": "Elapsed time the command can run without output. The string is a decimal with unit suffix, such as \"20m\", \"1.25h\", \"5s\" (default: 10 minutes)",
+                                    "type": "string",
+                                    "pattern": "\\d+(\\.\\d+)?[mhs]",
+                                    "default": "10m"
+                                },
+                                "when": {
+                                    "description": "Specify when to enable or disable the step. Takes the following values: `always`, `on_success`, `on_fail` (default: `on_success`)",
+                                    "enum": [
+                                        "always",
+                                        "on_success",
+                                        "on_fail"
+                                    ],
+                                    "default": "on_success"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "when": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/builtinSteps/documentation/when"
+                        }
+                    ],
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "condition",
+                        "steps"
+                    ],
+                    "properties": {
+                        "condition": {
+                            "description": "A parameter value",
+                            "type": "string"
+                        },
+                        "steps": {
+                            "description": "A list of steps to execute when the condition is true",
                             "type": "array",
                             "items": {
                                 "type": "string"
@@ -1146,6 +1240,14 @@
                                                         "$ref": "#/definitions/filter"
                                                     }
                                                 }
+                                            },
+                                            "pre-steps": {
+                                                "description": "Executed before any of the other steps in the job.",
+                                                "type": "string"
+                                            },
+                                            "post-steps": {
+                                                "description": "Executed after all of the other steps.",
+                                                "type": "string"
                                             }
                                         }
                                     }
