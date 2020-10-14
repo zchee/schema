@@ -38,17 +38,17 @@
       }
     },
     "orbs": {
-      "description": "Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects\n\n[orbs](https://circleci.com/docs/2.0/configuration-reference/#orbs-requires-version-21)",
+      "description": "https://circleci.com/docs/2.0/configuration-reference/#orbs-requires-version-21\n\nOrbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.",
       "type": "object",
       "additionalProperties": {
         "oneOf": [
           {
-            "description": "An orb to depend on and its semver range, or volatile for the most recent release\n\n[semantic versioning in orbs](https://circleci.com/docs/2.0/creating-orbs/#semantic-versioning-in-orbs)",
+            "description": "https://circleci.com/docs/2.0/creating-orbs/#semantic-versioning-in-orbs\n\nAn orb to depend on and its semver range, or volatile for the most recent release.",
             "type": "string",
             "pattern": "^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+@(\\d+|\\d+\\.\\d+|\\d+\\.\\d+\\.\\d+|volatile)$"
           },
           {
-            "description": "Inline orbs can be handy during development of an orb or as a convenience for name-spacing jobs and commands in lengthy configurations, particularly if you later intend to share the orb with others\n\n[creating inline orbs](https://circleci.com/docs/2.0/creating-orbs/#creating-inline-orbs)",
+            "description": "https://circleci.com/docs/2.0/creating-orbs/#creating-inline-orbs\n\nInline orbs can be handy during development of an orb or as a convenience for name-spacing jobs and commands in lengthy configurations, particularly if you later intend to share the orb with others.",
             "type": "object",
             "properties": {
               "orbs": {
@@ -69,30 +69,30 @@
       }
     },
     "commands": {
-      "description": "A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs\n\n[commands](https://circleci.com/docs/2.0/configuration-reference/#commands-requires-version-21)",
+      "description": "https://circleci.com/docs/2.0/configuration-reference/#commands-requires-version-21\n\nA command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.",
       "type": "object",
       "additionalProperties": {
-        "description": "Definition of a custom command\n\n[commands](nhttps://circleci.com/docs/2.0/configuration-reference/#commands-requires-version-21)",
+        "description": "https://circleci.com/docs/2.0/configuration-reference/#commands-requires-version-21\n\nDefinition of a custom command.",
         "type": "object",
         "required": [
           "steps"
         ],
         "properties": {
           "steps": {
-            "description": "A sequence of steps run inside the calling job of the command",
+            "description": "A sequence of steps run inside the calling job of the command.",
             "type": "array",
             "items": {
               "$ref": "#/definitions/step"
             }
           },
           "parameters": {
-            "description": "A map of parameter keys\n\n[parameter](https://circleci.com/docs/2.0/reusing-config/#using-the-parameters-declaration)",
+            "description": "https://circleci.com/docs/2.0/reusing-config/#using-the-parameters-declaration\n\nA map of parameter keys.",
             "type": "object",
             "patternProperties": {
               "^[a-z][a-z0-9_-]+$": {
                 "oneOf": [
                   {
-                    "description": "A string parameter\n\n[string parameter](https://circleci.com/docs/2.0/reusing-config/#string)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#string\n\nA string parameter.",
                     "type": "object",
                     "required": [
                       "type"
@@ -112,16 +112,14 @@
                     }
                   },
                   {
-                    "description": "A boolean parameter\n\n[boolean parameter](https://circleci.com/docs/2.0/reusing-config/#boolean)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#boolean\n\nA boolean parameter.",
                     "type": "object",
                     "required": [
                       "type"
                     ],
                     "properties": {
                       "type": {
-                        "enum": [
-                          "boolean"
-                        ]
+                        "enum": ["boolean"]
                       },
                       "description": {
                         "type": "string"
@@ -132,7 +130,7 @@
                     }
                   },
                   {
-                    "description": "An integer parameter\n\n[integer parameter](https://circleci.com/docs/2.0/reusing-config/#integer)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#integer\n\nAn integer parameter.",
                     "type": "object",
                     "required": [
                       "type"
@@ -152,7 +150,7 @@
                     }
                   },
                   {
-                    "description": "The `enum` parameter may be a list of any values. Use the `enum` parameter type when you want to enforce that the value must be one from a specific set of string values\n\n[enum parameter](https://circleci.com/docs/2.0/reusing-config/#enum)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#enum\n\nThe `enum` parameter may be a list of any values. Use the `enum` parameter type when you want to enforce that the value must be one from a specific set of string values.",
                     "type": "object",
                     "required": [
                       "type",
@@ -180,7 +178,7 @@
                     }
                   },
                   {
-                    "description": "Use an `executor` parameter type to allow the invoker of a job to decide what executor it will run on\n\n[executor](https://circleci.com/docs/2.0/reusing-config/#executor)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#executor\n\nUse an `executor` parameter type to allow the invoker of a job to decide what executor it will run on.",
                     "type": "object",
                     "required": [
                       "type"
@@ -200,7 +198,7 @@
                     }
                   },
                   {
-                    "description": "Steps are used when you have a job or command that needs to mix predefined and user-defined steps. When passed in to a command or job invocation, the steps passed as parameters are always defined as a sequence, even if only one step is provided\n\n[steps](https://circleci.com/docs/2.0/reusing-config/#steps)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#steps\n\nSteps are used when you have a job or command that needs to mix predefined and user-defined steps. When passed in to a command or job invocation, the steps passed as parameters are always defined as a sequence, even if only one step is provided.",
                     "type": "object",
                     "required": [
                       "type"
@@ -223,11 +221,9 @@
                     }
                   },
                   {
-                    "description": "The environment variable name parameter is a string that must match a POSIX_NAME regexp (e.g. no spaces or special characters) and is a more meaningful parameter type that enables additional checks to be performed\n\n[env_var_name](https://circleci.com/docs/2.0/reusing-config/#environment-variable-name)",
+                    "description": "https://circleci.com/docs/2.0/reusing-config/#environment-variable-name\n\nThe environment variable name parameter is a string that must match a POSIX_NAME regexp (e.g. no spaces or special characters) and is a more meaningful parameter type that enables additional checks to be performed. ",
                     "type": "object",
-                    "required": [
-                      "type"
-                    ],
+                    "required": ["type"],
                     "properties": {
                       "type": {
                         "enum": [
@@ -248,7 +244,7 @@
             }
           },
           "description": {
-            "description": "A string that describes the purpose of the command",
+            "description": "A string that describes the purpose of the command.",
             "type": "string"
           }
         }
@@ -349,7 +345,7 @@
       "additionalProperties": false,
       "properties": {
         "image": {
-          "description": "The VM image to use. View [available images](https://circleci.com/docs/2.0/configuration-reference/#available-machine-images). **Note**: This key is **not** supported on the installable CircleCI. For information about customizing machine executor images on CircleCI installed on your servers, see our [VM Service documentation](https://circleci.com/docs/2.0/vm-service)",
+          "description": "The VM image to use. View [available images](https://circleci.com/docs/2.0/configuration-reference/#available-machine-images). **Note:** This key is **not** supported on the installable CircleCI. For information about customizing machine executor images on CircleCI installed on your servers, see our [VM Service documentation](https://circleci.com/docs/2.0/vm-service).",
           "enum": [
             "ubuntu-2004:202008-01",
             "ubuntu-1604:202007-01",
@@ -372,7 +368,7 @@
           "default": "ubuntu-1604:201903-01"
         },
         "docker_layer_caching": {
-          "description": "Set to `true` to enable [Docker Layer Caching](https://circleci.com/docs/2.0/docker-layer-caching). Note: You must open a support ticket to have a CircleCI Sales representative contact you about enabling this feature on your account for an additional fee",
+          "description": "Set to `true` to enable [Docker Layer Caching](https://circleci.com/docs/2.0/docker-layer-caching). Note: You must open a support ticket to have a CircleCI Sales representative contact you about enabling this feature on your account for an additional fee.",
           "type": "boolean",
           "default": "true"
         }
@@ -404,7 +400,8 @@
             "11.4.1",
             "11.5.0",
             "11.6.0",
-            "12.0.0"
+            "12.0.0",
+            "12.0.1"
           ]
         }
       }
@@ -439,7 +436,7 @@
               "$ref": "#/definitions/dockerExecutor"
             },
             "resource_class": {
-              "description": "Amount of CPU and RAM allocated to each container in a job. (Only works with the `docker` key for paid accounts and is subject to change in a future pricing update. **Note:** Paid accounts must request to use this feature by opening a support ticket (or by contacting their Customer Success Manager when applicable) and non-paid users must request to use this feature by opening a ticket at <https://support.circleci.com/hc/en-us/requests/new>)",
+              "description": "Amount of CPU and RAM allocated to each container in a job. (Only works with the `docker` key for paid accounts and is subject to change in a future pricing update. **Note:** Paid accounts must request to use this feature by opening a support ticket (or by contacting their Customer Success Manager when applicable) and non-paid users must request to use this feature by opening a ticket at <https://support.circleci.com/hc/en-us/requests/new>.)",
               "type": "string",
               "default": "medium",
               "enum": [
@@ -493,7 +490,7 @@
       ]
     },
     "executors": {
-      "description": "Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs",
+      "description": "Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.",
       "type": "object",
       "additionalProperties": {
         "type": "object",
@@ -504,11 +501,11 @@
             "type": "string"
           },
           "working_directory": {
-            "description": "In which directory to run the steps",
+            "description": "In which directory to run the steps.",
             "type": "string"
           },
           "environment": {
-            "description": "A map of environment variable names and values",
+            "description": "A map of environment variable names and values.",
             "type": "object",
             "additionalProperties": {
               "type": "string"
@@ -520,40 +517,37 @@
     "builtinSteps": {
       "documentation": {
         "run": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#run\n\nUsed for invoking all command-line programs, taking either a map of configuration values, or, when called in its short-form, a string that will be used as both the `command` and `name`. Run commands are executed using non-login shells by default, so you must explicitly source any dotfiles as part of the command"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#run\n\nUsed for invoking all command-line programs, taking either a map of configuration values, or, when called in its short-form, a string that will be used as both the `command` and `name`. Run commands are executed using non-login shells by default, so you must explicitly source any dotfiles as part of the command."
         },
         "checkout": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#checkout\n\nSpecial step used to check out source code to the configured `path` (defaults to the `working_directory`). The reason this is a special step is because it is more of a helper function designed to make checking out code easy for you. If you require doing git over HTTPS you should not use this step as it configures git to checkout over ssh"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#checkout\n\nSpecial step used to check out source code to the configured `path` (defaults to the `working_directory`). The reason this is a special step is because it is more of a helper function designed to make checking out code easy for you. If you require doing git over HTTPS you should not use this step as it configures git to checkout over ssh."
         },
         "setup_remote_docker": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#setup_remote_docker\n\nCreates a remote Docker environment configured to execute Docker commands"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#setup_remote_docker\n\nCreates a remote Docker environment configured to execute Docker commands."
         },
         "save_cache": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#save_cache\n\nGenerates and stores a cache of a file or directory of files such as dependencies or source code in our object storage. Later jobs can restore this cache using the `restore_cache` step"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#save_cache\n\nGenerates and stores a cache of a file or directory of files such as dependencies or source code in our object storage. Later jobs can restore this cache using the `restore_cache` step."
         },
         "restore_cache": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#restore_cache\n\nRestores a previously saved cache based on a `key`. Cache needs to have been saved first for this key using the `save_cache` step"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#restore_cache\n\nRestores a previously saved cache based on a `key`. Cache needs to have been saved first for this key using the `save_cache` step."
         },
         "deploy": {
           "description": "https://circleci.com/docs/2.0/configuration-reference/#deploy\n\nSpecial step for deploying artifacts. `deploy` uses the same configuration map and semantics as run step. Jobs may have more than one deploy step. In general deploy step behaves just like run with two exceptions:\n* In a job with parallelism, the deploy step will only be executed by node #0 and only if all nodes succeed. Nodes other than #0 will skip this step.\n* In a job that runs with SSH, the deploy step will not execute"
         },
         "store_artifacts": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#store_artifacts\n\nStep to store artifacts (for example logs, binaries, etc) to be available in the web app or through the API"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#store_artifacts\n\nStep to store artifacts (for example logs, binaries, etc) to be available in the web app or through the API."
         },
         "store_test_results": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#store_test_results\n\nSpecial step used to upload test results so they display in builds’ Test Summary section and can be used for timing analysis. To also see test result as build artifacts, please use the `store_artifacts` step"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#store_test_results\n\nSpecial step used to upload test results so they display in builds’ Test Summary section and can be used for timing analysis. To also see test result as build artifacts, please use the `store_artifacts` step."
         },
         "persist_to_workspace": {
           "description": "https://circleci.com/docs/2.0/configuration-reference/#persist_to_workspace\n\nSpecial step used to persist a temporary file to be used by another job in the workflow"
         },
         "attach_workspace": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#attach_workspace\n\nSpecial step used to attach the workflow's workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being attached at"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#attach_workspace\n\nSpecial step used to attach the workflow's workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being attached at."
         },
         "add_ssh_keys": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#add_ssh_keys\n\nSpecial step that adds SSH keys from a project’s settings to a container. Also configures SSH to use these keys"
-        },
-        "when": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#the-when-step-requires-version-21\n\nA conditional step consists of a step with the key when or unless. Under the when key are the subkeys condition and steps"
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#add_ssh_keys\n\nSpecial step that adds SSH keys from a project’s settings to a container. Also configures SSH to use these keys."
         }
       },
       "configuration": {
@@ -957,7 +951,7 @@
           "pattern": "^[a-z][a-z0-9_-]+$"
         },
         {
-          "description": "https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb",
+          "description": "https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb.",
           "type": "string",
           "pattern": "^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+$"
         },
@@ -1005,7 +999,7 @@
               "description": "https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands\n\nA custom command defined via the top level commands key"
             },
             "^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+$": {
-              "description": "https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb"
+              "description": "https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb."
             }
           }
         }
@@ -1017,19 +1011,28 @@
       "additionalProperties": true,
       "properties": {
         "requires": {
-          "description": "Jobs are run in parallel by default, so you must explicitly require any dependencies by their job name",
+          "description": "Jobs are run in parallel by default, so you must explicitly require any dependencies by their job name.",
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "context": {
-          "description": "The name of the context. The default name is `org-global`",
-          "type": "string",
-          "default": "org-global"
+          "description": "Either a single context name, or a list of contexts. The default name is `org-global`",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],"default": "org-global"
         },
         "type": {
-          "description": "A job may have a `type` of `approval` indicating it must be manually approved before downstream jobs may proceed",
+          "description": "A job may have a `type` of `approval` indicating it must be manually approved before downstream jobs may proceed.",
           "enum": [
             "approval"
           ]
@@ -1061,7 +1064,7 @@
           }
         },
         "matrix": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#matrix-requires-version-21\n\nThe matrix stanza allows you to run a parameterized job multiple times with different arguments",
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#matrix-requires-version-21\n\nThe matrix stanza allows you to run a parameterized job multiple times with different arguments.",
           "type": "object",
           "additionalProperties": false,
           "required": [
@@ -1105,7 +1108,7 @@
             ],
             "properties": {
               "executor": {
-                "description": "The name of the executor to use (defined via the top level executors map)",
+                "description": "The name of the executor to use (defined via the top level executors map).",
                 "type": "string"
               }
             }
@@ -1127,7 +1130,7 @@
             }
           },
           "working_directory": {
-            "description": "In which directory to run the steps. (default: `~/project`. `project` is a literal string, not the name of the project.) You can also refer the directory with `$CIRCLE_WORKING_DIRECTORY` environment variable",
+            "description": "In which directory to run the steps. (default: `~/project`. `project` is a literal string, not the name of the project.) You can also refer the directory with `$CIRCLE_WORKING_DIRECTORY` environment variable.",
             "type": "string",
             "default": "~/project"
           },
@@ -1137,14 +1140,14 @@
             "default": 1
           },
           "environment": {
-            "description": "A map of environment variable names and variables (NOTE: these will override any environment variables you set in the CircleCI web interface)",
+            "description": "A map of environment variable names and variables (NOTE: these will override any environment variables you set in the CircleCI web interface).",
             "type": "object",
             "additionalProperties": {
               "type": "string"
             }
           },
           "branches": {
-            "description": "A map defining rules for whitelisting/blacklisting execution of specific branches for a single job that is **not** in a workflow (default: all whitelisted). See Workflows for configuring branch execution for jobs in a workflow",
+            "description": "A map defining rules for whitelisting/blacklisting execution of specific branches for a single job that is **not** in a workflow (default: all whitelisted). See Workflows for configuring branch execution for jobs in a workflow.",
             "type": "object",
             "additionalProperties": {
               "type": "string"
@@ -1160,7 +1163,7 @@
   ],
   "properties": {
     "version": {
-      "description": "The version field is intended to be used in order to issue warnings for deprecation or breaking change",
+      "description": "The version field is intended to be used in order to issue warnings for deprecation or breaking changes.",
       "default": 2.1,
       "enum": [
         2,
@@ -1196,7 +1199,7 @@
         "additionalProperties": false,
         "properties": {
           "triggers": {
-            "description": "Specifies which triggers will cause this workflow to be executed. Default behavior is to trigger the workflow when pushing to a branch",
+            "description": "Specifies which triggers will cause this workflow to be executed. Default behavior is to trigger the workflow when pushing to a branch.",
             "type": "array",
             "items": {
               "type": "object",
