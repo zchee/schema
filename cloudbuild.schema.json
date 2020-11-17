@@ -55,9 +55,7 @@
       "type": "string",
       "pattern": "^\\d+(\\.\\d{0,9})?s$",
       "default": "600s",
-      "examples": [
-        "3.5s"
-      ]
+      "examples": ["3.5s"]
     },
     "secrets": {
       "description": "Secrets to decrypt using Cloud Key Management Service.",
@@ -67,9 +65,7 @@
       }
     }
   },
-  "required": [
-    "steps"
-  ],
+  "required": ["steps"],
   "definitions": {
     "BuildStep": {
       "description": "A step in the build pipeline.",
@@ -117,9 +113,7 @@
           "format": "google-duration",
           "pattern": "^\\d+(\\.\\d{0,9})?s$",
           "default": "600s",
-          "examples": [
-            "3.5s"
-          ]
+          "examples": ["3.5s"]
         },
         "id": {
           "description": "Unique identifier for this build step, used in `wait_for` to\nreference this build step as a dependency.",
