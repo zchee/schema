@@ -1,7 +1,50 @@
 {
   "title": "CircleCI configuration JSON schema",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "definitions": {
+    "logical": {
+      "description": "https://circleci.com/docs/2.0/configuration-reference/#logic-statements \n\nA logical statement to be used in dynamic configuration",
+      "oneOf": [
+        {
+          "type": [
+            "string",
+            "boolean",
+            "integer",
+            "number"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "maxProperties": 1,
+          "properties": {
+            "and": {
+              "description": "https://circleci.com/docs/2.0/configuration-reference/#logic-statements \n\nLogical and: true when all statements in the list are true",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/logical"
+              }
+            },
+            "or": {
+              "description": "https://circleci.com/docs/2.0/configuration-reference/#logic-statements \n\nLogical or: true when at least one statements in the list is true",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/logical"
+              }
+            },
+            "not": {
+              "description": "https://circleci.com/docs/2.0/configuration-reference/#logic-statements \n\nLogical not: true when statement is false",
+              "$ref": "#/definitions/logical"
+            },
+            "equal": {
+              "description": "https://circleci.com/docs/2.0/configuration-reference/#logic-statements \n\nTrue when all elements in the list are equal",
+              "type": "array"
+            }
+          }
+        }
+      ]
+    },
     "filter": {
       "description": "A map defining rules for execution on specific branches",
       "type": "object",
@@ -310,32 +353,65 @@
     "machineExecutor": {
       "description": "Options for the [machine executor](https://circleci.com/docs/2.0/configuration-reference/#machine)",
       "type": "object",
-      "required": [
-        "image"
-      ],
+      "required": ["image"],
       "additionalProperties": false,
       "properties": {
         "image": {
           "description": "The VM image to use. View [available images](https://circleci.com/docs/2.0/configuration-reference/#available-machine-images). **Note:** This key is **not** supported on the installable CircleCI. For information about customizing machine executor images on CircleCI installed on your servers, see our [VM Service documentation](https://circleci.com/docs/2.0/vm-service).",
           "type": "string",
-          "enum": [
-            "ubuntu-2004:202008-01",
-            "ubuntu-1604:202007-01",
-            "ubuntu-1604:202004-01",
-            "ubuntu-1604:201903-01",
-            "circleci/classic:latest",
-            "circleci/classic:edge",
-            "circleci/classic:201703-01",
-            "circleci/classic:201707-01",
-            "circleci/classic:201708-01",
-            "circleci/classic:201709-01",
-            "circleci/classic:201710-01",
-            "circleci/classic:201710-02",
-            "circleci/classic:201711-01",
-            "circleci/classic:201808-01",
-            "ubuntu-1604-cuda-10.1:201909-23",
-            "ubuntu-1604-cuda-9.2:201909-23",
-            "windows-server-2019-nvidia:stable"
+          "oneOf": [
+            {
+              "const": "ubuntu-2004:202101-01",
+              "description": "Ubuntu 20.04, Docker v20.10.2, Docker Compose v1.28.2"
+            },
+            {
+              "const": "ubuntu-2004:202010-01",
+              "description": "Ubuntu 20.04, Docker v19.03.13, Docker Compose v1.27.4"
+            },
+            {
+              "const": "ubuntu-2004:202008-01",
+              "description": "Ubuntu 20.04, Docker v19.03.13, Docker Compose v1.27.4"
+            },
+            {
+              "const": "ubuntu-1604:202101-01",
+              "description": "Ubuntu 16.04, Docker v19.03.14, Docker Compose v1.28.2, 2nd to last release"
+            },
+            {
+              "const": "ubuntu-1604:202010-01",
+              "description": "Ubuntu 16.04, Docker v19.03.13, Docker Compose v1.27.4"
+            },
+            {
+              "const": "ubuntu-1604:202007-01",
+              "description": "Ubuntu 16.04, Docker v19.03.12, Docker Compose v1.26.1"
+            },
+            {
+              "const": "ubuntu-1604:202004-01",
+              "description": "Ubuntu 16.04, Docker v19.03.8, Docker Compose v1.25.5"
+            },
+            {
+              "const": "ubuntu-1604:201903-01",
+              "description": "Ubuntu 16.04, Docker v18.09.3, Docker Compose v1.23.1"
+            },
+            {
+              "const": "ubuntu-1604-cuda-11.1:202012-01",
+              "description": "CUDA v11.1, Docker v19.03.13, nvidia-container-toolkit v1.4.0-1"
+            },
+            {
+              "const": "ubuntu-1604-cuda-10.2:202012-01",
+              "description": "CUDA v10.2, Docker v19.03.13, nvidia-container-toolkit v1.3.0-1"
+            },
+            {
+              "const": "ubuntu-1604-cuda-10.1:201909-23",
+              "description": "CUDA v10.1, Docker v19.03.0-ce, nvidia-docker v2.2.2"
+            },
+            {
+              "const": "ubuntu-1604-cuda-9.2:201909-23",
+              "description": "CUDA v9.2, Docker v19.03.0-ce, nvidia-docker v2.2.2"
+            },
+            {
+              "const": "windows-server-2019-nvidia:stable",
+              "description": "Windows Server 2019, CUDA 10.1. This image is the default"
+            }
           ],
           "default": "ubuntu-1604:202004-01"
         },
@@ -355,25 +431,83 @@
         "xcode": {
           "description": "The version of Xcode that is installed on the virtual machine, see the [Supported Xcode Versions section of the Testing iOS](https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions) document for the complete list.",
           "type": "string",
-          "enum": [
-            "9.4.1",
-            "10.0.0",
-            "10.1.0",
-            "10.2.1",
-            "10.3.0",
-            "11.0.0",
-            "11.1.0",
-            "11.2.1",
-            "11.3.1",
-            "11.4.1",
-            "11.5.0",
-            "11.6.0",
-            "11.7.0",
-            "12.0.1",
-            "12.1.0",
-            "12.1.1",
-            "12.2.0",
-            "12.3.0"
+          "oneOf": [
+            {
+              "const": "12.4.0",
+              "description": "Xcode 12.4 (12D4e) maacOS 10.15.5"
+            },
+            {
+              "const": "12.3.0",
+              "description": "Xcode 12.3 (12C33) maacOS 10.15.5"
+            },
+            {
+              "const": "12.2.0",
+              "description": "Xcode 12.2 (12B45b) maacOS 10.15.5"
+            },
+            {
+              "const": "12.1.1",
+              "description": "Xcode 12.1.1 RC (12A7605b) maacOS 10.15.5"
+            },
+            {
+              "const": "12.1.0",
+              "description": "Xcode 12.1 (12A7403) maacOS 10.15.5"
+            },
+            {
+              "const": "12.0.1",
+              "description": "Xcode 12.0.1 (12A7300) maacOS 10.15.5"
+            },
+            {
+              "const": "11.7.0",
+              "description": "Xcode 11.7 (11E801a) maacOS 10.15.5"
+            },
+            {
+              "const": "11.6.0",
+              "description": "Xcode 11.6 (11E708) maacOS 10.15.5"
+            },
+            {
+              "const": "11.5.0",
+              "description": "Xcode 11.5 (11E608c) maacOS 10.15.4"
+            },
+            {
+              "const": "11.4.1",
+              "description": "Xcode 11.4.1 (11E503a) maacOS 10.15.4"
+            },
+            {
+              "const": "11.3.1",
+              "description": "Xcode 11.3.1 (11C505) maacOS 10.15.1"
+            },
+            {
+              "const": "11.2.1",
+              "description": "Xcode 11.2.1 (11B500) maacOS 10.15.0"
+            },
+            {
+              "const": "11.1.0",
+              "description": "Xcode 11.1 (11A1027) maacOS 10.14.4"
+            },
+            {
+              "const": "11.0.0",
+              "description": "Xcode 11.0 (11A420a) maacOS 10.14.4"
+            },
+            {
+              "const": "10.3.0",
+              "description": "Xcode 10.3 (10G8) maacOS 10.14.4"
+            },
+            {
+              "const": "10.2.1",
+              "description": "Xcode 10.2.1 (10E1001) maacOS 10.14.4"
+            },
+            {
+              "const": "10.1.0",
+              "description": "Xcode 10.1 (10B61) maacOS 10.13.6"
+            },
+            {
+              "const": "10.0.0",
+              "description": "Xcode 10.0 (10A255) maacOS 10.13.6"
+            },
+            {
+              "const": "9.4.1",
+              "description": "Xcode 9.4.1 (9F2000) maacOS 10.13.3"
+            }
           ],
           "default": "12.3.0"
         }
@@ -495,9 +629,6 @@
         "restore_cache": {
           "description": "https://circleci.com/docs/2.0/configuration-reference/#restore_cache\n\nRestores a previously saved cache based on a `key`. Cache needs to have been saved first for this key using the `save_cache` step."
         },
-        "deploy": {
-          "description": "https://circleci.com/docs/2.0/configuration-reference/#deploy\n\nSpecial step for deploying artifacts. `deploy` uses the same configuration map and semantics as run step. Jobs may have more than one deploy step. In general deploy step behaves just like run with two exceptions:\n* In a job with parallelism, the deploy step will only be executed by node #0 and only if all nodes succeed. Nodes other than #0 will skip this step.\n* In a job that runs with SSH, the deploy step will not execute"
-        },
         "store_artifacts": {
           "description": "https://circleci.com/docs/2.0/configuration-reference/#store_artifacts\n\nStep to store artifacts (for example logs, binaries, etc) to be available in the web app or through the API."
         },
@@ -512,6 +643,12 @@
         },
         "add_ssh_keys": {
           "description": "https://circleci.com/docs/2.0/configuration-reference/#add_ssh_keys\n\nSpecial step that adds SSH keys from a project’s settings to a container. Also configures SSH to use these keys."
+        },
+        "when": {
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#the-when-step-requires-version-21 \n\nConditional step to run on custom conditions (determined at config-compile time) that are checked before a workflow runs"
+        },
+        "unless": {
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#the-when-step-requires-version-21 \n\nConditional step to run when custom conditions aren't met (determined at config-compile time) that are checked before a workflow runs"
         }
       },
       "configuration": {
@@ -615,9 +752,10 @@
                 "19.03.13",
                 "19.03.12",
                 "19.03.8",
-                "18.09.3"
+                "18.09.3",
+                "17.09.0-ce"
               ],
-              "default": "19.03.13"
+              "default": "17.09.0-ce"
             }
           }
         },
@@ -691,16 +829,6 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        "deploy": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/builtinSteps/documentation/deploy"
-            },
-            {
-              "$ref": "#/definitions/builtinSteps/configuration/run"
             }
           ]
         },
@@ -816,6 +944,50 @@
               }
             }
           }
+        },
+        "when": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/builtinSteps/documentation/when"
+            }
+          ],
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "condition": {
+              "$ref": "#/definitions/logical"
+            },
+            "steps": {
+              "description": "A list of steps to be performed",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/step"
+              }
+            }
+          },
+          "required": ["condition", "steps"]
+        },
+        "unless": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/builtinSteps/documentation/unless"
+            }
+          ],
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "condition": {
+              "$ref": "#/definitions/logical"
+            },
+            "steps": {
+              "description": "A list of steps to be performed",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/step"
+              }
+            }
+          },
+          "required": ["condition", "steps"]
         }
       }
     },
@@ -863,9 +1035,6 @@
             "restore_cache": {
               "$ref": "#/definitions/builtinSteps/configuration/restore_cache"
             },
-            "deploy": {
-              "$ref": "#/definitions/builtinSteps/configuration/deploy"
-            },
             "store_artifacts": {
               "$ref": "#/definitions/builtinSteps/configuration/store_artifacts"
             },
@@ -880,6 +1049,12 @@
             },
             "add_ssh_keys": {
               "$ref": "#/definitions/builtinSteps/configuration/add_ssh_keys"
+            },
+            "when": {
+              "$ref": "#/definitions/builtinSteps/configuration/when"
+            },
+            "unless": {
+              "$ref": "#/definitions/builtinSteps/configuration/unless"
             }
           },
           "patternProperties": {
@@ -1136,8 +1311,12 @@
             }
           },
           "when": {
-            "description": "Specify when to enable or disable the workflow.",
-            "type": "string"
+            "description": "Specify when to run the workflow.",
+            "$ref": "#/definitions/logical"
+          },
+          "unless": {
+            "description": "Specify when *not* to run the workflow.",
+            "$ref": "#/definitions/logical"
           }
         }
       }
