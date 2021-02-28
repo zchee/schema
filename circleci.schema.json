@@ -590,9 +590,9 @@
         "properties": {
           "resource_class": {
             "description": "Amount of CPU and RAM allocated to each container in a job. Note: A performance plan is required to access this feature.",
-            "type": "string",
-            "default": "medium",
-            "enum": ["small", "medium", "medium+", "large", "xlarge", "2xlarge", "2xlarge+", "gpu.nvidia.small", "gpu.nvidia.medium", "windows.gpu.nvidia.medium"]
+            "type": "enum",
+            "enum": ["small", "medium", "medium+", "large", "xlarge", "2xlarge", "2xlarge+", "windows.medium", "windows.medium+", "windows.large", "windows.xlarge", "windows.2xlarge", "arm.medium", "arm.large", "gpu.nvidia.small", "gpu.nvidia.medium", "windows.gpu.nvidia.medium"],
+            "default": "medium"
           },
           "shell": {
             "description": "Shell to use for execution command in all steps. Can be overridden by shell in each step (default: See [Default Shell Options](https://circleci.com/docs/2.0/configuration-reference/#default-shell-options)",
@@ -1135,6 +1135,22 @@
               "description": "An alias for the matrix, usable from another job’s requires stanza. Defaults to the name of the job being executed",
               "type": "string"
             }
+          }
+        },
+        "pre-steps": {
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#pre-steps-and-post-steps-requires-version-21\n\nThe specify job name of executed specify job before any of the other steps in the job",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "$ref": "#/definitions/step"
+          }
+        },
+        "post-steps": {
+          "description": "https://circleci.com/docs/2.0/configuration-reference/#pre-steps-and-post-steps-requires-version-21\n\nThe specify job name of executed after all of the other steps",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "$ref": "#/definitions/step"
           }
         }
       }
