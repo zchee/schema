@@ -1,9 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
-    "$ref": "#/definitions/Mkdocs",
     "title": "Mkdocs",
     "type": "object",
-    "additionalProperties": false,
+    "additionalProperties": true,
     "properties": {
         "site_name": {
             "type": "string",
@@ -42,7 +41,7 @@
             "description": "Set the copyright information to be included in the documentation by the theme"
         },
         "google_analytics": {
-            "type": "object",
+            "type": "array",
             "description": "Set the Google analytics tracking configuration"
         },
         "remote_branch": {
@@ -108,7 +107,10 @@
             "type": "array",
             "description": "A list of plugins with optional configuration settings to use when building the site",
             "items": {
-                "$ref": "#/definitions/Plugin"
+                "anyof": {
+                    "type": "string",
+                    "$ref": "#/definitions/Plugin"
+                }
             }
         },
         "prebuild_index": {
@@ -123,7 +125,7 @@
         "Nav": {
             "title": "Nav",
             "type": "object",
-            "additionalProperties": false,
+            "additionalProperties": true,
             "properties": {
                 "Home": {
                     "type": "string"
@@ -143,7 +145,7 @@
         },
         "Theme": {
             "type": "object",
-            "additionalProperties": false,
+            "additionalProperties": true,
             "properties": {
                 "name": {
                     "type": "string"
@@ -162,22 +164,19 @@
                 }
             },
             "required": [
-                "custom_dir",
-                "include_sidebar",
-                "name",
-                "static_templates"
+                "name"
             ],
             "title": "Theme"
         },
         "Extra": {
             "title": "Extra",
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "Plugin": {
             "title": "Plugin",
             "type": "object",
-            "additionalProperties": false,
+            "additionalProperties": true,
             "properties": {
                 "search": {
                     "type": "object",
