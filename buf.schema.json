@@ -1,0 +1,268 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "buf.yaml configuration files",
+  "description": "The buf.yaml file defines a module, and is placed at the root of the Protobuf source files it defines.",
+  "type": "object",
+  "definitions": {
+    "lint": {
+      "description": "The lint settings you specify in this section are the default for all modules in the workspace, but can be replaced for individual modules by specifying different settings at the module level. Module-level settings have all of the same fields and behavior as workspace-level settings.",
+      "type": "object",
+      "properties": {
+        "use": {
+          "description": "Lists the rules or categories to use for breaking change detection.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/lint_rule"
+          }
+        },
+        "except": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/lint_rule"
+          }
+        },
+        "ignore": {
+          "description": "Excludes specific directories or files from all breaking change detection rules. If a directory is ignored, then all files and subfolders of the directory are also ignored. The specified paths must be relative to the buf.yaml file.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ignore_only": {
+          "description": "Allows directories or files to be excluded from specific breaking change detection categories or rules. As with ignore, the paths must be relative to buf.yaml.",
+          "type": "object",
+          "properties": {
+            "items": {
+              "$ref": "#/definitions/lint_rule"
+            }
+          }
+        },
+        "disallow_comment_ignores": {
+          "description": "If this option is set to true, you can ignore lint rules for specific components in your Protobuf files by adding a comment to them",
+          "type": "boolean"
+        },
+        "enum_zero_value_suffix": {
+          "description": "Controls the behavior of the ENUM_ZERO_VALUE_SUFFIX lint rule",
+          "type": "string",
+          "default": "_UNSPECIFIED"
+        },
+        "rpc_allow_same_request_response": {
+          "description": "Allows the same message type to be used for a single RPC's request and response type.",
+          "type": "boolean"
+        },
+        "rpc_allow_google_protobuf_empty_requests": {
+          "description": "Allows RPC requests to be google.protobuf.Empty messages. You can set this if you want to allow messages to be void forever and never take any parameters.",
+          "type": "boolean"
+        },
+        "rpc_allow_google_protobuf_empty_responses": {
+          "description": "Allows RPC responses to be google.protobuf.Empty messages. You can set this if you want to allow messages to never return any parameters.",
+          "type": "boolean"
+        },
+        "service_suffix": {
+          "description": "Controls the behavior of the SERVICE_SUFFIX lint rule. ",
+          "type": "string",
+          "default": "Service"
+        },
+        "disable_builtin": {
+          "description": "If this option is set to true, Buf's built-in lint rules are disabled.",
+          "type": "boolean"
+        }
+      }
+    },
+    "lint_rule": {
+      "$comment": "See https://buf.build/docs/lint/rules",
+      "type": "string",
+      "enum": [
+        "MINIMAL",
+        "BASIC",
+        "STANDARD",
+        "COMMENTS",
+        "UNARY_RPC",
+        "DIRECTORY_SAME_PACKAGE",
+        "PACKAGE_DEFINED",
+        "PACKAGE_DIRECTORY_MATCH",
+        "PACKAGE_SAME_DIRECTORY",
+        "ENUM_FIRST_VALUE_ZERO",
+        "ENUM_NO_ALLOW_ALIAS",
+        "ENUM_PASCAL_CASE",
+        "ENUM_VALUE_UPPER_SNAKE_CASE",
+        "FIELD_LOWER_SNAKE_CASE",
+        "FIELD_NOT_REQUIRED",
+        "IMPORT_NO_PUBLIC",
+        "IMPORT_NO_WEAK",
+        "IMPORT_USED",
+        "MESSAGE_PASCAL_CASE",
+        "ONEOF_LOWER_SNAKE_CASE",
+        "PACKAGE_LOWER_SNAKE_CASE",
+        "PACKAGE_SAME_CSHARP_NAMESPACE",
+        "PACKAGE_SAME_GO_PACKAGE",
+        "PACKAGE_SAME_JAVA_MULTIPLE_FILES",
+        "PACKAGE_SAME_JAVA_PACKAGE",
+        "PACKAGE_SAME_PHP_NAMESPACE",
+        "PACKAGE_SAME_RUBY_PACKAGE",
+        "PACKAGE_SAME_SWIFT_PREFIX",
+        "RPC_PASCAL_CASE",
+        "SERVICE_PASCAL_CASE",
+        "ENUM_VALUE_PREFIX",
+        "ENUM_ZERO_VALUE_SUFFIX",
+        "FILE_LOWER_SNAKE_CASE",
+        "RPC_REQUEST_RESPONSE_UNIQUE",
+        "RPC_REQUEST_STANDARD_NAME",
+        "RPC_RESPONSE_STANDARD_NAME",
+        "PACKAGE_NO_IMPORT_CYCLE",
+        "PACKAGE_VERSION_SUFFIX",
+        "PROTOVALIDATE",
+        "SERVICE_SUFFIX",
+        "COMMENT_ENUM",
+        "COMMENT_ENUM_VALUE",
+        "COMMENT_FIELD",
+        "COMMENT_MESSAGE",
+        "COMMENT_ONEOF",
+        "COMMENT_RPC",
+        "COMMENT_SERVICE",
+        "RPC_NO_CLIENT_STREAMING",
+        "RPC_NO_SERVER_STREAMING"
+      ]
+    },
+    "breaking": {
+      "description": "Specifies the breaking change detection rules enforced on the Protobuf files in the directory.",
+      "type": "object",
+      "properties": {
+        "use": {
+          "description": "Lists the rules or categories to use for breaking change detection.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "except": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ignore": {
+          "description": "Excludes specific directories or files from all breaking change detection rules. If a directory is ignored, then all files and subfolders of the directory are also ignored. The specified paths must be relative to the buf.yaml file.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ignore_only": {
+          "description": "Allows directories or files to be excluded from specific breaking change detection categories or rules. As with ignore, the paths must be relative to buf.yaml.",
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "ignore_unstable_packages": {
+          "description": "Ignores packages with a last component that's one of the unstable forms recognized by the Buf linter's PACKAGE_VERSION_SUFFIX rule",
+          "type": "boolean"
+        },
+        "disable_builtin": {
+          "description": "If this option is set to true, Buf's built-in breaking rules are disabled.",
+          "type": "boolean"
+        }
+      },
+      "required": []
+    }
+  },
+  "properties": {
+    "version": {
+      "description": "Defines the current configuration version. The only accepted values are v2, v1, or v1beta1.",
+      "type": "string",
+      "enum": [
+        "v2",
+        "v1",
+        "v1beta1"
+      ],
+      "default": "v2"
+    },
+    "modules": {
+      "description": "Defines the list of modules that will be built together in this workspace. Any dependencies that the files have on each other are automatically taken into account when building and shouldn't be declared in the deps section.",
+      "type": "array",
+      "items": {
+        "properties": {
+          "path": {
+            "description": "The path to a directory containing Protobuf files, which must be defined relative to the workspace root (the directory that contains the buf.yaml file). All path values must point to directories within the workspace.",
+            "type": "string"
+          },
+          "name": {
+            "description": "A Buf Schema Registry (BSR) path that uniquely identifies this directory. The name must be a valid module name and it defines the BSR repository that contains the commit and label history and generated artifacts for the Protobuf files in the directory.",
+            "type": "string"
+          },
+          "includes": {
+            "description": "Lists directories within this directory to include in Protobuf file discovery. Only directories added to this list are included in Buf operations.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excludes": {
+            "description": "Lists directories within this directory to exclude from Protobuf file discovery. Any directories added to this list are completely skipped and excluded from Buf operations. This can be specified together with includes, in which case each directory in excludes must be contained in a directory in includes.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deps": {
+            "description": "Lists Declares one or more modules that your workspace depends on. ",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lint": {
+            "$ref": "#/definitions/lint"
+          },
+          "breaking": {
+            "$ref": "#/definitions/breaking"
+          }
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "deps": {
+      "description": "Declares one or more modules that your workspace depends on.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lint": {
+      "$ref": "#/definitions/lint"
+    },
+    "breaking": {
+      "$ref": "#/definitions/breaking"
+    },
+    "plugins": {
+      "description": "Specifies Buf plugins for applying custom lint or breaking change rules and categories, either in place of or in addition to Buf's. All specified plugins must be installed locally to work.",
+      "type": "array",
+      "items": {
+        "properties": {
+          "plugin": {
+            "description": " The name of a locally installed Buf plugin to use for lint or breaking change checks.",
+            "type": "string"
+          },
+          "options": {
+            "description": "A list of option definitions if the plugin allows for them.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "path"
+      ]
+    }
+  },
+  "required": [
+    "version"
+  ]
+}
