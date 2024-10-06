@@ -1,0 +1,329 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "buf.gen.yaml configuration files",
+  "description": "buf.gen.yaml is a configuration file used by the buf generate command to generate integration code for the languages of your choice.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "Defines the current configuration version. The only accepted values are v2, v1, or v1beta1.",
+      "type": "string",
+      "enum": [
+        "v2",
+        "v1",
+        "v1beta1"
+      ]
+    },
+    "clean": {
+      "description": "When set to true, buf generate deletes all directories, zip files, and/or jar files specified by the out field for each plugin before running code generation.",
+      "type": "boolean"
+    },
+    "managed": {
+      "description": "The managed key is used to enable managed mode, an advanced feature that allows you to specify Protobuf file and field options without defining them in the Protobuf files. See Managed mode for details about default behavior and accepted values for each available option key.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "disable": {
+          "description": "Optional. Allows you to granularly disable managed mode for either file options or field options by specifying a list of rules. There are two types of rules: file option or field option. For both types of disable rules, you can set any combination of keys and the union is used to determine the combination of file and field options that managed mode doesn't modify. A disable rule must have at least one key set.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "module": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "file_option": {
+                "type": "string"
+              },
+              "field_option": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              }
+            },
+            "required": []
+          }
+        },
+        "override": {
+          "description": "Allows you to granularly override the file and field options that managed mode handles. Similar to disable rules, there are two types of override rules: field option or file option.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file_option": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "module": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "field_option": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        }
+      },
+      "required": [
+        "enabled"
+      ]
+    },
+    "plugins": {
+      "description": "Each entry in the plugins key is a protoc plugin configuration. Plugins are invoked in parallel and their outputs are written in the order you specify here.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "remote": {
+                "description": "Indicates a remote plugin hosted on either the public BSR at https://buf.build or a private BSR. Its value must be in the form of <REMOTE>/<ORGANIZATION>/<PLUGIN>.",
+                "type": "string"
+              },
+              "out": {
+                "description": "Controls where the generated files are deposited for a given plugin. Although absolute paths are supported, this configuration is typically a relative output directory to where buf generate is run.",
+                "type": "string"
+              },
+              "opt": {
+                "description": "Specifies one or more plugin options for a plugin. You can provide options as either a single string or a list of strings.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "strategy": {
+                "description": "Specifies the invocation strategy to use.",
+                "type": "string",
+                "enum": [
+                  "directory",
+                  "all"
+                ]
+              },
+              "include_imports": {
+                "description": "Generates all imports except for Well-Known Types. This setting works the same as the --include-imports flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "boolean"
+              },
+              "include_wkt": {
+                "description": "Generates Well-Known Types. Can't be set without --include-imports. This setting works the same as the --include-wkt flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "remote",
+              "out"
+            ]
+          },
+          {
+            "properties": {
+              "protoc_builtin": {
+                "description": "Only applies to the code generators that are built into protoc.",
+                "type": "string",
+                "enum": [
+                  "cpp",
+                  "csharp",
+                  "java",
+                  "kotlin",
+                  "objc",
+                  "php",
+                  "pyi",
+                  "python",
+                  "ruby"
+                ]
+              },
+              "protoc_path": {
+                "description": "Generates all imports except for Well-Known Types. This setting works the same as the --include-imports flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "string"
+              },
+              "out": {
+                "description": "Controls where the generated files are deposited for a given plugin. Although absolute paths are supported, this configuration is typically a relative output directory to where buf generate is run.",
+                "type": "string"
+              },
+              "opt": {
+                "description": "Specifies one or more plugin options for a plugin. You can provide options as either a single string or a list of strings.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "strategy": {
+                "description": "Specifies the invocation strategy to use.",
+                "type": "string",
+                "enum": [
+                  "directory",
+                  "all"
+                ]
+              },
+              "include_imports": {
+                "description": "Generates all imports except for Well-Known Types. This setting works the same as the --include-imports flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "boolean"
+              },
+              "include_wkt": {
+                "description": "Generates Well-Known Types. Can't be set without --include-imports. This setting works the same as the --include-wkt flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "protoc_builtin",
+              "protoc_path",
+              "out"
+            ]
+          },
+          {
+            "properties": {
+              "local": {
+                "description": "A string or list of strings that point to the names of plugin binaries on your ${PATH}, or to its relative or absolute location on disk. If you specify a list of strings, the first is the local name, and the subsequent strings are considered arguments passed to the binary."
+              },
+              "out": {
+                "description": "Controls where the generated files are deposited for a given plugin. Although absolute paths are supported, this configuration is typically a relative output directory to where buf generate is run.",
+                "type": "string"
+              },
+              "opt": {
+                "description": "Specifies one or more plugin options for a plugin. You can provide options as either a single string or a list of strings.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "strategy": {
+                "description": "Specifies the invocation strategy to use.",
+                "type": "string",
+                "enum": [
+                  "directory",
+                  "all"
+                ]
+              },
+              "include_imports": {
+                "description": "Generates all imports except for Well-Known Types. This setting works the same as the --include-imports flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "boolean"
+              },
+              "include_wkt": {
+                "description": "Generates Well-Known Types. Can't be set without --include-imports. This setting works the same as the --include-wkt flag on buf generate—if they conflict with each other, the flag gets precedence.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "local",
+              "out"
+            ]
+          }
+        ]
+      },
+      "required": [
+        "out",
+        "local"
+      ]
+    },
+    "inputs": {
+      "description": "A list of inputs to generate code for. In previous Buf configurations, the input was passed to buf generate from the CLI, but in the v2 configuration, it's specified in buf.gen.yaml so that all code generation settings are in one place.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "description": "Specifies a local directory path as the input, with the location as the value. The path should be a valid module or workspace root, or a directory of Protobuf files. The path can be relative to the workspace or absolute.",
+            "type": "string"
+          },
+          "module": {
+            "description": "Specifies a remote BSR module as the input, with the location as the value.",
+            "type": "string",
+            "examples": [
+              "buf.build/acme/weather"
+            ]
+          },
+          "tarball": {
+            "description": "Specifies a local or remote (http/https) tarball, with the location as the value.",
+            "type": "string"
+          },
+          "zip_archive": {
+            "description": "Specifies a local or remote (http/https) zip archive, with the location as the value.",
+            "type": "string"
+          },
+          "git_repo": {
+            "description": "Specifies a Git repo as the input, with the location as the key value. The path to the Git repository can be either a local .git directory or a remote location (http/https/ssh/git).",
+            "type": "string"
+          },
+          "proto_file": {
+            "description": "Specifies a single .proto file as the input, with the location as the value.",
+            "type": "string"
+          },
+          "binary_image": {
+            "description": "These keys specify a Buf image in the noted format (binary, JSON, text, or YAML) as the input, with the location as the value.",
+            "type": "string"
+          },
+          "json_image": {
+            "description": "These keys specify a Buf image in the noted format (binary, JSON, text, or YAML) as the input, with the location as the value.",
+            "type": "string"
+          },
+          "txt_image": {
+            "description": "These keys specify a Buf image in the noted format (binary, JSON, text, or YAML) as the input, with the location as the value.",
+            "type": "string"
+          },
+          "yaml_image": {
+            "description": "These keys specify a Buf image in the noted format (binary, JSON, text, or YAML) as the input, with the location as the value.",
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "depth": {
+            "type": "number"
+          },
+          "subdir": {
+            "type": "string"
+          },
+          "exclude_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "compression": {
+            "type": "string"
+          },
+          "strip_components": {
+            "type": "number"
+          },
+          "format": {
+            "type": "string"
+          },
+          "include_package_files": {
+            "type": "boolean"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  "required": [
+    "plugins",
+    "version"
+  ]
+}
