@@ -1,0 +1,290 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Claude Code JSON Schema from https://github.com/snowfort-ai/config/blob/main/packages/core/src/adapters/claude.ts",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "description": "API key for Claude service"
+    },
+    "model": {
+      "type": "string",
+      "description": "Default model to use"
+    },
+    "max_project_files": {
+      "type": "number",
+      "description": "Maximum number of project files to include"
+    },
+    "verbose": {
+      "description": "Enable verbose logging",
+      "type": "boolean"
+    },
+    "bypassPermissionsModeAccepted": {
+      "description": "User has accepted bypass permissions mode",
+      "type": "boolean"
+    },
+    "hasCompletedOnboarding": {
+      "description": "User has completed initial onboarding",
+      "type": "boolean"
+    },
+    "lastOnboardingVersion": {
+      "description": "Last onboarding version seen",
+      "type": "string"
+    },
+    "firstStartTime": {
+      "description": "First time Claude Code was started",
+      "type": "string"
+    },
+    "numStartups": {
+      "description": "Number of times Claude Code has been started",
+      "type": "number"
+    },
+    "installMethod": {
+      "description": "Method used to install Claude Code",
+      "type": "string"
+    },
+    "tipsHistory": {
+      "description": "History of tips shown to user",
+      "additionalProperties": {
+        "type": "number"
+      },
+      "type": "object"
+    },
+    "lastReleaseNotesSeen": {
+      "description": "Last release notes version seen by user",
+      "type": "string"
+    },
+    "hasAvailableSubscription": {
+      "description": "User has available subscription",
+      "type": "boolean"
+    },
+    "subscriptionNoticeCount": {
+      "description": "Number of subscription notices shown",
+      "type": "number"
+    },
+    "oauthAccount": {
+      "description": "OAuth account information including user and organization details",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "accountUuid": {
+          "description": "Unique account identifier",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Account email address",
+          "type": "string"
+        },
+        "organizationUuid": {
+          "description": "Organization unique identifier",
+          "type": "string"
+        },
+        "organizationRole": {
+          "description": "Role within the organization (e.g., admin, member)",
+          "type": "string"
+        },
+        "workspaceRole": {
+          "description": "Role within the workspace (can be null)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "organizationName": {
+          "description": "Name of the organization",
+          "type": "string"
+        }
+      },
+      "required": [
+        "accountUuid",
+        "emailAddress",
+        "organizationUuid",
+        "organizationRole",
+        "workspaceRole",
+        "organizationName"
+      ]
+    },
+    "autoUpdates": {
+      "description": "Automatic updates enabled",
+      "type": "boolean"
+    },
+    "cachedChangelog": {
+      "description": "Cached changelog content",
+      "type": "string"
+    },
+    "changelogLastFetched": {
+      "description": "Last time changelog was fetched",
+      "type": [
+        "string",
+        "number"
+      ]
+    },
+    "appleTerminalSetupInProgress": {
+      "description": "Apple Terminal setup is in progress",
+      "type": "boolean"
+    },
+    "appleTerminalBackupPath": {
+      "description": "Path to Apple Terminal backup",
+      "type": "string"
+    },
+    "optionAsMetaKeyInstalled": {
+      "description": "Option as meta key is installed",
+      "type": "boolean"
+    },
+    "fallbackAvailableWarningThreshold": {
+      "description": "Threshold for fallback availability warnings",
+      "type": "number"
+    },
+    "projects": {
+      "description": "claude code project",
+      "type": "object",
+      "permissions": {
+        "type": "object",
+        "allowedTools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {}
+        },
+        "dontCrawlDirectory": {
+          "type": "boolean"
+        },
+        "mcpContextUris": {
+          "type": "array",
+          "items": {}
+        },
+        "mcpServers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "env": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "enabledMcpjsonServers": {
+          "type": "array",
+          "items": {}
+        },
+        "disabledMcpjsonServers": {
+          "type": "array",
+          "items": {}
+        },
+        "enableAllProjectMcpServers": {
+          "type": "boolean"
+        },
+        "hasTrustDialogAccepted": {
+          "type": "boolean"
+        },
+        "ignorePatterns": {
+          "type": "array",
+          "items": {}
+        },
+        "exampleFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exampleFilesGeneratedAt": {
+          "type": "number"
+        },
+        "hasCompletedProjectOnboarding": {
+          "type": "boolean"
+        },
+        "lastCost": {
+          "type": "number"
+        },
+        "lastAPIDuration": {
+          "type": "number"
+        },
+        "lastDuration": {
+          "type": "number"
+        },
+        "lastLinesAdded": {
+          "type": "number"
+        },
+        "lastLinesRemoved": {
+          "type": "number"
+        },
+        "lastSessionId": {
+          "type": "string"
+        }
+      }
+    },
+    "preferredNotifChannel": {
+      "type": "string"
+    },
+    "editorMode": {
+      "type": "string"
+    },
+    "autoCompactEnabled": {
+      "type": "boolean"
+    },
+    "customApiKeyResponses": {
+      "type": "object",
+      "properties": {
+        "approved": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rejected": {
+          "type": "array",
+          "items": {}
+        }
+      }
+    },
+    "env": {
+      "type": "object",
+      "properties": {
+        "GOPRIVATE": {
+          "type": "string"
+        }
+      }
+    },
+    "parallelTasksCount": {
+      "type": "string"
+    },
+    "promptQueueUseCount": {
+      "type": "number"
+    },
+    "autoConnectIde": {
+      "type": "boolean"
+    },
+    "isQualifiedForDataSharing": {
+      "type": "boolean"
+    },
+    "recommendedSubscription": {
+      "type": "string"
+    },
+    "userID": {
+      "type": "string"
+    },
+    "hasAcknowledgedCostThreshold": {
+      "type": "boolean"
+    },
+    "githubActionSetupCount": {
+      "type": "number"
+    }
+  }
+}
