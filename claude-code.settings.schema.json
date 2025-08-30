@@ -1,0 +1,538 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Claude code settings JSON Schema",
+  "type": "object",
+  "properties": {
+    "apiKeyHelper": {
+      "description": "Custom script, to be executed in /bin/sh, to generate an auth value. This value will be sent as X-Api-Key and Authorization: Bearer headers for model requests",
+      "type": "string",
+      "examples": [
+        "/bin/generate_temp_api_key.sh"
+      ]
+    },
+    "cleanupPeriodDays": {
+      "description": "How long to locally retain chat transcripts based on last activity date (default: 30 days)",
+      "type": "number",
+      "examples": [
+        20
+      ]
+    },
+    "env": {
+      "description": "Environment variables that will be applied to every session",
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "string"
+        }
+      },
+      "examples": [
+        {
+          "FOO": "bar"
+        }
+      ]
+    },
+    "includeCoAuthoredBy": {
+      "description": "Whether to include the co-authored-by Claude byline in git commits and pull requests (default: true)",
+      "type": "boolean",
+      "default": true
+    },
+    "permissions": {
+      "description": "See table below for structure of permissions.",
+      "type": "object",
+      "properties": {
+        "allow": {
+          "description": "Array of permission rules to allow tool use",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            [
+              "Bash(git diff:*)"
+            ]
+          ]
+        },
+        "ask": {
+          "description": "Array of permission rules to ask for confirmation upon tool use.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            [
+              "Bash(git push:*)"
+            ]
+          ]
+        },
+        "deny": {
+          "description": "Array of permission rules to deny tool use. Use this to also exclude sensitive files from Claude Code access.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            [
+              "WebFetch",
+              "Bash(curl:*)",
+              "Read(./.env)",
+              "Read(./secrets/**)"
+            ]
+          ]
+        },
+        "additionalDirectories": {
+          "description": "Additional working directories that Claude has access to",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            [
+              "../docs/"
+            ]
+          ]
+        },
+        "defaultMode": {
+          "description": "Default permission mode when opening Claude Code",
+          "type": "string",
+          "enum": [
+            "default",
+            "acceptEdits",
+            "plan",
+            "bypassPermissions"
+          ]
+        },
+        "disableBypassPermissionsMode": {
+          "description": "Set to \"disable\" to prevent bypassPermissions mode from being activated.",
+          "type": "string",
+          "enum": [
+            "disable"
+          ]
+        }
+      }
+    },
+    "hooks": {
+      "description": "Configure custom commands to run before or after tool executions.",
+      "type": "object",
+      "properties": {
+        "PreToolUse": {
+          "description": "Runs after Claude creates tool parameters and before processing the tool call.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "matcher": {
+                "type": "string",
+                "examples": [
+                  [
+                    "Write|Edit"
+                  ]
+                ]
+              },
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "PostToolUse": {
+          "description": "Runs immediately after a tool completes successfully. Recognizes the same matcher values as PreToolUse.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "matcher": {
+                "type": "string",
+                "examples": [
+                  [
+                    "Write|Edit"
+                  ]
+                ]
+              },
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "Notification": {
+          "description": "Runs when Claude Code sends notifications.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "UserPromptSubmit": {
+          "description": "Runs when the user submits a prompt, before Claude processes it. This allows you to add additional context based on the prompt/conversation, validate prompts, or block certain types of prompts.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "Stop": {
+          "description": "Runs when the main Claude Code agent has finished responding. Does not run if the stoppage occurred due to a user interrupt.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "SubagentStop": {
+          "description": "Runs when a Claude Code subagent (Task tool call) has finished responding.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "PreCompact": {
+          "description": "Runs before Claude Code is about to run a compact operation.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "matcher": {
+                "type": "string",
+                "enum": [
+                  "manual",
+                  "auto"
+                ]
+              },
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "SessionStart": {
+          "description": "Runs when Claude Code starts a new session or resumes an existing session (which currently does start a new session under the hood). Useful for loading in development context like existing issues or recent changes to your codebase.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "matcher": {
+                "type": "string",
+                "enum": [
+                  "startup",
+                  "resume",
+                  "clear",
+                  "compact"
+                ]
+              },
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "SessionEnd": {
+          "description": "Runs when a Claude Code session ends. Useful for cleanup tasks, logging session statistics, or saving session state.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hooks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Currently only \"command\" is supported",
+                      "type": "string",
+                      "enum": [
+                        "command"
+                      ]
+                    },
+                    "command": {
+                      "description": "The bash command to execute (can use $CLAUDE_PROJECT_DIR environment variable)",
+                      "type": "string",
+                      "examples": [
+                        "$CLAUDE_PROJECT_DIR/.claude/hooks/check-style.sh"
+                      ]
+                    },
+                    "timeout": {
+                      "description": "How long a command should run, in seconds, before canceling that specific command.",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "command"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "model": {
+      "description": "Override the default model to use for Claude Code",
+      "type": "string"
+    },
+    "forceLoginMethod": {
+      "description": "Use claudeai to restrict login to Claude.ai accounts, console to restrict login to Anthropic Console (API usage billing) accounts",
+      "type": "string"
+    },
+    "enableAllProjectMcpServers": {
+      "description": "Automatically approve all MCP servers defined in project .mcp.json files",
+      "type": "boolean"
+    },
+    "enabledMcpjsonServers": {
+      "description": "List of specific MCP servers from .mcp.json files to approve",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "disabledMcpjsonServers": {
+      "description": "List of specific MCP servers from .mcp.json files to reject",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
