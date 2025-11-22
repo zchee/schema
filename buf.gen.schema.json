@@ -223,11 +223,7 @@
             ]
           }
         ]
-      },
-      "required": [
-        "out",
-        "local"
-      ]
+      }
     },
     "inputs": {
       "description": "A list of inputs to generate code for. In previous Buf configurations, the input was passed to buf generate from the CLI, but in the v2 configuration, it's specified in buf.gen.yaml so that all code generation settings are in one place.",
@@ -235,16 +231,41 @@
       "items": {
         "type": "object",
         "properties": {
+          "types": {
+            "description": "Include only the specified types when generating.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paths": {
+            "description": "Include only the specified paths when generating.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exclude_types": {
+            "description": "Exclude the specified types when generating.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exclude_paths": {
+            "description": "Exclude the specified paths when generating.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "directory": {
             "description": "Specifies a local directory path as the input, with the location as the value. The path should be a valid module or workspace root, or a directory of Protobuf files. The path can be relative to the workspace or absolute.",
             "type": "string"
           },
           "module": {
             "description": "Specifies a remote BSR module as the input, with the location as the value.",
-            "type": "string",
-            "examples": [
-              "buf.build/acme/weather"
-            ]
+            "type": "string"
           },
           "tarball": {
             "description": "Specifies a local or remote (http/https) tarball, with the location as the value.",
@@ -279,51 +300,51 @@
             "type": "string"
           },
           "branch": {
+            "description": "Use a specific branch of the repo as the input.",
+            "type": "string"
+          },
+          "tag": {
+            "description": "Use a specific commit or tag in the repo as the input.",
+            "type": "string"
+          },
+          "ref": {
+            "description": "Use an explicit reference in the repo as the input. Any valid input to git checkout is accepted, but most Git hosts (including GitHub) only allow fetching by reference and not commits by sha.\nUse git ls-remote --refs to get a list of available references and their corresponding commits.",
             "type": "string"
           },
           "depth": {
-            "type": "number"
+            "description": "Specifies how deep within the repo to generate. Defaults to 50 if ref is specified.",
+            "type": "integer"
+          },
+          "recurse_submodules": {
+            "description": "Controls whether to generate for modules recursively.",
+            "type": "boolean"
           },
           "subdir": {
+            "description": "Reads at the relative path and uses the subdirectory specified within the archive as the base directory.",
             "type": "string"
-          },
-          "exclude_paths": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "paths": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "types": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           },
           "compression": {
-            "type": "string"
+            "description": "Compression is automatically detected if the file extension is .tgz, .tar.gz, or .tar.zst but can be manually specified here.",
+            "type": "string",
+            "enum": [
+              "gz",
+              "zst"
+            ]
           },
           "strip_components": {
-            "type": "number"
-          },
-          "format": {
-            "type": "string"
+            "description": "Reads at the relative path and strips some number of components.",
+            "type": "integer"
           },
           "include_package_files": {
+            "description": "Include all other files in the package and their imports for the specified .proto file.",
             "type": "boolean"
           }
-        },
-        "required": []
+        }
       }
     }
   },
   "required": [
-    "plugins",
-    "version"
+    "version",
+    "plugins"
   ]
 }
