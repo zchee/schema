@@ -2,10 +2,11 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Codex Configuration Schema",
   "type": "object",
+  "additionalProperties": true,
   "properties": {
     "model": {
       "type": "string",
-      "description": "Model to use",
+      "description": "Optional override of model selection.",
       "enum": [
         "gpt-5.1-codex-max",
         "gpt-5.1-codex",
@@ -15,7 +16,7 @@
     },
     "review_model": {
       "type": "string",
-      "description": "Model used specifically for review sessions",
+      "description": "Review model override used by the `/review` feature.",
       "enum": [
         "gpt-5.1-codex-max",
         "gpt-5.1-codex",
@@ -25,32 +26,15 @@
     },
     "model_provider": {
       "type": "string",
-      "description": "Provider id from `model_providers` (default: `openai`)."
+      "description": "Provider to use from the model_providers map."
     },
     "model_context_window": {
-      "type": "number",
-      "description": "Context window tokens available to the active model."
+      "type": "integer",
+      "description": "Size of the context window for the model, in tokens."
     },
-    "project_doc_max_bytes": {
-      "type": "number",
-      "description": "Maximum number of bytes to include from an AGENTS.md project doc file."
-    },
-    "project_doc_fallback_filenames": {
-      "type": "array",
-      "description": "Additional filenames to try when looking for project-level docs.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "hide_agent_reasoning": {
-      "type": "boolean",
-      "description": "When set to `true`, `AgentReasoning` events will be hidden from the UI/output",
-      "default": false
-    },
-    "show_raw_agent_reasoning": {
-      "type": "boolean",
-      "description": "When set to `true`, `AgentReasoningRawContentEvent` events will be shown in the UI/output.",
-      "default": false
+    "model_auto_compact_token_limit": {
+      "type": "integer",
+      "description": "Token usage threshold triggering auto-compaction of conversation history."
     },
     "approval_policy": {
       "type": "string",
@@ -60,7 +44,10 @@
         "on-request",
         "never"
       ],
-      "description": "Controls when Codex pauses for approval before executing commands."
+      "description": "Default approval policy for executing commands."
+    },
+    "shell_environment_policy": {
+      "$ref": "#/$defs/shell_environment_policy"
     },
     "sandbox_mode": {
       "type": "string",
@@ -69,144 +56,733 @@
         "workspace-write",
         "danger-full-access"
       ],
-      "description": "Sandbox policy for filesystem and network access during command execution."
+      "description": "Sandbox mode to use."
     },
     "sandbox_workspace_write": {
-      "type": "object",
-      "properties": {
-        "writable_roots": {
-          "type": "array",
-          "description": "Additional writable roots when `sandbox_mode = \"workspace-write\"`.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "network_access": {
-          "type": "boolean",
-          "description": "Allow outbound network access inside the workspace-write sandbox."
-        },
-        "exclude_tmpdir_env_var": {
-          "type": "boolean",
-          "description": "Exclude `$TMPDIR` from writable roots in workspace-write mode."
-        },
-        "exclude_slash_tmp": {
-          "type": "boolean",
-          "description": "Exclude `/tmp` from writable roots in workspace-write mode."
-        }
-      }
+      "$ref": "#/$defs/sandbox_workspace_write"
     },
     "notify": {
-      "description": "Command invoked for notifications; receives a JSON payload from Codex.",
-      "writable_roots": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional external command to spawn for end-user notifications. Provide argv tokens; Codex appends a JSON payload describing each completed turn."
     },
     "instructions": {
-      "description": "Reserved for future use; prefer `experimental_instructions_file` or `AGENTS.md`.",
-      "type": "string"
-    },
-    "model_reasoning_effort": {
       "type": "string",
-      "description": "Adjust reasoning effort for supported models (Responses API only).",
-      "enum": [
-        "minimal",
-        "low",
-        "medium",
-        "high",
-        "xhigh"
-      ]
+      "description": "System instructions."
     },
-    "model_reasoning_summary": {
+    "developer_instructions": {
       "type": "string",
-      "description": "Select reasoning summary detail or disable summaries entirely.",
-      "enum": [
-        "auto",
-        "concise",
-        "detailed",
-        "none"
-      ]
+      "description": "Developer instructions inserted as a `developer` role message."
     },
-    "model_verbosity": {
+    "compact_prompt": {
       "type": "string",
-      "description": "Control GPT-5 Responses API verbosity (defaults to `medium`).",
+      "description": "Compact prompt used for history compaction."
+    },
+    "forced_chatgpt_workspace_id": {
+      "type": "string",
+      "description": "When set, restricts ChatGPT login to a specific workspace identifier."
+    },
+    "forced_login_method": {
+      "type": "string",
       "enum": [
-        "low",
-        "medium",
-        "high"
+        "chatgpt",
+        "api"
       ],
-      "default": "medium"
+      "description": "When set, restricts the login mechanism users may use."
     },
-    "model_supports_reasoning_summaries": {
-      "type": "boolean",
-      "description": "Force Codex to send reasoning metadata even for unknown models."
-    },
-    "model_reasoning_summary_format": {
+    "cli_auth_credentials_store": {
       "type": "string",
-      "description": "Override the format of reasoning summaries (experimental).",
       "enum": [
-        "none",
-        "experimental"
-      ]
+        "file",
+        "keyring",
+        "auto"
+      ],
+      "description": "Preferred backend for storing CLI auth credentials."
+    },
+    "mcp_servers": {
+      "type": "object",
+      "description": "Definition for MCP servers that Codex can reach out to for tool calls.",
+      "additionalProperties": {
+        "$ref": "#/$defs/mcp_server_config"
+      }
+    },
+    "mcp_oauth_credentials_store": {
+      "type": "string",
+      "enum": [
+        "file",
+        "keyring",
+        "auto"
+      ],
+      "description": "Preferred backend for storing MCP OAuth credentials."
+    },
+    "model_providers": {
+      "type": "object",
+      "description": "User-defined provider entries that extend/override the built-in list.",
+      "additionalProperties": true
+    },
+    "project_doc_max_bytes": {
+      "type": "integer",
+      "description": "Maximum number of bytes to include from an AGENTS.md project doc file."
+    },
+    "project_doc_fallback_filenames": {
+      "type": "array",
+      "description": "Ordered list of fallback filenames to look for when AGENTS.md is missing.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tool_output_token_limit": {
+      "type": "integer",
+      "description": "Token budget applied when storing tool/function outputs in the context manager."
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile to use from the `profiles` map."
+    },
+    "profiles": {
+      "type": "object",
+      "description": "Named profiles to facilitate switching between different configurations.",
+      "additionalProperties": {
+        "$ref": "#/$defs/config_profile"
+      }
+    },
+    "history": {
+      "$ref": "#/$defs/history"
     },
     "file_opener": {
       "type": "string",
-      "description": "URI scheme used to open citations from Codex output (default: `vscode`).",
       "enum": [
         "vscode",
         "vscode-insiders",
         "windsurf",
         "cursor",
         "none"
-      ]
+      ],
+      "description": "Optional URI-based file opener. If set, citations to files in the model output will be hyperlinked using the specified URI scheme."
+    },
+    "tui": {
+      "$ref": "#/$defs/tui"
+    },
+    "hide_agent_reasoning": {
+      "type": "boolean",
+      "description": "When set to `true`, `AgentReasoning` events will be hidden from the UI/output. Defaults to `false`.",
+      "default": false
+    },
+    "show_raw_agent_reasoning": {
+      "type": "boolean",
+      "description": "When set to `true`, `AgentReasoningRawContentEvent` events will be shown in the UI/output. Defaults to `false`.",
+      "default": false
+    },
+    "model_reasoning_effort": {
+      "type": "string",
+      "enum": [
+        "none",
+        "minimal",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "description": "Value to use for `reasoning.effort` when making a request using the Responses API."
+    },
+    "model_reasoning_summary": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "concise",
+        "detailed",
+        "none"
+      ],
+      "description": "If not \"none\", the value to use for `reasoning.summary` when making a request using the Responses API."
+    },
+    "model_verbosity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "Optional verbosity control for GPT-5 models (Responses API `text.verbosity`)."
+    },
+    "model_supports_reasoning_summaries": {
+      "type": "boolean",
+      "description": "Override to force-enable reasoning summaries for the configured model."
+    },
+    "model_reasoning_summary_format": {
+      "type": "string",
+      "enum": [
+        "none",
+        "experimental"
+      ],
+      "description": "Override to force reasoning summary format for the configured model."
     },
     "chatgpt_base_url": {
       "type": "string",
-      "description": "Override the base URL used during the ChatGPT login flow."
+      "description": "Base URL for requests to ChatGPT (as opposed to the OpenAI API)."
     },
-    "forced_login_method": {
-      "type": "string",
-      "description": "Restrict Codex to a specific authentication method.",
-      "enum": [
-        "chatgpt",
-        "api"
-      ]
-    },
-    "forced_chatgpt_workspace_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Limit ChatGPT logins to a specific workspace identifier."
-    },
-    "mcp_servers": {
+    "projects": {
       "type": "object",
-      "additionalProperties": true,
+      "description": "Project-specific trust settings keyed by project path.",
+      "additionalProperties": {
+        "$ref": "#/$defs/project_config"
+      }
+    },
+    "tools": {
+      "$ref": "#/$defs/tools"
+    },
+    "features": {
+      "$ref": "#/$defs/features"
+    },
+    "check_for_update_on_startup": {
+      "type": "boolean",
+      "description": "When `true`, checks for Codex updates on startup and surfaces update prompts. Set to `false` only if your Codex updates are centrally managed.",
+      "default": true
+    },
+    "disable_paste_burst": {
+      "type": "boolean",
+      "description": "When true, disables burst-paste detection for typed input entirely. All characters are inserted as they are received."
+    },
+    "otel": {
+      "$ref": "#/$defs/otel"
+    },
+    "windows_wsl_setup_acknowledged": {
+      "type": "boolean",
+      "description": "Tracks whether the Windows onboarding screen has been acknowledged."
+    },
+    "notice": {
+      "$ref": "#/$defs/notice"
+    },
+    "experimental_instructions_file": {
+      "type": "string",
+      "description": "Legacy, now use features."
+    },
+    "experimental_compact_prompt_file": {
+      "type": "string",
+      "description": "Legacy compact prompt override file."
+    },
+    "experimental_use_unified_exec_tool": {
+      "type": "boolean",
+      "description": "If set to `true`, used only the experimental unified exec tool."
+    },
+    "experimental_use_rmcp_client": {
+      "type": "boolean",
+      "description": "If set to `true`, use the experimental official Rust MCP client."
+    },
+    "experimental_use_freeform_apply_patch": {
+      "type": "boolean",
+      "description": "Include the freeform apply_patch tool (legacy toggle)."
+    },
+    "experimental_sandbox_command_assessment": {
+      "type": "boolean",
+      "description": "When `true`, run a model-based assessment for commands denied by the sandbox."
+    },
+    "oss_provider": {
+      "type": "string",
+      "description": "Preferred OSS provider for local models, e.g. \"lmstudio\" or \"ollama\"."
+    }
+  },
+  "$defs": {
+    "shell_environment_policy": {
+      "type": "object",
+      "description": "Policy for building the `env` when spawning a process via either the `shell` or `local_shell` tool.",
       "properties": {
-        "command": {
+        "inherit": {
           "type": "string",
-          "description": "Launcher command for an MCP stdio server."
+          "enum": [
+            "core",
+            "all",
+            "none"
+          ],
+          "description": "Starting point when building the environment."
         },
-        "args": {
+        "ignore_default_excludes": {
+          "type": "boolean",
+          "description": "True to skip filtering default excludes for env vars containing KEY or TOKEN."
+        },
+        "exclude": {
           "type": "array",
-          "description": "Arguments passed to the MCP stdio server command.",
           "items": {
+            "type": "string"
+          },
+          "description": "List of regular expressions to exclude environment variables."
+        },
+        "set": {
+          "type": "object",
+          "description": "Environment variable key/value pairs to insert in the environment.",
+          "additionalProperties": {
             "type": "string"
           }
         },
-        "env": {
-          "type": "object",
-          "description": "Environment variables forwarded to the MCP stdio server."
+        "include_only": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of regular expressions; only matching environment variables are retained."
+        },
+        "experimental_use_profile": {
+          "type": "boolean",
+          "description": "If true, the shell profile will be used to run the command."
+        }
+      },
+      "additionalProperties": false,
+      "default": {}
+    },
+    "sandbox_workspace_write": {
+      "type": "object",
+      "description": "Sandbox configuration to apply if `sandbox` is `WorkspaceWrite`.",
+      "properties": {
+        "writable_roots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional folders (beyond cwd and TMPDIR) that should be writable from within the sandbox."
+        },
+        "network_access": {
+          "type": "boolean",
+          "description": "When set to `true`, outbound network access is allowed.",
+          "default": false
         },
         "exclude_tmpdir_env_var": {
           "type": "boolean",
-          "description": "Exclude `$TMPDIR` from writable roots in workspace-write mode."
+          "description": "When set to `true`, will NOT include the per-user `TMPDIR` environment variable among the default writable roots.",
+          "default": false
         },
         "exclude_slash_tmp": {
           "type": "boolean",
-          "description": "Exclude `/tmp` from writable roots in workspace-write mode."
+          "description": "When set to `true`, will NOT include `/tmp` among the default writable roots on UNIX.",
+          "default": false
         }
+      },
+      "additionalProperties": false,
+      "default": {}
+    },
+    "history": {
+      "type": "object",
+      "description": "Settings that govern if and what will be written to `~/.codex/history.jsonl`.",
+      "properties": {
+        "persistence": {
+          "type": "string",
+          "enum": [
+            "save-all",
+            "none"
+          ],
+          "description": "Save all history entries to disk or disable writing.",
+          "default": "save-all"
+        },
+        "max_bytes": {
+          "type": "integer",
+          "description": "If set, the maximum size of the history file in bytes."
+        }
+      },
+      "additionalProperties": false
+    },
+    "notifications": {
+      "description": "Enable desktop notifications from the TUI when the terminal is unfocused.",
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Custom notification command argv to execute."
+        }
+      ]
+    },
+    "tui": {
+      "type": "object",
+      "description": "Collection of settings that are specific to the TUI.",
+      "properties": {
+        "notifications": {
+          "$ref": "#/$defs/notifications"
+        },
+        "animations": {
+          "type": "boolean",
+          "description": "Enable animations (welcome screen, shimmer effects, spinners).",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "notice": {
+      "type": "object",
+      "description": "Collection of in-product notices (different from notifications).",
+      "properties": {
+        "hide_full_access_warning": {
+          "type": "boolean",
+          "description": "Tracks whether the user has acknowledged the full access warning prompt."
+        },
+        "hide_world_writable_warning": {
+          "type": "boolean",
+          "description": "Tracks whether the user has acknowledged the Windows world-writable directories warning."
+        },
+        "hide_rate_limit_model_nudge": {
+          "type": "boolean",
+          "description": "Tracks whether the user opted out of the rate limit model switch reminder."
+        },
+        "hide_gpt5_1_migration_prompt": {
+          "type": "boolean",
+          "description": "Tracks whether the user has seen the model migration prompt."
+        },
+        "hide_gpt-5.1-codex-max_migration_prompt": {
+          "type": "boolean",
+          "description": "Tracks whether the user has seen the gpt-5.1-codex-max migration prompt."
+        }
+      },
+      "additionalProperties": false
+    },
+    "otel_tls": {
+      "type": "object",
+      "properties": {
+        "ca_certificate": {
+          "type": "string",
+          "description": "Path to CA certificate file."
+        },
+        "client_certificate": {
+          "type": "string",
+          "description": "Path to client certificate file."
+        },
+        "client_private_key": {
+          "type": "string",
+          "description": "Path to client private key file."
+        }
+      },
+      "additionalProperties": false
+    },
+    "otel_exporter": {
+      "oneOf": [
+        {
+          "type": "string",
+          "const": "none",
+          "description": "Disable OTEL exporter."
+        },
+        {
+          "type": "object",
+          "required": [
+            "endpoint",
+            "protocol"
+          ],
+          "properties": {
+            "type": {
+              "const": "otlp-http"
+            },
+            "endpoint": {
+              "type": "string",
+              "description": "OTLP/HTTP endpoint."
+            },
+            "headers": {
+              "type": "object",
+              "description": "Additional HTTP headers to include in OTLP/HTTP exporter.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "protocol": {
+              "type": "string",
+              "enum": [
+                "binary",
+                "json"
+              ],
+              "description": "OTLP/HTTP payload format."
+            },
+            "tls": {
+              "$ref": "#/$defs/otel_tls"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "endpoint"
+          ],
+          "properties": {
+            "type": {
+              "const": "otlp-grpc"
+            },
+            "endpoint": {
+              "type": "string",
+              "description": "OTLP/gRPC endpoint."
+            },
+            "headers": {
+              "type": "object",
+              "description": "Additional HTTP headers to include in OTLP/gRPC exporter.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "tls": {
+              "$ref": "#/$defs/otel_tls"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "otel": {
+      "type": "object",
+      "description": "OTEL configuration.",
+      "properties": {
+        "log_user_prompt": {
+          "type": "boolean",
+          "description": "Log user prompt in traces",
+          "default": false
+        },
+        "environment": {
+          "type": "string",
+          "description": "Mark traces with environment (dev, staging, prod, test). Defaults to dev.",
+          "default": "dev"
+        },
+        "exporter": {
+          "$ref": "#/$defs/otel_exporter",
+          "description": "Exporter to use."
+        }
+      },
+      "additionalProperties": false
+    },
+    "mcp_server_config": {
+      "type": "object",
+      "description": "Definition for an MCP server Codex can reach out to for tool calls.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "When `false`, Codex skips initializing this MCP server.",
+          "default": true
+        },
+        "startup_timeout_sec": {
+          "type": "number",
+          "description": "Startup timeout in seconds for initializing MCP server & initially listing tools."
+        },
+        "tool_timeout_sec": {
+          "type": "number",
+          "description": "Default timeout for MCP tool calls initiated via this server."
+        },
+        "enabled_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Explicit allow-list of tools exposed from this server."
+        },
+        "disabled_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Explicit deny-list of tools removed after applying enabled_tools."
+        },
+        "command": {
+          "type": "string",
+          "description": "Stdio transport: command to launch MCP server."
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Arguments passed to the MCP stdio server command.",
+          "default": []
+        },
+        "env": {
+          "type": "object",
+          "description": "Environment variables forwarded to the MCP stdio server.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "env_vars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Environment variable names to forward to the MCP stdio server.",
+          "default": []
+        },
+        "cwd": {
+          "type": "string",
+          "description": "Working directory for the MCP stdio server."
+        },
+        "url": {
+          "type": "string",
+          "description": "Streamable HTTP transport endpoint URL."
+        },
+        "bearer_token_env_var": {
+          "type": "string",
+          "description": "Name of environment variable providing HTTP bearer token."
+        },
+        "http_headers": {
+          "type": "object",
+          "description": "Additional HTTP headers to include in requests to this server.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "env_http_headers": {
+          "type": "object",
+          "description": "HTTP headers whose values are sourced from environment variables.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "command"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "project_config": {
+      "type": "object",
+      "properties": {
+        "trust_level": {
+          "type": "string",
+          "enum": [
+            "trusted",
+            "untrusted"
+          ],
+          "description": "Trust level for the project directory."
+        }
+      },
+      "additionalProperties": false
+    },
+    "config_profile": {
+      "type": "object",
+      "description": "Collection of common configuration options that a user can define as a unit in `config.toml`.",
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "model_provider": {
+          "type": "string",
+          "description": "The key in the `model_providers` map identifying the model provider to use."
+        },
+        "approval_policy": {
+          "type": "string",
+          "enum": [
+            "untrusted",
+            "on-failure",
+            "on-request",
+            "never"
+          ]
+        },
+        "sandbox_mode": {
+          "type": "string",
+          "enum": [
+            "read-only",
+            "workspace-write",
+            "danger-full-access"
+          ]
+        },
+        "model_reasoning_effort": {
+          "type": "string",
+          "enum": [
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ]
+        },
+        "model_reasoning_summary": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "concise",
+            "detailed",
+            "none"
+          ]
+        },
+        "model_verbosity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "chatgpt_base_url": {
+          "type": "string"
+        },
+        "experimental_instructions_file": {
+          "type": "string"
+        },
+        "experimental_compact_prompt_file": {
+          "type": "string"
+        },
+        "include_apply_patch_tool": {
+          "type": "boolean",
+          "description": "Include the `apply_patch` tool for structured file edits."
+        },
+        "experimental_use_unified_exec_tool": {
+          "type": "boolean"
+        },
+        "experimental_use_rmcp_client": {
+          "type": "boolean"
+        },
+        "experimental_use_freeform_apply_patch": {
+          "type": "boolean"
+        },
+        "experimental_sandbox_command_assessment": {
+          "type": "boolean"
+        },
+        "tools_web_search": {
+          "type": "boolean",
+          "description": "Allow the model to request web searches."
+        },
+        "tools_view_image": {
+          "type": "boolean",
+          "description": "Enable the `view_image` tool that lets the agent attach local images."
+        },
+        "features": {
+          "$ref": "#/$defs/features"
+        },
+        "oss_provider": {
+          "type": "string",
+          "description": "Preferred OSS provider for local models, e.g. \"lmstudio\" or \"ollama\"."
+        }
+      },
+      "additionalProperties": false
+    },
+    "features": {
+      "type": "object",
+      "description": "Keyed feature toggles table.",
+      "additionalProperties": {
+        "type": "boolean"
       }
+    },
+    "tools": {
+      "type": "object",
+      "description": "Nested tools section for feature toggles.",
+      "properties": {
+        "web_search": {
+          "type": "boolean",
+          "description": "Allow the model to request web searches."
+        },
+        "web_search_request": {
+          "type": "boolean",
+          "description": "Alias for `web_search`."
+        },
+        "view_image": {
+          "type": "boolean",
+          "description": "Enable the `view_image` tool that lets the agent attach local images."
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
