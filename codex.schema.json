@@ -9,10 +9,9 @@
       "description": "Optional override of model selection.",
       "enum": [
         "gpt-5.1-codex-max",
-        "gpt-5.1-codex",
         "gpt-5.1-codex-mini",
         "gpt-5.2",
-        "gpt-5.1"
+        "gpt-5.2-codex"
       ]
     },
     "review_model": {
@@ -20,10 +19,9 @@
       "description": "Review model override used by the `/review` feature.",
       "enum": [
         "gpt-5.1-codex-max",
-        "gpt-5.1-codex",
         "gpt-5.1-codex-mini",
         "gpt-5.2",
-        "gpt-5.1"
+        "gpt-5.2-codex"
       ]
     },
     "model_provider": {
