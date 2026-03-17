@@ -1,290 +1,704 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Claude Code JSON Schema from https://github.com/snowfort-ai/config/blob/main/packages/core/src/adapters/claude.ts",
+  "title": "Claude Code User Configuration (~/.claude.json)",
+  "description": "User-level configuration file for Claude Code CLI, stored at ~/.claude.json. Contains authentication state, UI preferences, feature flags, usage counters, and per-project settings.",
   "type": "object",
+  "additionalProperties": true,
   "properties": {
-    "api_key": {
-      "type": "string",
-      "description": "API key for Claude service"
-    },
-    "model": {
-      "type": "string",
-      "description": "Default model to use"
-    },
-    "max_project_files": {
-      "type": "number",
-      "description": "Maximum number of project files to include"
-    },
-    "verbose": {
-      "description": "Enable verbose logging",
-      "type": "boolean"
-    },
-    "bypassPermissionsModeAccepted": {
-      "description": "User has accepted bypass permissions mode",
-      "type": "boolean"
-    },
-    "hasCompletedOnboarding": {
-      "description": "User has completed initial onboarding",
-      "type": "boolean"
-    },
-    "lastOnboardingVersion": {
-      "description": "Last onboarding version seen",
-      "type": "string"
-    },
-    "firstStartTime": {
-      "description": "First time Claude Code was started",
-      "type": "string"
-    },
     "numStartups": {
-      "description": "Number of times Claude Code has been started",
-      "type": "number"
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times Claude Code has been started"
     },
     "installMethod": {
-      "description": "Method used to install Claude Code",
-      "type": "string"
-    },
-    "tipsHistory": {
-      "description": "History of tips shown to user",
-      "additionalProperties": {
-        "type": "number"
-      },
-      "type": "object"
-    },
-    "lastReleaseNotesSeen": {
-      "description": "Last release notes version seen by user",
-      "type": "string"
-    },
-    "hasAvailableSubscription": {
-      "description": "User has available subscription",
-      "type": "boolean"
-    },
-    "subscriptionNoticeCount": {
-      "description": "Number of subscription notices shown",
-      "type": "number"
-    },
-    "oauthAccount": {
-      "description": "OAuth account information including user and organization details",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "accountUuid": {
-          "description": "Unique account identifier",
-          "type": "string"
-        },
-        "emailAddress": {
-          "description": "Account email address",
-          "type": "string"
-        },
-        "organizationUuid": {
-          "description": "Organization unique identifier",
-          "type": "string"
-        },
-        "organizationRole": {
-          "description": "Role within the organization (e.g., admin, member)",
-          "type": "string"
-        },
-        "workspaceRole": {
-          "description": "Role within the workspace (can be null)",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "organizationName": {
-          "description": "Name of the organization",
-          "type": "string"
-        }
-      },
-      "required": [
-        "accountUuid",
-        "emailAddress",
-        "organizationUuid",
-        "organizationRole",
-        "workspaceRole",
-        "organizationName"
-      ]
+      "type": "string",
+      "enum": ["native", "local", "global", "unknown"],
+      "description": "How Claude Code was installed"
     },
     "autoUpdates": {
-      "description": "Automatic updates enabled",
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether auto-updates are enabled"
     },
-    "cachedChangelog": {
-      "description": "Cached changelog content",
-      "type": "string"
+    "autoUpdatesProtectedForNative": {
+      "type": "boolean",
+      "description": "Whether auto-updates are protected for native installs"
     },
-    "changelogLastFetched": {
-      "description": "Last time changelog was fetched",
-      "type": [
-        "string",
-        "number"
-      ]
+    "autoUpdatesChannel": {
+      "type": "string",
+      "enum": ["latest", "stable"],
+      "description": "Release channel for auto-updates"
     },
-    "appleTerminalSetupInProgress": {
-      "description": "Apple Terminal setup is in progress",
-      "type": "boolean"
+    "autoUpdaterStatus": {
+      "type": "string",
+      "enum": ["migrated", "installed", "disabled", "enabled", "no_permissions", "not_configured"],
+      "description": "Legacy auto-updater status (converted to installMethod)"
     },
-    "appleTerminalBackupPath": {
-      "description": "Path to Apple Terminal backup",
-      "type": "string"
-    },
-    "optionAsMetaKeyInstalled": {
-      "description": "Option as meta key is installed",
-      "type": "boolean"
-    },
-    "fallbackAvailableWarningThreshold": {
-      "description": "Threshold for fallback availability warnings",
-      "type": "number"
-    },
-    "projects": {
-      "description": "claude code project",
-      "type": "object",
-      "permissions": {
-        "type": "object",
-        "allowedTools": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "history": {
-          "type": "array",
-          "items": {}
-        },
-        "dontCrawlDirectory": {
-          "type": "boolean"
-        },
-        "mcpContextUris": {
-          "type": "array",
-          "items": {}
-        },
-        "mcpServers": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "command": {
-                "type": "string"
-              },
-              "args": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "env": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "enabledMcpjsonServers": {
-          "type": "array",
-          "items": {}
-        },
-        "disabledMcpjsonServers": {
-          "type": "array",
-          "items": {}
-        },
-        "enableAllProjectMcpServers": {
-          "type": "boolean"
-        },
-        "hasTrustDialogAccepted": {
-          "type": "boolean"
-        },
-        "ignorePatterns": {
-          "type": "array",
-          "items": {}
-        },
-        "exampleFiles": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "exampleFilesGeneratedAt": {
-          "type": "number"
-        },
-        "hasCompletedProjectOnboarding": {
-          "type": "boolean"
-        },
-        "lastCost": {
-          "type": "number"
-        },
-        "lastAPIDuration": {
-          "type": "number"
-        },
-        "lastDuration": {
-          "type": "number"
-        },
-        "lastLinesAdded": {
-          "type": "number"
-        },
-        "lastLinesRemoved": {
-          "type": "number"
-        },
-        "lastSessionId": {
-          "type": "string"
-        }
-      }
+    "theme": {
+      "type": "string",
+      "enum": ["dark", "light", "light-daltonized", "dark-daltonized", "light-ansi", "dark-ansi"],
+      "default": "dark",
+      "description": "Color theme for the UI"
     },
     "preferredNotifChannel": {
-      "type": "string"
+      "type": "string",
+      "enum": ["auto", "iterm2", "iterm2_with_bell", "terminal_bell", "kitty", "notifications_disabled"],
+      "default": "auto",
+      "description": "Preferred notification channel"
+    },
+    "verbose": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show detailed debug output"
     },
     "editorMode": {
-      "type": "string"
+      "type": "string",
+      "enum": ["normal", "vim"],
+      "default": "normal",
+      "description": "Key binding mode"
     },
     "autoCompactEnabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": true,
+      "description": "Auto-compact when context is full"
+    },
+    "showTurnDuration": {
+      "type": "boolean",
+      "default": true,
+      "description": "Show turn duration message after responses (e.g., \"Cooked for 1m 6s\")"
+    },
+    "hasSeenTasksHint": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the tasks hint has been shown"
+    },
+    "hasUsedStash": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has used the stash feature"
+    },
+    "hasUsedBackslashReturn": {
+      "type": "boolean",
+      "description": "Whether the user has used backslash-return input"
+    },
+    "queuedCommandUpHintCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times the queued command up-arrow hint has been shown"
+    },
+    "diffTool": {
+      "type": "string",
+      "enum": ["auto", "terminal"],
+      "default": "auto",
+      "description": "Diff tool to use for displaying changes"
     },
     "customApiKeyResponses": {
       "type": "object",
       "properties": {
         "approved": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" },
+          "default": [],
+          "description": "List of approved custom API key hashes"
         },
         "rejected": {
           "type": "array",
-          "items": {}
+          "items": { "type": "string" },
+          "default": [],
+          "description": "List of rejected custom API key hashes"
         }
-      }
+      },
+      "additionalProperties": false,
+      "default": { "approved": [], "rejected": [] },
+      "description": "Custom API key approval/rejection state"
     },
     "env": {
       "type": "object",
-      "properties": {
-        "GOPRIVATE": {
-          "type": "string"
-        }
-      }
+      "additionalProperties": { "type": "string" },
+      "default": {},
+      "description": "Environment variables to set for Claude Code sessions"
     },
-    "parallelTasksCount": {
-      "type": "string"
+    "tipsHistory": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "History of tips that have been shown"
+    },
+    "memoryUsageCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times memory has been used"
     },
     "promptQueueUseCount": {
-      "type": "number"
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times prompt queue has been used"
+    },
+    "btwUseCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times BTW (by-the-way) suggestions have been used"
+    },
+    "todoFeatureEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable todo/task tracking"
+    },
+    "showExpandedTodos": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show expanded todo list view"
+    },
+    "messageIdleNotifThresholdMs": {
+      "type": "integer",
+      "default": 60000,
+      "description": "Milliseconds of idle time before showing a notification"
     },
     "autoConnectIde": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false,
+      "description": "Auto-connect to IDE (external terminal)"
     },
-    "isQualifiedForDataSharing": {
-      "type": "boolean"
+    "autoInstallIdeExtension": {
+      "type": "boolean",
+      "default": true,
+      "description": "Auto-install IDE extension when connecting"
     },
-    "recommendedSubscription": {
-      "type": "string"
+    "fileCheckpointingEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable file checkpointing for code rewind"
     },
-    "userID": {
-      "type": "string"
+    "terminalProgressBarEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable terminal progress bar display"
+    },
+    "cachedStatsigGates": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "Cached Statsig feature gate values"
+    },
+    "cachedDynamicConfigs": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "Cached dynamic configuration values"
+    },
+    "cachedGrowthBookFeatures": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "Cached GrowthBook feature flag values"
+    },
+    "respectGitignore": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether file picker should respect .gitignore files"
+    },
+    "copyFullResponse": {
+      "type": "boolean",
+      "default": false,
+      "description": "Copy full response to clipboard"
+    },
+    "copyOnSelect": {
+      "type": "boolean",
+      "description": "Copy text on selection"
+    },
+    "apiKeyHelper": {
+      "type": "string",
+      "description": "Path to a script that outputs authentication values"
+    },
+    "shiftEnterKeyBindingInstalled": {
+      "type": "boolean",
+      "description": "Whether Shift+Enter key binding has been installed"
+    },
+    "taskCompleteNotifEnabled": {
+      "type": "boolean",
+      "description": "Enable notification when a task completes"
+    },
+    "inputNeededNotifEnabled": {
+      "type": "boolean",
+      "description": "Enable notification when input is needed"
+    },
+    "agentPushNotifEnabled": {
+      "type": "boolean",
+      "description": "Enable push notifications from agents"
+    },
+    "claudeInChromeDefaultEnabled": {
+      "type": "boolean",
+      "description": "Enable Claude-in-Chrome integration by default"
+    },
+    "hasCompletedClaudeInChromeOnboarding": {
+      "type": "boolean",
+      "description": "Whether Claude-in-Chrome onboarding has been completed"
+    },
+    "lspRecommendationDisabled": {
+      "type": "boolean",
+      "description": "Disable LSP recommendations"
+    },
+    "lspRecommendationNeverPlugins": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of LSP plugin names to never recommend"
+    },
+    "lspRecommendationIgnoredCount": {
+      "type": "integer",
+      "description": "Number of times LSP recommendations have been dismissed"
+    },
+    "permissionExplainerEnabled": {
+      "type": "boolean",
+      "description": "Enable permission explainer UI"
+    },
+    "prStatusFooterEnabled": {
+      "type": "boolean",
+      "description": "Enable PR status footer display"
+    },
+    "remoteControlAtStartup": {
+      "type": "boolean",
+      "description": "Enable Remote Control for all sessions"
+    },
+    "remoteDialogSeen": {
+      "type": "boolean",
+      "description": "Whether the remote control dialog has been seen"
+    },
+    "hasCompletedOnboarding": {
+      "type": "boolean",
+      "description": "Whether the user has completed onboarding"
+    },
+    "oauthAccount": {
+      "type": "object",
+      "properties": {
+        "accountUuid": { "type": "string" },
+        "emailAddress": { "type": "string" },
+        "organizationUuid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "hasExtraUsageEnabled": { "type": "boolean" },
+        "billingType": { "type": "string" },
+        "accountCreatedAt": { "type": "string", "description": "ISO 8601 date string" },
+        "subscriptionCreatedAt": { "type": "string", "description": "ISO 8601 date string" },
+        "organizationRole": { "type": "string" },
+        "workspaceRole": { "type": "string" },
+        "organizationName": { "type": "string" }
+      },
+      "description": "OAuth account information"
+    },
+    "primaryApiKey": {
+      "type": "string",
+      "description": "Primary API key for authentication"
+    },
+    "awsAuthRefresh": {
+      "type": "string",
+      "description": "Path to a script that refreshes AWS authentication"
+    },
+    "awsCredentialExport": {
+      "type": "string",
+      "description": "Path to a script that exports AWS credentials"
+    },
+    "gcpAuthRefresh": {
+      "type": "string",
+      "description": "Command to refresh GCP authentication"
+    },
+    "otelHeadersHelper": {
+      "type": "string",
+      "description": "Path to a script that outputs OpenTelemetry headers"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "allow": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of permission rules for allowed operations"
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of permission rules for denied operations"
+        },
+        "ask": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of permission rules that should always prompt for confirmation"
+        },
+        "defaultMode": {
+          "type": "string",
+          "enum": ["default", "acceptEdits", "bypassPermissions", "plan", "dontAsk", "auto"],
+          "description": "Default permission mode when Claude Code needs access"
+        },
+        "disableBypassPermissionsMode": {
+          "type": "string",
+          "enum": ["disable"],
+          "description": "Disable the ability to bypass permission prompts"
+        },
+        "disableAutoMode": {
+          "type": "string",
+          "enum": ["disable"],
+          "description": "Disable auto mode"
+        },
+        "additionalDirectories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional directories to include in the permission scope"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Tool usage permissions configuration"
+    },
+    "mcpServers": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "const": "stdio" },
+              "command": { "type": "string", "minLength": 1, "description": "Command to run" },
+              "args": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Command arguments" },
+              "env": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Environment variables" }
+            },
+            "required": ["command"],
+            "description": "Stdio MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "const": "sse" },
+              "url": { "type": "string", "description": "Server URL" },
+              "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "HTTP headers" },
+              "headersHelper": { "type": "string", "description": "Path to a script that outputs headers" },
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "clientId": { "type": "string" },
+                  "callbackPort": { "type": "integer" },
+                  "authServerMetadataUrl": { "type": "string", "format": "uri" }
+                }
+              }
+            },
+            "required": ["type", "url"],
+            "description": "SSE MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "const": "http" },
+              "url": { "type": "string", "description": "Server URL" },
+              "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "HTTP headers" },
+              "headersHelper": { "type": "string", "description": "Path to a script that outputs headers" },
+              "oauth": {
+                "type": "object",
+                "properties": {
+                  "clientId": { "type": "string" },
+                  "callbackPort": { "type": "integer" },
+                  "authServerMetadataUrl": { "type": "string", "format": "uri" }
+                }
+              }
+            },
+            "required": ["type", "url"],
+            "description": "HTTP MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "const": "ws" },
+              "url": { "type": "string", "description": "WebSocket URL" },
+              "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "HTTP headers" },
+              "headersHelper": { "type": "string", "description": "Path to a script that outputs headers" }
+            },
+            "required": ["type", "url"],
+            "description": "WebSocket MCP server configuration"
+          }
+        ]
+      },
+      "description": "MCP server configurations keyed by server name"
+    },
+    "claudeAiMcpEverConnected": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of Claude.ai MCP servers that have been connected"
+    },
+    "teammateMode": {
+      "type": "string",
+      "enum": ["auto", "tmux", "in-process"],
+      "description": "How to spawn teammates: \"tmux\" for traditional tmux, \"in-process\" for same process, \"auto\" to choose automatically"
+    },
+    "voiceEnabled": {
+      "type": "boolean",
+      "description": "Enable voice dictation (hold-to-talk)"
+    },
+    "alwaysThinkingEnabled": {
+      "type": "boolean",
+      "description": "When false, thinking is disabled. When absent or true, thinking is enabled automatically."
+    },
+    "fastMode": {
+      "type": "boolean",
+      "description": "When true, fast mode is enabled"
+    },
+    "fastModePerSessionOptIn": {
+      "type": "boolean",
+      "description": "When true, fast mode does not persist across sessions"
+    },
+    "promptSuggestionEnabled": {
+      "type": "boolean",
+      "description": "When false, prompt suggestions are disabled"
+    },
+    "showThinkingSummaries": {
+      "type": "boolean",
+      "description": "Show thinking summaries in the transcript view"
+    },
+    "skipDangerousModePermissionPrompt": {
+      "type": "boolean",
+      "description": "Whether the user has accepted the bypass permissions mode dialog"
+    },
+    "skipAutoPermissionPrompt": {
+      "type": "boolean",
+      "description": "Whether the user has accepted the auto mode opt-in dialog"
+    },
+    "bypassPermissionsModeAccepted": {
+      "type": "boolean",
+      "description": "Whether bypass permissions mode has been accepted"
+    },
+    "penguinModeOrgEnabled": {
+      "type": "boolean",
+      "description": "Whether penguin mode is enabled for the organization"
+    },
+    "preferTmuxOverIterm2": {
+      "type": "boolean",
+      "description": "Prefer tmux over iTerm2 for terminal management"
+    },
+    "iterm2It2SetupComplete": {
+      "type": "boolean",
+      "description": "Whether iTerm2 IT2 setup has been completed"
+    },
+    "showSpinnerTree": {
+      "type": "boolean",
+      "description": "Show spinner tree view for teammates"
+    },
+    "defaultView": {
+      "type": "string",
+      "enum": ["chat", "transcript"],
+      "description": "Default transcript view"
+    },
+    "prefersReducedMotion": {
+      "type": "boolean",
+      "description": "Reduce or disable animations for accessibility"
+    },
+    "firstStartTime": {
+      "type": "number",
+      "description": "Unix timestamp of the first startup"
+    },
+    "claudeCodeFirstTokenDate": {
+      "type": "string",
+      "description": "Date string of when the first token was used"
+    },
+    "startupPrefetchedAt": {
+      "type": "number",
+      "description": "Unix timestamp of the last startup prefetch"
+    },
+    "lastReleaseNotesSeen": {
+      "type": "object",
+      "description": "Last release notes version seen"
+    },
+    "lastShownEmergencyTip": {
+      "type": "string",
+      "description": "ID of the last shown emergency tip"
+    },
+    "transcriptShareDismissed": {
+      "type": "boolean",
+      "description": "Whether the transcript share prompt has been dismissed"
     },
     "hasAcknowledgedCostThreshold": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether the user has acknowledged the cost threshold"
+    },
+    "hasResetAutoModeOptInForDefaultOffer": {
+      "type": "boolean",
+      "description": "Whether auto mode opt-in has been reset for the default offer"
+    },
+    "hasVisitedPasses": {
+      "type": "boolean",
+      "description": "Whether the user has visited the passes page"
+    },
+    "opusProMigrationComplete": {
+      "type": "boolean",
+      "description": "Whether Opus Pro migration has been completed"
+    },
+    "sonnet1m45MigrationComplete": {
+      "type": "boolean",
+      "description": "Whether Sonnet 1M 4.5 migration has been completed"
+    },
+    "sonnet45To46MigrationTimestamp": {
+      "type": "number",
+      "description": "Unix timestamp of when Sonnet 4.5 to 4.6 migration occurred"
+    },
+    "feedbackSurveyState": {
+      "type": "object",
+      "description": "State of the feedback survey"
+    },
+    "skillUsage": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-skill usage tracking keyed by skill name"
+    },
+    "githubRepoPaths": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "description": "GitHub repository paths keyed by repo identifier"
+    },
+    "cachedChromeExtensionInstalled": {
+      "type": "boolean",
+      "description": "Whether the Chrome extension is detected as installed"
+    },
+    "cachedExtraUsageDisabledReason": {
+      "type": "string",
+      "description": "Cached reason for extra usage being disabled"
+    },
+    "clientDataCache": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "description": "Client data cache"
+    },
+    "metricsStatusCache": {
+      "type": "object",
+      "description": "Cached metrics status"
+    },
+    "groveConfigCache": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cached Grove configuration keyed by identifier"
+    },
+    "passesEligibilityCache": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "referrer_reward": {},
+          "remaining_passes": { "type": "number" }
+        }
+      },
+      "description": "Cached passes eligibility information"
+    },
+    "passesLastSeenRemaining": {
+      "type": "number",
+      "description": "Last seen remaining passes count"
+    },
+    "passesUpsellSeenCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times the passes upsell has been shown"
+    },
+    "desktopUpsellSeenCount": {
+      "type": "integer",
+      "description": "Number of times the desktop upsell has been shown"
     },
     "githubActionSetupCount": {
-      "type": "number"
+      "type": "integer",
+      "description": "Number of times GitHub Action setup has been prompted"
+    },
+    "ideHintShownCount": {
+      "type": "integer",
+      "description": "Number of times IDE hint has been shown"
+    },
+    "slackAppInstallCount": {
+      "type": "integer",
+      "description": "Number of times Slack app install has been prompted"
+    },
+    "subscriptionNoticeCount": {
+      "type": "integer",
+      "description": "Number of times subscription notice has been shown"
+    },
+    "voiceNoticeSeenCount": {
+      "type": "integer",
+      "description": "Number of times voice notice has been shown"
+    },
+    "opus1mMergeNoticeSeenCount": {
+      "type": "integer",
+      "description": "Number of times Opus 1M merge notice has been shown"
+    },
+    "autoPermissionsNotificationCount": {
+      "type": "integer",
+      "description": "Number of times auto permissions notification has been shown"
+    },
+    "chromeExtension": {
+      "type": "object",
+      "properties": {
+        "pairedDeviceId": { "type": "string" }
+      },
+      "description": "Chrome extension configuration"
+    },
+    "projects": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "allowedTools": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "Tool whitelist for this project"
+          },
+          "mcpContextUris": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "MCP context URIs for this project"
+          },
+          "mcpServers": {
+            "type": "object",
+            "additionalProperties": true,
+            "default": {},
+            "description": "Per-project MCP server configurations"
+          },
+          "enabledMcpjsonServers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "List of approved MCP servers from .mcp.json"
+          },
+          "disabledMcpjsonServers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "List of rejected MCP servers from .mcp.json"
+          },
+          "hasTrustDialogAccepted": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether the trust dialog has been accepted for this project"
+          },
+          "projectOnboardingSeenCount": {
+            "type": "integer",
+            "default": 0,
+            "description": "Number of times project onboarding has been shown"
+          },
+          "hasClaudeMdExternalIncludesApproved": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether external includes in CLAUDE.md have been approved"
+          },
+          "hasClaudeMdExternalIncludesWarningShown": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether the external includes warning has been shown"
+          },
+          "hasCompletedProjectOnboarding": {
+            "type": "boolean",
+            "description": "Whether project-specific onboarding has been completed"
+          }
+        },
+        "additionalProperties": true,
+        "description": "Per-project configuration keyed by sanitized project path"
+      },
+      "description": "Per-project configuration settings"
     }
   }
 }
