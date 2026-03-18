@@ -1,9 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Claude Code User Configuration (~/.claude.json)",
-  "description": "User-level configuration file for Claude Code CLI, stored at ~/.claude.json. Contains authentication state, UI preferences, feature flags, usage counters, and per-project settings.",
-  "type": "object",
+  "description": "Global user configuration/state file for Claude Code CLI, stored at ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.78 using DEFAULT_GLOBAL_CONFIG, GLOBAL_CONFIG_KEYS, P1() global-config reads/writes, project defaults, and notification/editor enum tables.",
   "additionalProperties": true,
+  "type": "object",
   "properties": {
     "numStartups": {
       "type": "integer",
@@ -12,7 +13,12 @@
     },
     "installMethod": {
       "type": "string",
-      "enum": ["native", "local", "global", "unknown"],
+      "enum": [
+        "native",
+        "local",
+        "global",
+        "unknown"
+      ],
       "description": "How Claude Code was installed"
     },
     "autoUpdates": {
@@ -23,25 +29,42 @@
       "type": "boolean",
       "description": "Whether auto-updates are protected for native installs"
     },
-    "autoUpdatesChannel": {
-      "type": "string",
-      "enum": ["latest", "stable"],
-      "description": "Release channel for auto-updates"
-    },
     "autoUpdaterStatus": {
       "type": "string",
-      "enum": ["migrated", "installed", "disabled", "enabled", "no_permissions", "not_configured"],
+      "enum": [
+        "migrated",
+        "installed",
+        "disabled",
+        "enabled",
+        "no_permissions",
+        "not_configured"
+      ],
       "description": "Legacy auto-updater status (converted to installMethod)"
     },
     "theme": {
       "type": "string",
-      "enum": ["dark", "light", "light-daltonized", "dark-daltonized", "light-ansi", "dark-ansi"],
+      "enum": [
+        "dark",
+        "light",
+        "light-daltonized",
+        "dark-daltonized",
+        "light-ansi",
+        "dark-ansi"
+      ],
       "default": "dark",
       "description": "Color theme for the UI"
     },
     "preferredNotifChannel": {
       "type": "string",
-      "enum": ["auto", "iterm2", "iterm2_with_bell", "terminal_bell", "kitty", "notifications_disabled"],
+      "enum": [
+        "auto",
+        "iterm2",
+        "iterm2_with_bell",
+        "terminal_bell",
+        "kitty",
+        "ghostty",
+        "notifications_disabled"
+      ],
       "default": "auto",
       "description": "Preferred notification channel"
     },
@@ -52,7 +75,10 @@
     },
     "editorMode": {
       "type": "string",
-      "enum": ["normal", "vim"],
+      "enum": [
+        "normal",
+        "vim"
+      ],
       "default": "normal",
       "description": "Key binding mode"
     },
@@ -87,7 +113,10 @@
     },
     "diffTool": {
       "type": "string",
-      "enum": ["auto", "terminal"],
+      "enum": [
+        "auto",
+        "terminal"
+      ],
       "default": "auto",
       "description": "Diff tool to use for displaying changes"
     },
@@ -96,24 +125,33 @@
       "properties": {
         "approved": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": [],
           "description": "List of approved custom API key hashes"
         },
         "rejected": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": [],
           "description": "List of rejected custom API key hashes"
         }
       },
       "additionalProperties": false,
-      "default": { "approved": [], "rejected": [] },
+      "default": {
+        "approved": [],
+        "rejected": []
+      },
       "description": "Custom API key approval/rejection state"
     },
     "env": {
       "type": "object",
-      "additionalProperties": { "type": "string" },
+      "additionalProperties": {
+        "type": "string"
+      },
       "default": {},
       "description": "Environment variables to set for Claude Code sessions"
     },
@@ -239,7 +277,9 @@
     },
     "lspRecommendationNeverPlugins": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "List of LSP plugin names to never recommend"
     },
     "lspRecommendationIgnoredCount": {
@@ -269,81 +309,47 @@
     "oauthAccount": {
       "type": "object",
       "properties": {
-        "accountUuid": { "type": "string" },
-        "emailAddress": { "type": "string" },
-        "organizationUuid": { "type": "string" },
-        "displayName": { "type": "string" },
-        "hasExtraUsageEnabled": { "type": "boolean" },
-        "billingType": { "type": "string" },
-        "accountCreatedAt": { "type": "string", "description": "ISO 8601 date string" },
-        "subscriptionCreatedAt": { "type": "string", "description": "ISO 8601 date string" },
-        "organizationRole": { "type": "string" },
-        "workspaceRole": { "type": "string" },
-        "organizationName": { "type": "string" }
+        "accountUuid": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "organizationUuid": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "hasExtraUsageEnabled": {
+          "type": "boolean"
+        },
+        "billingType": {
+          "type": "string"
+        },
+        "accountCreatedAt": {
+          "type": "string",
+          "description": "ISO 8601 date string"
+        },
+        "subscriptionCreatedAt": {
+          "type": "string",
+          "description": "ISO 8601 date string"
+        },
+        "organizationRole": {
+          "type": "string"
+        },
+        "workspaceRole": {
+          "type": "string"
+        },
+        "organizationName": {
+          "type": "string"
+        }
       },
       "description": "OAuth account information"
     },
     "primaryApiKey": {
       "type": "string",
       "description": "Primary API key for authentication"
-    },
-    "awsAuthRefresh": {
-      "type": "string",
-      "description": "Path to a script that refreshes AWS authentication"
-    },
-    "awsCredentialExport": {
-      "type": "string",
-      "description": "Path to a script that exports AWS credentials"
-    },
-    "gcpAuthRefresh": {
-      "type": "string",
-      "description": "Command to refresh GCP authentication"
-    },
-    "otelHeadersHelper": {
-      "type": "string",
-      "description": "Path to a script that outputs OpenTelemetry headers"
-    },
-    "permissions": {
-      "type": "object",
-      "properties": {
-        "allow": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "List of permission rules for allowed operations"
-        },
-        "deny": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "List of permission rules for denied operations"
-        },
-        "ask": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "List of permission rules that should always prompt for confirmation"
-        },
-        "defaultMode": {
-          "type": "string",
-          "enum": ["default", "acceptEdits", "bypassPermissions", "plan", "dontAsk", "auto"],
-          "description": "Default permission mode when Claude Code needs access"
-        },
-        "disableBypassPermissionsMode": {
-          "type": "string",
-          "enum": ["disable"],
-          "description": "Disable the ability to bypass permission prompts"
-        },
-        "disableAutoMode": {
-          "type": "string",
-          "enum": ["disable"],
-          "description": "Disable auto mode"
-        },
-        "additionalDirectories": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Additional directories to include in the permission scope"
-        }
-      },
-      "additionalProperties": false,
-      "description": "Tool usage permissions configuration"
     },
     "mcpServers": {
       "type": "object",
@@ -352,62 +358,253 @@
           {
             "type": "object",
             "properties": {
-              "type": { "type": "string", "const": "stdio" },
-              "command": { "type": "string", "minLength": 1, "description": "Command to run" },
-              "args": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Command arguments" },
-              "env": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Environment variables" }
+              "type": {
+                "type": "string",
+                "const": "stdio"
+              },
+              "command": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Command to run"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "Command arguments"
+              },
+              "env": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Environment variables"
+              }
             },
-            "required": ["command"],
+            "required": [
+              "command"
+            ],
             "description": "Stdio MCP server configuration"
           },
           {
             "type": "object",
             "properties": {
-              "type": { "type": "string", "const": "sse" },
-              "url": { "type": "string", "description": "Server URL" },
-              "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "HTTP headers" },
-              "headersHelper": { "type": "string", "description": "Path to a script that outputs headers" },
+              "type": {
+                "type": "string",
+                "const": "sse"
+              },
+              "url": {
+                "type": "string",
+                "description": "Server URL"
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "HTTP headers"
+              },
+              "headersHelper": {
+                "type": "string",
+                "description": "Path to a script that outputs headers"
+              },
               "oauth": {
                 "type": "object",
                 "properties": {
-                  "clientId": { "type": "string" },
-                  "callbackPort": { "type": "integer" },
-                  "authServerMetadataUrl": { "type": "string", "format": "uri" }
+                  "clientId": {
+                    "type": "string"
+                  },
+                  "callbackPort": {
+                    "type": "integer"
+                  },
+                  "authServerMetadataUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  }
                 }
               }
             },
-            "required": ["type", "url"],
+            "required": [
+              "type",
+              "url"
+            ],
             "description": "SSE MCP server configuration"
           },
           {
             "type": "object",
             "properties": {
-              "type": { "type": "string", "const": "http" },
-              "url": { "type": "string", "description": "Server URL" },
-              "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "HTTP headers" },
-              "headersHelper": { "type": "string", "description": "Path to a script that outputs headers" },
+              "type": {
+                "type": "string",
+                "const": "sse-ide"
+              },
+              "url": {
+                "type": "string",
+                "description": "Server URL"
+              },
+              "ideName": {
+                "type": "string",
+                "description": "IDE name"
+              },
+              "ideRunningInWindows": {
+                "type": "boolean",
+                "description": "Whether the IDE is running on Windows"
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "ideName"
+            ],
+            "description": "IDE-backed SSE MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ws-ide"
+              },
+              "url": {
+                "type": "string",
+                "description": "WebSocket URL"
+              },
+              "ideName": {
+                "type": "string",
+                "description": "IDE name"
+              },
+              "authToken": {
+                "type": "string",
+                "description": "Optional IDE auth token"
+              },
+              "ideRunningInWindows": {
+                "type": "boolean",
+                "description": "Whether the IDE is running on Windows"
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "ideName"
+            ],
+            "description": "IDE-backed WebSocket MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "http"
+              },
+              "url": {
+                "type": "string",
+                "description": "Server URL"
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "HTTP headers"
+              },
+              "headersHelper": {
+                "type": "string",
+                "description": "Path to a script that outputs headers"
+              },
               "oauth": {
                 "type": "object",
                 "properties": {
-                  "clientId": { "type": "string" },
-                  "callbackPort": { "type": "integer" },
-                  "authServerMetadataUrl": { "type": "string", "format": "uri" }
+                  "clientId": {
+                    "type": "string"
+                  },
+                  "callbackPort": {
+                    "type": "integer"
+                  },
+                  "authServerMetadataUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  }
                 }
               }
             },
-            "required": ["type", "url"],
+            "required": [
+              "type",
+              "url"
+            ],
             "description": "HTTP MCP server configuration"
           },
           {
             "type": "object",
             "properties": {
-              "type": { "type": "string", "const": "ws" },
-              "url": { "type": "string", "description": "WebSocket URL" },
-              "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "HTTP headers" },
-              "headersHelper": { "type": "string", "description": "Path to a script that outputs headers" }
+              "type": {
+                "type": "string",
+                "const": "ws"
+              },
+              "url": {
+                "type": "string",
+                "description": "WebSocket URL"
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "HTTP headers"
+              },
+              "headersHelper": {
+                "type": "string",
+                "description": "Path to a script that outputs headers"
+              }
             },
-            "required": ["type", "url"],
+            "required": [
+              "type",
+              "url"
+            ],
             "description": "WebSocket MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sdk"
+              },
+              "name": {
+                "type": "string",
+                "description": "SDK server name"
+              }
+            },
+            "required": [
+              "type",
+              "name"
+            ],
+            "description": "In-process SDK MCP server configuration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "claudeai-proxy"
+              },
+              "url": {
+                "type": "string",
+                "description": "Proxy URL"
+              },
+              "id": {
+                "type": "string",
+                "description": "Claude.ai proxy server identifier"
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "id"
+            ],
+            "description": "Claude.ai proxy MCP server configuration"
           }
         ]
       },
@@ -415,45 +612,19 @@
     },
     "claudeAiMcpEverConnected": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "List of Claude.ai MCP servers that have been connected"
     },
     "teammateMode": {
       "type": "string",
-      "enum": ["auto", "tmux", "in-process"],
+      "enum": [
+        "auto",
+        "tmux",
+        "in-process"
+      ],
       "description": "How to spawn teammates: \"tmux\" for traditional tmux, \"in-process\" for same process, \"auto\" to choose automatically"
-    },
-    "voiceEnabled": {
-      "type": "boolean",
-      "description": "Enable voice dictation (hold-to-talk)"
-    },
-    "alwaysThinkingEnabled": {
-      "type": "boolean",
-      "description": "When false, thinking is disabled. When absent or true, thinking is enabled automatically."
-    },
-    "fastMode": {
-      "type": "boolean",
-      "description": "When true, fast mode is enabled"
-    },
-    "fastModePerSessionOptIn": {
-      "type": "boolean",
-      "description": "When true, fast mode does not persist across sessions"
-    },
-    "promptSuggestionEnabled": {
-      "type": "boolean",
-      "description": "When false, prompt suggestions are disabled"
-    },
-    "showThinkingSummaries": {
-      "type": "boolean",
-      "description": "Show thinking summaries in the transcript view"
-    },
-    "skipDangerousModePermissionPrompt": {
-      "type": "boolean",
-      "description": "Whether the user has accepted the bypass permissions mode dialog"
-    },
-    "skipAutoPermissionPrompt": {
-      "type": "boolean",
-      "description": "Whether the user has accepted the auto mode opt-in dialog"
     },
     "bypassPermissionsModeAccepted": {
       "type": "boolean",
@@ -474,15 +645,6 @@
     "showSpinnerTree": {
       "type": "boolean",
       "description": "Show spinner tree view for teammates"
-    },
-    "defaultView": {
-      "type": "string",
-      "enum": ["chat", "transcript"],
-      "description": "Default transcript view"
-    },
-    "prefersReducedMotion": {
-      "type": "boolean",
-      "description": "Reduce or disable animations for accessibility"
     },
     "firstStartTime": {
       "type": "number",
@@ -545,7 +707,9 @@
       "type": "object",
       "additionalProperties": {
         "type": "array",
-        "items": { "type": "string" }
+        "items": {
+          "type": "string"
+        }
       },
       "description": "GitHub repository paths keyed by repo identifier"
     },
@@ -582,7 +746,9 @@
         "type": "object",
         "properties": {
           "referrer_reward": {},
-          "remaining_passes": { "type": "number" }
+          "remaining_passes": {
+            "type": "number"
+          }
         }
       },
       "description": "Cached passes eligibility information"
@@ -631,7 +797,9 @@
     "chromeExtension": {
       "type": "object",
       "properties": {
-        "pairedDeviceId": { "type": "string" }
+        "pairedDeviceId": {
+          "type": "string"
+        }
       },
       "description": "Chrome extension configuration"
     },
@@ -642,13 +810,17 @@
         "properties": {
           "allowedTools": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "default": [],
             "description": "Tool whitelist for this project"
           },
           "mcpContextUris": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "default": [],
             "description": "MCP context URIs for this project"
           },
@@ -660,13 +832,17 @@
           },
           "enabledMcpjsonServers": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "default": [],
             "description": "List of approved MCP servers from .mcp.json"
           },
           "disabledMcpjsonServers": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "default": [],
             "description": "List of rejected MCP servers from .mcp.json"
           },
@@ -698,7 +874,7 @@
         "additionalProperties": true,
         "description": "Per-project configuration keyed by sanitized project path"
       },
-      "description": "Per-project configuration settings"
+      "description": "Per-project configuration stored inside ~/.claude.json, keyed by sanitized project path."
     }
   }
 }
