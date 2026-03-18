@@ -1,0 +1,2769 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BlendMode": {
+      "enum": [
+        "normal",
+        "darken",
+        "multiply",
+        "linearBurn",
+        "colorBurn",
+        "light",
+        "screen",
+        "linearDodge",
+        "colorDodge",
+        "overlay",
+        "softLight",
+        "hardLight",
+        "difference",
+        "exclusion",
+        "hue",
+        "saturation",
+        "color",
+        "luminosity"
+      ],
+      "type": "string"
+    },
+    "BooleanOrVariable": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/definitions/Variable"
+        }
+      ]
+    },
+    "CanHaveChildren": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "$ref": "#/definitions/Child"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "CanHaveEffects": {
+      "additionalProperties": false,
+      "properties": {
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        }
+      },
+      "type": "object"
+    },
+    "CanHaveGraphics": {
+      "additionalProperties": false,
+      "properties": {
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        }
+      },
+      "type": "object"
+    },
+    "CanHaveRotation": {
+      "additionalProperties": false,
+      "properties": {
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        }
+      },
+      "type": "object"
+    },
+    "Child": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Frame"
+        },
+        {
+          "$ref": "#/definitions/Group"
+        },
+        {
+          "$ref": "#/definitions/Rectangle"
+        },
+        {
+          "$ref": "#/definitions/Ellipse"
+        },
+        {
+          "$ref": "#/definitions/Line"
+        },
+        {
+          "$ref": "#/definitions/Path"
+        },
+        {
+          "$ref": "#/definitions/Polygon"
+        },
+        {
+          "$ref": "#/definitions/Text"
+        },
+        {
+          "$ref": "#/definitions/Note"
+        },
+        {
+          "$ref": "#/definitions/Prompt"
+        },
+        {
+          "$ref": "#/definitions/Context"
+        },
+        {
+          "$ref": "#/definitions/IconFont"
+        },
+        {
+          "$ref": "#/definitions/Ref"
+        }
+      ]
+    },
+    "Color": {
+      "description": "Colors can be 8-digit RGBA hex strings (e.g. #AABBCCDD), 6-digit RGB hex strings (e.g. #AABBCC) or 3-digit RGB hex strings (e.g. #ABC which means #AABBCC).",
+      "type": "string"
+    },
+    "ColorOrVariable": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Color"
+        },
+        {
+          "$ref": "#/definitions/Variable"
+        }
+      ]
+    },
+    "Context": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/TextContent"
+        },
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fontFamily": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontSize": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "fontStyle": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontWeight": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "href": {
+          "type": "string"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "letterSpacing": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "lineHeight": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "A multiplier that gets applied to the font size to determine spacing between lines. If not specified, uses the font's built-in line height."
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "strikethrough": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "textAlign": {
+          "enum": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "type": "string"
+        },
+        "textAlignVertical": {
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "type": "string"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "context",
+          "type": "string"
+        },
+        "underline": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Document": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Frame"
+              },
+              {
+                "$ref": "#/definitions/Group"
+              },
+              {
+                "$ref": "#/definitions/Rectangle"
+              },
+              {
+                "$ref": "#/definitions/Ellipse"
+              },
+              {
+                "$ref": "#/definitions/Line"
+              },
+              {
+                "$ref": "#/definitions/Polygon"
+              },
+              {
+                "$ref": "#/definitions/Path"
+              },
+              {
+                "$ref": "#/definitions/Text"
+              },
+              {
+                "$ref": "#/definitions/Note"
+              },
+              {
+                "$ref": "#/definitions/Context"
+              },
+              {
+                "$ref": "#/definitions/Prompt"
+              },
+              {
+                "$ref": "#/definitions/IconFont"
+              },
+              {
+                "$ref": "#/definitions/Ref"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "imports": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "themes": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "variables": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "const": "boolean",
+                    "type": "string"
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/BooleanOrVariable"
+                      },
+                      {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "theme": {
+                              "$ref": "#/definitions/Theme"
+                            },
+                            "value": {
+                              "$ref": "#/definitions/BooleanOrVariable"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "const": "color",
+                    "type": "string"
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ColorOrVariable"
+                      },
+                      {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "theme": {
+                              "$ref": "#/definitions/Theme"
+                            },
+                            "value": {
+                              "$ref": "#/definitions/ColorOrVariable"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "const": "number",
+                    "type": "string"
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/NumberOrVariable"
+                      },
+                      {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "theme": {
+                              "$ref": "#/definitions/Theme"
+                            },
+                            "value": {
+                              "$ref": "#/definitions/NumberOrVariable"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "const": "string",
+                    "type": "string"
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/StringOrVariable"
+                      },
+                      {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "theme": {
+                              "$ref": "#/definitions/Theme"
+                            },
+                            "value": {
+                              "$ref": "#/definitions/StringOrVariable"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "type": "object"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "children"
+      ],
+      "type": "object"
+    },
+    "Effect": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "radius": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "type": {
+              "const": "blur",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "radius": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "type": {
+              "const": "background_blur",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "blendMode": {
+              "$ref": "#/definitions/BlendMode"
+            },
+            "blur": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "color": {
+              "$ref": "#/definitions/ColorOrVariable"
+            },
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "offset": {
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                },
+                "y": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "type": "object"
+            },
+            "shadowType": {
+              "enum": [
+                "inner",
+                "outer"
+              ],
+              "type": "string"
+            },
+            "spread": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "type": {
+              "const": "shadow",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Effects": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Effect"
+        },
+        {
+          "items": {
+            "$ref": "#/definitions/Effect"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "Ellipse": {
+      "additionalProperties": false,
+      "description": "An ellipse is defined by its bounding rectangle's position and size.",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "innerRadius": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Inner-to-outer radius ratio for ring shapes. 0 = solid, 1 = fully hollow. Default: 0."
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "startAngle": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Arc start angle in degrees, counter-clockwise from the right. Default: 0."
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "sweepAngle": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Arc length in degrees from startAngle. Positive = counter-clockwise, negative = clockwise. Range: -360 to 360. Default: 360 (full ellipse)."
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "ellipse",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Entity": {
+      "additionalProperties": false,
+      "description": "Entities have unique identifiers.",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "Fill": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ColorOrVariable"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "blendMode": {
+              "$ref": "#/definitions/BlendMode"
+            },
+            "color": {
+              "$ref": "#/definitions/ColorOrVariable"
+            },
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "type": {
+              "const": "color",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "color"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "blendMode": {
+              "$ref": "#/definitions/BlendMode"
+            },
+            "center": {
+              "$ref": "#/definitions/Position",
+              "description": "Normalized to bounding box (default: 0.5,0.5)."
+            },
+            "colors": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "color": {
+                    "$ref": "#/definitions/ColorOrVariable"
+                  },
+                  "position": {
+                    "$ref": "#/definitions/NumberOrVariable"
+                  }
+                },
+                "required": [
+                  "color",
+                  "position"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "gradientType": {
+              "enum": [
+                "linear",
+                "radial",
+                "angular"
+              ],
+              "type": "string"
+            },
+            "opacity": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "rotation": {
+              "$ref": "#/definitions/NumberOrVariable",
+              "description": "Rotation in degrees, counterclockwise (0° up, 90° left, 180° down)."
+            },
+            "size": {
+              "additionalProperties": false,
+              "description": "Normalized to bounding box (default: 1,1). Linear: height sets gradient length, width is ignored. Radial/Angular: sets ellipse diameters.",
+              "properties": {
+                "height": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                },
+                "width": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                }
+              },
+              "type": "object"
+            },
+            "type": {
+              "const": "gradient",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "blendMode": {
+              "$ref": "#/definitions/BlendMode"
+            },
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "mode": {
+              "enum": [
+                "stretch",
+                "fill",
+                "fit"
+              ],
+              "type": "string"
+            },
+            "opacity": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "type": {
+              "const": "image",
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "url"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "blendMode": {
+              "$ref": "#/definitions/BlendMode"
+            },
+            "colors": {
+              "description": "Color per vertex.",
+              "items": {
+                "$ref": "#/definitions/ColorOrVariable"
+              },
+              "type": "array"
+            },
+            "columns": {
+              "type": "number"
+            },
+            "enabled": {
+              "$ref": "#/definitions/BooleanOrVariable"
+            },
+            "opacity": {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            "points": {
+              "description": "columns * rows points in [0,1] normalized coordinates.",
+              "items": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "number"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2,
+                    "type": "array"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "bottomHandle": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "type": "array"
+                      },
+                      "leftHandle": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "type": "array"
+                      },
+                      "position": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "type": "array"
+                      },
+                      "rightHandle": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "type": "array"
+                      },
+                      "topHandle": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "position"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            "rows": {
+              "type": "number"
+            },
+            "type": {
+              "const": "mesh_gradient",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Fills": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Fill"
+        },
+        {
+          "items": {
+            "$ref": "#/definitions/Fill"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "Frame": {
+      "additionalProperties": false,
+      "description": "A frame is a rectangle that can have children.",
+      "properties": {
+        "alignItems": {
+          "description": "Control the alignment of children along the cross axis. Defaults to 'start'.",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ],
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/Child"
+          },
+          "type": "array"
+        },
+        "clip": {
+          "$ref": "#/definitions/BooleanOrVariable",
+          "description": "Visually clip content that overflows the frame bounds. Default is false."
+        },
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "cornerRadius": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            }
+          ]
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "gap": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "The gap between children in the main axis direction. Defaults to 0."
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "justifyContent": {
+          "description": "Control the justify alignment of the children along the main axis. Defaults to 'start'.",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "space_between",
+            "space_around"
+          ],
+          "type": "string"
+        },
+        "layout": {
+          "description": "Enable flex layout. None means all children are absolutely positioned and will not be affected by layout properties. Frames default to horizontal, groups default to none.",
+          "enum": [
+            "none",
+            "vertical",
+            "horizontal"
+          ],
+          "type": "string"
+        },
+        "layoutIncludeStroke": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "padding": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            }
+          ],
+          "description": "The Inside padding along the edge of the container"
+        },
+        "placeholder": {
+          "type": "boolean"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "slot": {
+          "description": "The presence of this property indicates that this frame is a \"slot\" - which means that it is intended be customized with children in instances of the parent component. Each element of the array is an ID of a \"recommended\" reusable component, one which fits semantically as a child here (e.g. inside a menu bar, the content slot would recommend IDs of various menu item components).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "frame",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Group": {
+      "additionalProperties": false,
+      "properties": {
+        "alignItems": {
+          "description": "Control the alignment of children along the cross axis. Defaults to 'start'.",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ],
+          "type": "string"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/Child"
+          },
+          "type": "array"
+        },
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "gap": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "The gap between children in the main axis direction. Defaults to 0."
+        },
+        "height": {
+          "$ref": "#/definitions/SizingBehavior"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "justifyContent": {
+          "description": "Control the justify alignment of the children along the main axis. Defaults to 'start'.",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "space_between",
+            "space_around"
+          ],
+          "type": "string"
+        },
+        "layout": {
+          "description": "Enable flex layout. None means all children are absolutely positioned and will not be affected by layout properties. Frames default to horizontal, groups default to none.",
+          "enum": [
+            "none",
+            "vertical",
+            "horizontal"
+          ],
+          "type": "string"
+        },
+        "layoutIncludeStroke": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "padding": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            }
+          ],
+          "description": "The Inside padding along the edge of the container"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "group",
+          "type": "string"
+        },
+        "width": {
+          "$ref": "#/definitions/SizingBehavior"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "IconFont": {
+      "additionalProperties": false,
+      "description": "Icon from a font",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "iconFontFamily": {
+          "$ref": "#/definitions/StringOrVariable",
+          "description": "Icon font to use. Valid fonts are 'lucide', 'feather', 'Material Symbols Outlined', 'Material Symbols Rounded', 'Material Symbols Sharp', 'phosphor'"
+        },
+        "iconFontName": {
+          "$ref": "#/definitions/StringOrVariable",
+          "description": "Name of the icon in the icon font"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "icon_font",
+          "type": "string"
+        },
+        "weight": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Variable font weight, only valid for icon fonts with variable weight. Values from 100 to 700."
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "IdPath": {
+      "type": "string"
+    },
+    "Layout": {
+      "additionalProperties": false,
+      "properties": {
+        "alignItems": {
+          "description": "Control the alignment of children along the cross axis. Defaults to 'start'.",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ],
+          "type": "string"
+        },
+        "gap": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "The gap between children in the main axis direction. Defaults to 0."
+        },
+        "justifyContent": {
+          "description": "Control the justify alignment of the children along the main axis. Defaults to 'start'.",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "space_between",
+            "space_around"
+          ],
+          "type": "string"
+        },
+        "layout": {
+          "description": "Enable flex layout. None means all children are absolutely positioned and will not be affected by layout properties. Frames default to horizontal, groups default to none.",
+          "enum": [
+            "none",
+            "vertical",
+            "horizontal"
+          ],
+          "type": "string"
+        },
+        "layoutIncludeStroke": {
+          "type": "boolean"
+        },
+        "padding": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            }
+          ],
+          "description": "The Inside padding along the edge of the container"
+        }
+      },
+      "type": "object"
+    },
+    "Line": {
+      "additionalProperties": false,
+      "description": "A line is defined by its bounding rectangle's position and size.",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "line",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Note": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/TextContent"
+        },
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fontFamily": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontSize": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "fontStyle": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontWeight": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "href": {
+          "type": "string"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "letterSpacing": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "lineHeight": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "A multiplier that gets applied to the font size to determine spacing between lines. If not specified, uses the font's built-in line height."
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "strikethrough": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "textAlign": {
+          "enum": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "type": "string"
+        },
+        "textAlignVertical": {
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "type": "string"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "note",
+          "type": "string"
+        },
+        "underline": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "NumberOrVariable": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "$ref": "#/definitions/Variable"
+        }
+      ]
+    },
+    "Path": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "fillRule": {
+          "description": "fillRule is used to determine which parts of the path are considered inside the shape to be filled. Default is 'nonzero'.",
+          "enum": [
+            "nonzero",
+            "evenodd"
+          ],
+          "type": "string"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "geometry": {
+          "description": "SVG Path",
+          "type": "string"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "path",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Polygon": {
+      "additionalProperties": false,
+      "description": "A regular polygon is defined by its bounding rectangle's position and size.",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "cornerRadius": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "polygonCount": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "polygon",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Position": {
+      "additionalProperties": false,
+      "description": "Position is relative to the parent object's position. X increases rightwards, Y increases downwards. IMPORTANT: x and y are IGNORED when parent uses flexbox layout.",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "Prompt": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/TextContent"
+        },
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fontFamily": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontSize": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "fontStyle": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontWeight": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "href": {
+          "type": "string"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "letterSpacing": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "lineHeight": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "A multiplier that gets applied to the font size to determine spacing between lines. If not specified, uses the font's built-in line height."
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "model": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "strikethrough": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "textAlign": {
+          "enum": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "type": "string"
+        },
+        "textAlignVertical": {
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "type": "string"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "prompt",
+          "type": "string"
+        },
+        "underline": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Rectangle": {
+      "additionalProperties": false,
+      "description": "A rectangle is defined by its position and size. The position corresponds to the top-left corner.",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "cornerRadius": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            }
+          ]
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "rectangle",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Rectangleish": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "cornerRadius": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/NumberOrVariable"
+              },
+              "maxItems": 4,
+              "minItems": 4,
+              "type": "array"
+            }
+          ]
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "Ref": {
+      "description": "References allow reusing other objects in different places.",
+      "properties": {
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "descendants": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "description": "This can be used to customize the properties of descendant objects except the `children` property.",
+          "type": "object"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "ref": {
+          "description": "The `ref` property must be another object's ID.",
+          "type": "string"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "ref",
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "ref",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Size": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "SizingBehavior": {
+      "description": "SizingBehavior controls the dynamic layout size.\n- fit_content: Use the combined size of all children for the container size. Fallback is used when there are no children.\n- fill_container: Use the parent size for the container size. Fallback is used when the parent has no layout. Optional number in parentheses (e.g., 'fit_content(100)') specifies the fallback size.",
+      "type": "string"
+    },
+    "StringOrVariable": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/Variable"
+        }
+      ]
+    },
+    "Stroke": {
+      "additionalProperties": false,
+      "properties": {
+        "align": {
+          "enum": [
+            "inside",
+            "center",
+            "outside"
+          ],
+          "type": "string"
+        },
+        "cap": {
+          "enum": [
+            "none",
+            "round",
+            "square"
+          ],
+          "type": "string"
+        },
+        "dashPattern": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "join": {
+          "enum": [
+            "miter",
+            "bevel",
+            "round"
+          ],
+          "type": "string"
+        },
+        "miterAngle": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "thickness": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "bottom": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                },
+                "left": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                },
+                "right": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                },
+                "top": {
+                  "$ref": "#/definitions/NumberOrVariable"
+                }
+              },
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Text": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/TextContent"
+        },
+        "context": {
+          "description": "Optional context information about this object.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/Effects"
+        },
+        "enabled": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fill": {
+          "$ref": "#/definitions/Fills"
+        },
+        "flipX": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "flipY": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "fontFamily": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontSize": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "fontStyle": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontWeight": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "href": {
+          "type": "string"
+        },
+        "id": {
+          "description": "A unique string that MUST NOT contain slash (/) characters. If omitted, a unique ID will be generated automatically.",
+          "type": "string"
+        },
+        "letterSpacing": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "lineHeight": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "A multiplier that gets applied to the font size to determine spacing between lines. If not specified, uses the font's built-in line height."
+        },
+        "metadata": {
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "description": "Optional name for the entity, used for display and identification purposes",
+          "type": "string"
+        },
+        "opacity": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "reusable": {
+          "description": "Objects are not reusable by default. If an object is made reusable by setting this property to `true`, the object can be duplicated using `ref` objects.",
+          "type": "boolean"
+        },
+        "rotation": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "Rotation is represented in degrees, measured counter-clockwise."
+        },
+        "strikethrough": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Stroke"
+        },
+        "textAlign": {
+          "enum": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "type": "string"
+        },
+        "textAlignVertical": {
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "type": "string"
+        },
+        "textGrowth": {
+          "description": "textGrowth controls how the text box dimensions behave. It must be set before width or height can be used — without textGrowth, the width and height properties are ignored. 'auto': The text box automatically grows to fit the text content. Text does not wrap. Width and height adjust dynamically. 'fixed-width': The width is fixed and text wraps within it. The height grows automatically to fit the wrapped content. 'fixed-width-height': Both width and height are fixed. Text wraps and may be overflow if it exceeds the bounds. IMPORTANT: Never set width or height without also setting textGrowth. If you want to control the size of a text box, you must set textGrowth first.",
+          "enum": [
+            "auto",
+            "fixed-width",
+            "fixed-width-height"
+          ],
+          "type": "string"
+        },
+        "theme": {
+          "$ref": "#/definitions/Theme"
+        },
+        "type": {
+          "const": "text",
+          "type": "string"
+        },
+        "underline": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NumberOrVariable"
+            },
+            {
+              "$ref": "#/definitions/SizingBehavior"
+            }
+          ]
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "TextContent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        {
+          "items": {
+            "$ref": "#/definitions/TextStyle"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "TextStyle": {
+      "additionalProperties": false,
+      "properties": {
+        "fontFamily": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontSize": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "fontStyle": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "fontWeight": {
+          "$ref": "#/definitions/StringOrVariable"
+        },
+        "href": {
+          "type": "string"
+        },
+        "letterSpacing": {
+          "$ref": "#/definitions/NumberOrVariable"
+        },
+        "lineHeight": {
+          "$ref": "#/definitions/NumberOrVariable",
+          "description": "A multiplier that gets applied to the font size to determine spacing between lines. If not specified, uses the font's built-in line height."
+        },
+        "strikethrough": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        },
+        "textAlign": {
+          "enum": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ],
+          "type": "string"
+        },
+        "textAlignVertical": {
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "type": "string"
+        },
+        "underline": {
+          "$ref": "#/definitions/BooleanOrVariable"
+        }
+      },
+      "type": "object"
+    },
+    "Theme": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Each key must be an existing theme axis, and each value must be one of the possible values for that axis. E.g. { 'device': 'phone' }",
+      "type": "object"
+    },
+    "Variable": {
+      "description": "To bind a variable to a property, set the property to the dollar-prefixed name of the variable!",
+      "type": "string"
+    }
+  }
+}
