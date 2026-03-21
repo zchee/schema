@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Claude Code User Configuration (~/.claude.json)",
-  "description": "Global user configuration/state file for Claude Code CLI, stored at ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.78 using DEFAULT_GLOBAL_CONFIG, GLOBAL_CONFIG_KEYS, P1() global-config reads/writes, project defaults, and notification/editor enum tables.",
+  "title": "Claude Code Global User Configuration",
+  "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.81 using DEFAULT_GLOBAL_CONFIG, GLOBAL_CONFIG_KEYS, P8()/c8() global-config reads/writes, project defaults, and notification/editor enum tables.",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -305,6 +305,14 @@
     "hasCompletedOnboarding": {
       "type": "boolean",
       "description": "Whether the user has completed onboarding"
+    },
+    "userID": {
+      "type": "string",
+      "description": "Locally generated stable user identifier persisted for telemetry and per-user runtime state."
+    },
+    "anonymousId": {
+      "type": "string",
+      "description": "Locally generated anonymous analytics identifier (for example `claudecode.v1.<uuid>`)."
     },
     "oauthAccount": {
       "type": "object",
