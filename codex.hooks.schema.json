@@ -1,0 +1,405 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codex hooks.json Schema",
+  "type": "object",
+  "additionalProperties": true,
+  "description": "Schema for Codex lifecycle hooks loaded from hooks.json. Command hooks receive a JSON payload on stdin whose event-specific shape is described in the definitions below.",
+  "properties": {
+    "hooks": {
+      "$ref": "#/definitions/HookEvents",
+      "description": "Lifecycle hooks grouped by Codex hook event name."
+    }
+  },
+  "required": [
+    "hooks"
+  ],
+  "examples": [
+    {
+      "hooks": {
+        "SessionStart": [
+          {
+            "matcher": "^(startup|resume|clear)$",
+            "hooks": [
+              {
+                "type": "command",
+                "command": "python3 ~/.codex/hooks/session_start.py",
+                "timeout": 30,
+                "statusMessage": "running session start hook"
+              }
+            ]
+          }
+        ],
+        "UserPromptSubmit": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "python3 ~/.codex/hooks/prompt_guard.py",
+                "timeoutSec": 10
+              }
+            ]
+          }
+        ],
+        "Stop": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "python3 ~/.codex/hooks/notify.py",
+                "statusMessage": "running stop hook"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "definitions": {
+    "NullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PermissionMode": {
+      "type": "string",
+      "enum": [
+        "default",
+        "acceptEdits",
+        "plan",
+        "dontAsk",
+        "bypassPermissions"
+      ]
+    },
+    "SessionStartSource": {
+      "type": "string",
+      "enum": [
+        "startup",
+        "resume",
+        "clear"
+      ]
+    },
+    "SessionStartCommandInput": {
+      "title": "session-start.command.input",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "hook_event_name": {
+          "type": "string",
+          "const": "SessionStart"
+        },
+        "model": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "$ref": "#/definitions/PermissionMode"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/definitions/SessionStartSource"
+        },
+        "transcript_path": {
+          "$ref": "#/definitions/NullableString"
+        }
+      },
+      "required": [
+        "cwd",
+        "hook_event_name",
+        "model",
+        "permission_mode",
+        "session_id",
+        "source",
+        "transcript_path"
+      ]
+    },
+    "UserPromptSubmitCommandInput": {
+      "title": "user-prompt-submit.command.input",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "hook_event_name": {
+          "type": "string",
+          "const": "UserPromptSubmit"
+        },
+        "model": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "$ref": "#/definitions/PermissionMode"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "transcript_path": {
+          "$ref": "#/definitions/NullableString"
+        },
+        "turn_id": {
+          "type": "string",
+          "description": "Codex extension: expose the active turn id to internal turn-scoped hooks."
+        }
+      },
+      "required": [
+        "cwd",
+        "hook_event_name",
+        "model",
+        "permission_mode",
+        "prompt",
+        "session_id",
+        "transcript_path",
+        "turn_id"
+      ]
+    },
+    "StopCommandInput": {
+      "title": "stop.command.input",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "hook_event_name": {
+          "type": "string",
+          "const": "Stop"
+        },
+        "last_assistant_message": {
+          "$ref": "#/definitions/NullableString"
+        },
+        "model": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "$ref": "#/definitions/PermissionMode"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "stop_hook_active": {
+          "type": "boolean"
+        },
+        "transcript_path": {
+          "$ref": "#/definitions/NullableString"
+        },
+        "turn_id": {
+          "type": "string",
+          "description": "Codex extension: expose the active turn id to internal turn-scoped hooks."
+        }
+      },
+      "required": [
+        "cwd",
+        "hook_event_name",
+        "last_assistant_message",
+        "model",
+        "permission_mode",
+        "session_id",
+        "stop_hook_active",
+        "transcript_path",
+        "turn_id"
+      ]
+    },
+    "CommandHookInput": {
+      "description": "Union of command hook stdin payloads. `hook_event_name` acts as the discriminator.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/SessionStartCommandInput"
+        },
+        {
+          "$ref": "#/definitions/UserPromptSubmitCommandInput"
+        },
+        {
+          "$ref": "#/definitions/StopCommandInput"
+        }
+      ]
+    },
+    "CommandHookHandler": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Synchronous shell command handler. Codex writes an event-specific JSON object to stdin before executing the command.",
+      "allOf": [
+        {
+          "not": {
+            "required": [
+              "timeout",
+              "timeoutSec"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "command"
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": ".*\\S.*",
+          "description": "Shell command to execute. Empty or whitespace-only commands are skipped by Codex discovery."
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum runtime in seconds for this command."
+        },
+        "timeoutSec": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Alias for `timeout` accepted by Codex."
+        },
+        "async": {
+          "type": "boolean",
+          "description": "Accepted for forward compatibility, but Codex currently skips async hook commands."
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Optional status message surfaced while the hook command is running."
+        }
+      },
+      "required": [
+        "type",
+        "command"
+      ]
+    },
+    "PromptHookHandler": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Accepted by the hooks parser, but currently skipped during discovery because prompt hooks are not supported yet.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "prompt"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "AgentHookHandler": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Accepted by the hooks parser, but currently skipped during discovery because agent hooks are not supported yet.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "agent"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "HookHandler": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/CommandHookHandler"
+        },
+        {
+          "$ref": "#/definitions/PromptHookHandler"
+        },
+        {
+          "$ref": "#/definitions/AgentHookHandler"
+        }
+      ]
+    },
+    "SessionStartMatcherGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Group of handlers for the `SessionStart` event. When present, `matcher` is treated as a regular expression and matched against the session source string.",
+      "properties": {
+        "matcher": {
+          "type": "string",
+          "description": "Regular expression matched against the `source` field of the SessionStart command input payload."
+        },
+        "hooks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/HookHandler"
+          }
+        }
+      },
+      "required": [
+        "hooks"
+      ]
+    },
+    "UserPromptSubmitMatcherGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Group of handlers for the `UserPromptSubmit` event. Codex currently ignores `matcher` for this event during discovery.",
+      "properties": {
+        "matcher": {
+          "type": "string",
+          "description": "Accepted for config symmetry, but currently ignored by Codex for `UserPromptSubmit`."
+        },
+        "hooks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/HookHandler"
+          }
+        }
+      },
+      "required": [
+        "hooks"
+      ]
+    },
+    "StopMatcherGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Group of handlers for the `Stop` event. Codex currently ignores `matcher` for this event during discovery.",
+      "properties": {
+        "matcher": {
+          "type": "string",
+          "description": "Accepted for config symmetry, but currently ignored by Codex for `Stop`."
+        },
+        "hooks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/HookHandler"
+          }
+        }
+      },
+      "required": [
+        "hooks"
+      ]
+    },
+    "HookEvents": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SessionStart": {
+          "type": "array",
+          "description": "Handlers triggered when Codex starts or resumes a session. Command hooks receive JSON on stdin matching `#/definitions/SessionStartCommandInput`.",
+          "items": {
+            "$ref": "#/definitions/SessionStartMatcherGroup"
+          }
+        },
+        "UserPromptSubmit": {
+          "type": "array",
+          "description": "Handlers triggered before Codex processes a user prompt. Command hooks receive JSON on stdin matching `#/definitions/UserPromptSubmitCommandInput`.",
+          "items": {
+            "$ref": "#/definitions/UserPromptSubmitMatcherGroup"
+          }
+        },
+        "Stop": {
+          "type": "array",
+          "description": "Handlers triggered after Codex finishes a turn. Command hooks receive JSON on stdin matching `#/definitions/StopCommandInput`.",
+          "items": {
+            "$ref": "#/definitions/StopMatcherGroup"
+          }
+        }
+      }
+    }
+  }
+}
