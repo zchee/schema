@@ -549,6 +549,11 @@
               "description": "Enable collab tools. Status: stable. Enabled by default.",
               "type": "boolean"
             },
+            "multi_agent_v2": {
+              "default": false,
+              "description": "Enable task-path-based multi-agent routing. Status: under development. Disabled by default.",
+              "type": "boolean"
+            },
             "personality": {
               "default": true,
               "description": "Enable personality selection in the TUI. Status: stable. Enabled by default.",
@@ -557,10 +562,6 @@
             "plugins": {
               "default": false,
               "description": "Enable plugins. Status: under development. Disabled by default.",
-              "type": "boolean"
-            },
-            "powershell_utf8": {
-              "description": "Enforce UTF8 output in Powershell. Status: under development. Enabled by default on Windows and disabled by default on other platforms.",
               "type": "boolean"
             },
             "prevent_idle_sleep": {
@@ -2175,14 +2176,22 @@
         "enabled": {
           "type": "boolean"
         },
+        "name": {
+          "description": "Name-based selector.",
+          "type": "string"
+        },
         "path": {
-          "$ref": "#/definitions/AbsolutePathBuf",
+          "allOf": [
+            {
+              "$ref": "#/definitions/AbsolutePathBuf"
+            }
+          ],
+          "description": "Path-based selector.",
           "type": "string"
         }
       },
       "required": [
-        "enabled",
-        "path"
+        "enabled"
       ],
       "type": "object"
     },
@@ -2365,6 +2374,14 @@
         "status_line": {
           "default": null,
           "description": "Ordered list of status line item identifiers.\n\nWhen set, the TUI renders the selected items as the status line. When unset, the TUI defaults to: `model-with-reasoning`, `context-remaining`, and `current-dir`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "terminal_title": {
+          "default": null,
+          "description": "Ordered list of terminal title item identifiers.\n\nWhen set, the TUI renders the selected items into the terminal window/tab title. When unset, the TUI defaults to: `spinner` and `project`.",
           "items": {
             "type": "string"
           },
@@ -2698,6 +2715,10 @@
       "description": "Legacy path to a file containing compaction prompt instructions. Deprecated: prefer `compact_prompt`.",
       "type": "string"
     },
+    "experimental_exec_server_url": {
+      "description": "Experimental / do not use. Overrides the URL used when connecting to a remote exec server.",
+      "type": "string"
+    },
     "experimental_realtime_start_instructions": {
       "description": "Experimental / do not use. Replaces the built-in realtime start instructions inserted into developer messages when realtime becomes active.",
       "type": "string"
@@ -2881,6 +2902,11 @@
           "description": "Enable collab tools. Status: stable. Enabled by default.",
           "type": "boolean"
         },
+        "multi_agent_v2": {
+          "default": false,
+          "description": "Enable task-path-based multi-agent routing. Status: under development. Disabled by default.",
+          "type": "boolean"
+        },
         "personality": {
           "default": true,
           "description": "Enable personality selection in the TUI. Status: stable. Enabled by default.",
@@ -2889,10 +2915,6 @@
         "plugins": {
           "default": false,
           "description": "Enable plugins. Status: under development. Disabled by default.",
-          "type": "boolean"
-        },
-        "powershell_utf8": {
-          "description": "Enforce UTF8 output in Powershell. Status: under development. Enabled by default on Windows and disabled by default on other platforms.",
           "type": "boolean"
         },
         "prevent_idle_sleep": {
