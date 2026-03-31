@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Claude Code Global User Configuration",
   "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.81 using DEFAULT_GLOBAL_CONFIG, GLOBAL_CONFIG_KEYS, P8()/c8() global-config reads/writes, project defaults, and notification/editor enum tables.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.88 using DEFAULT_GLOBAL_CONFIG (line 188677), GLOBAL_CONFIG_KEYS (line 189444), PROJECT_CONFIG_KEYS (line 189445), project defaults (line 189432), and notification/editor/theme enum tables.",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -80,7 +80,7 @@
         "vim"
       ],
       "default": "normal",
-      "description": "Key binding mode"
+      "description": "Key binding mode (\"emacs\" is mapped to \"normal\" for backward compatibility)"
     },
     "autoCompactEnabled": {
       "type": "boolean",
@@ -101,6 +101,11 @@
       "type": "boolean",
       "default": false,
       "description": "Whether the user has used the stash feature"
+    },
+    "hasUsedBackgroundTask": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has used background tasks"
     },
     "hasUsedBackslashReturn": {
       "type": "boolean",
@@ -209,7 +214,11 @@
     "terminalProgressBarEnabled": {
       "type": "boolean",
       "default": true,
-      "description": "Enable terminal progress bar display"
+      "description": "Enable terminal progress bar display (OSC 9;4)"
+    },
+    "showStatusInTerminalTab": {
+      "type": "boolean",
+      "description": "Show status in terminal tab title"
     },
     "cachedStatsigGates": {
       "type": "object",
@@ -241,7 +250,7 @@
     },
     "copyOnSelect": {
       "type": "boolean",
-      "description": "Copy text on selection"
+      "description": "Copy text on selection (default true on applicable platforms)"
     },
     "apiKeyHelper": {
       "type": "string",
@@ -394,7 +403,7 @@
             "required": [
               "command"
             ],
-            "description": "Stdio MCP server configuration"
+            "description": "Stdio MCP server configuration (type field is optional for stdio)"
           },
           {
             "type": "object",
@@ -419,20 +428,7 @@
                 "description": "Path to a script that outputs headers"
               },
               "oauth": {
-                "type": "object",
-                "properties": {
-                  "clientId": {
-                    "type": "string"
-                  },
-                  "callbackPort": {
-                    "type": "integer"
-                  },
-                  "authServerMetadataUrl": {
-                    "type": "string",
-                    "format": "uri",
-                    "pattern": "^https://"
-                  }
-                }
+                "$ref": "#/$defs/mcpOAuth"
               }
             },
             "required": [
@@ -522,20 +518,7 @@
                 "description": "Path to a script that outputs headers"
               },
               "oauth": {
-                "type": "object",
-                "properties": {
-                  "clientId": {
-                    "type": "string"
-                  },
-                  "callbackPort": {
-                    "type": "integer"
-                  },
-                  "authServerMetadataUrl": {
-                    "type": "string",
-                    "format": "uri",
-                    "pattern": "^https://"
-                  }
-                }
+                "$ref": "#/$defs/mcpOAuth"
               }
             },
             "required": [
@@ -634,6 +617,10 @@
       ],
       "description": "How to spawn teammates: \"tmux\" for traditional tmux, \"in-process\" for same process, \"auto\" to choose automatically"
     },
+    "teammateDefaultModel": {
+      "type": "string",
+      "description": "Default model override for spawned teammates"
+    },
     "bypassPermissionsModeAccepted": {
       "type": "boolean",
       "description": "Whether bypass permissions mode has been accepted"
@@ -653,6 +640,10 @@
     "showSpinnerTree": {
       "type": "boolean",
       "description": "Show spinner tree view for teammates"
+    },
+    "deepLinkTerminal": {
+      "type": "string",
+      "description": "Terminal app name for deep-link protocol handler"
     },
     "firstStartTime": {
       "type": "number",
@@ -678,6 +669,10 @@
       "type": "boolean",
       "description": "Whether the transcript share prompt has been dismissed"
     },
+    "idleReturnDismissed": {
+      "type": "boolean",
+      "description": "Whether the idle-return prompt has been dismissed"
+    },
     "hasAcknowledgedCostThreshold": {
       "type": "boolean",
       "description": "Whether the user has acknowledged the cost threshold"
@@ -689,6 +684,10 @@
     "hasVisitedPasses": {
       "type": "boolean",
       "description": "Whether the user has visited the passes page"
+    },
+    "hasVisitedExtraUsage": {
+      "type": "boolean",
+      "description": "Whether the user has visited the extra usage page"
     },
     "opusProMigrationComplete": {
       "type": "boolean",
@@ -702,8 +701,17 @@
       "type": "number",
       "description": "Unix timestamp of when Sonnet 4.5 to 4.6 migration occurred"
     },
+    "migrationVersion": {
+      "type": "number",
+      "description": "Config migration version number"
+    },
     "feedbackSurveyState": {
       "type": "object",
+      "properties": {
+        "lastShownTime": {
+          "type": "number"
+        }
+      },
       "description": "State of the feedback survey"
     },
     "skillUsage": {
@@ -735,7 +743,8 @@
         "data": {
           "type": "object",
           "additionalProperties": true
-        }
+        },
+        "coral_reef_sonnet": {}
       },
       "description": "Client data cache"
     },
@@ -747,6 +756,11 @@
       "type": "object",
       "additionalProperties": true,
       "description": "Cached Grove configuration keyed by identifier"
+    },
+    "overageCreditGrantCache": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cached overage credit grant information keyed by identifier"
     },
     "passesEligibilityCache": {
       "type": "object",
@@ -769,6 +783,10 @@
       "type": "integer",
       "default": 0,
       "description": "Number of times the passes upsell has been shown"
+    },
+    "additionalModelOptionsCache": {
+      "type": "array",
+      "description": "Cached additional model options from server"
     },
     "desktopUpsellSeenCount": {
       "type": "integer",
@@ -794,6 +812,10 @@
       "type": "integer",
       "description": "Number of times voice notice has been shown"
     },
+    "voiceFooterHintSeenCount": {
+      "type": "integer",
+      "description": "Number of times voice footer hint has been shown"
+    },
     "opus1mMergeNoticeSeenCount": {
       "type": "integer",
       "description": "Number of times Opus 1M merge notice has been shown"
@@ -802,10 +824,23 @@
       "type": "integer",
       "description": "Number of times auto permissions notification has been shown"
     },
+    "claudeCodeHints": {
+      "type": "object",
+      "properties": {
+        "plugin": {},
+        "disabled": {
+          "type": "boolean"
+        }
+      },
+      "description": "Hint state for various UI hints"
+    },
     "chromeExtension": {
       "type": "object",
       "properties": {
         "pairedDeviceId": {
+          "type": "string"
+        },
+        "pairedDeviceName": {
           "type": "string"
         }
       },
@@ -883,6 +918,26 @@
         "description": "Per-project configuration keyed by sanitized project path"
       },
       "description": "Per-project configuration stored inside ~/.claude.json, keyed by sanitized project path."
+    }
+  },
+  "$defs": {
+    "mcpOAuth": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "callbackPort": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "authServerMetadataUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        }
+      },
+      "description": "OAuth configuration for MCP server connections"
     }
   }
 }
