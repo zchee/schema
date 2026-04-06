@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Claude Code Global User Configuration",
   "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.88 using DEFAULT_GLOBAL_CONFIG (line 188677), GLOBAL_CONFIG_KEYS (line 189444), PROJECT_CONFIG_KEYS (line 189445), project defaults (line 189432), and notification/editor/theme enum tables.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.92 using DEFAULT_GLOBAL_CONFIG (Lr() at line 188868), GLOBAL_CONFIG_KEYS (Gtq at line 189636), PROJECT_CONFIG_KEYS (vtq at line 189637), project defaults (xn6 at line 189624), and notification/editor/theme enum tables.",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -246,7 +246,7 @@
     "copyFullResponse": {
       "type": "boolean",
       "default": false,
-      "description": "Copy full response to clipboard"
+      "description": "Always copy full response (skip /copy picker)"
     },
     "copyOnSelect": {
       "type": "boolean",
@@ -645,6 +645,45 @@
       "type": "string",
       "description": "Terminal app name for deep-link protocol handler"
     },
+    "companion": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 14,
+          "description": "Companion pet name"
+        },
+        "personality": {
+          "type": "string",
+          "description": "AI-generated personality description"
+        },
+        "hatchedAt": {
+          "type": "number",
+          "description": "Unix timestamp (ms) when the companion was hatched"
+        }
+      },
+      "description": "Companion pet state (buddy feature)"
+    },
+    "companionMuted": {
+      "type": "boolean",
+      "description": "Whether the companion pet is muted"
+    },
+    "powerupsUnlocked": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of unlocked powerup IDs"
+    },
+    "hasSeenUltraplanTerms": {
+      "type": "boolean",
+      "description": "Whether the user has seen and accepted ultraplan terms"
+    },
+    "resumeReturnDismissed": {
+      "type": "boolean",
+      "description": "Whether the resume-return prompt has been dismissed"
+    },
     "firstStartTime": {
       "type": "number",
       "description": "Unix timestamp of the first startup"
@@ -888,6 +927,24 @@
             },
             "default": [],
             "description": "List of rejected MCP servers from .mcp.json"
+          },
+          "enableAllProjectMcpServers": {
+            "type": "boolean",
+            "description": "Whether to automatically approve all MCP servers in the project"
+          },
+          "enabledMcpServers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of individually approved MCP servers (non-.mcp.json)"
+          },
+          "disabledMcpServers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of individually rejected MCP servers (non-.mcp.json)"
           },
           "hasTrustDialogAccepted": {
             "type": "boolean",
