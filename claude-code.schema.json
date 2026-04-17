@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Claude Code Global User Configuration",
   "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.92 using DEFAULT_GLOBAL_CONFIG (Lr() at line 188868), GLOBAL_CONFIG_KEYS (Gtq at line 189636), PROJECT_CONFIG_KEYS (vtq at line 189637), project defaults (xn6 at line 189624), and notification/editor/theme enum tables.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.104 using DEFAULT_GLOBAL_CONFIG (lo() at line 189089), GLOBAL_CONFIG_KEYS (r84 at line 189873), PROJECT_CONFIG_KEYS (o84 at line 189874), project defaults (Ho6 at line 189842), and notification/editor/theme enum tables (kv8/Nv8/mI1/l84 around line 189047-189049).",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -191,6 +191,11 @@
       "default": false,
       "description": "Show expanded todo list view"
     },
+    "briefTranscript": {
+      "type": "boolean",
+      "default": false,
+      "description": "Render the transcript in brief mode (compact, less verbose). Toggled by the default-view chat/transcript setting and by focus-mode. New in v2.1.104."
+    },
     "messageIdleNotifThresholdMs": {
       "type": "integer",
       "default": 60000,
@@ -218,7 +223,7 @@
     },
     "showStatusInTerminalTab": {
       "type": "boolean",
-      "description": "Show status in terminal tab title"
+      "description": "Show status in terminal tab title (gated behind the tengu_terminal_sidebar Statsig gate)"
     },
     "cachedStatsigGates": {
       "type": "object",
@@ -310,6 +315,10 @@
     "remoteDialogSeen": {
       "type": "boolean",
       "description": "Whether the remote control dialog has been seen"
+    },
+    "loopAutoEnabled": {
+      "type": "boolean",
+      "description": "Whether the /loop auto mode has been enabled. Synced via GLOBAL_CONFIG_KEYS; added in v2.1.104."
     },
     "hasCompletedOnboarding": {
       "type": "boolean",
