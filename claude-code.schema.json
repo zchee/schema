@@ -1,8 +1,8 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Claude Code Global User Configuration",
   "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.104 using DEFAULT_GLOBAL_CONFIG (lo() at line 189089), GLOBAL_CONFIG_KEYS (r84 at line 189873), PROJECT_CONFIG_KEYS (o84 at line 189874), project defaults (Ho6 at line 189842), and notification/editor/theme enum tables (kv8/Nv8/mI1/l84 around line 189047-189049).",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.112 using DEFAULT_GLOBAL_CONFIG (La() at line 190480, exported as uk8 and assigned at 191284), GLOBAL_CONFIG_KEYS (Lq4 at line 191285), PROJECT_CONFIG_KEYS (hq4 at line 191286), project defaults (rk6 at line 191273), NOTIFICATION_CHANNELS (Sk8 at line 190439), EDITOR_MODES (Ck8 at line 190440), TEAMMATE_MODES (Nq4 at line 190441), theme enum (Au_ at line 190482 via another module), MCP transport types (C5O at line 64074). Previously based on v2.1.104 (lo/r84/o84/Ho6).",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -87,10 +87,20 @@
       "default": true,
       "description": "Auto-compact when context is full"
     },
+    "autoScrollEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Auto-scroll the transcript to follow new output. Synced via GLOBAL_CONFIG_KEYS. New in v2.1.112."
+    },
     "showTurnDuration": {
       "type": "boolean",
       "default": true,
       "description": "Show turn duration message after responses (e.g., \"Cooked for 1m 6s\")"
+    },
+    "externalEditorContext": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show the last response in an external editor. Synced via GLOBAL_CONFIG_KEYS. New in v2.1.112."
     },
     "hasSeenTasksHint": {
       "type": "boolean",
@@ -252,6 +262,11 @@
       "type": "boolean",
       "default": false,
       "description": "Always copy full response (skip /copy picker)"
+    },
+    "unpinOpus47LaunchEffort": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the Opus 4.7 launch-effort pin has been released for this user. Flipped after the user explicitly opts in. New in v2.1.112."
     },
     "copyOnSelect": {
       "type": "boolean",
@@ -689,6 +704,17 @@
       "type": "boolean",
       "description": "Whether the user has seen and accepted ultraplan terms"
     },
+    "hasSeenUltrareviewTerms": {
+      "type": "boolean",
+      "description": "Whether the user has seen and accepted ultrareview terms. New in v2.1.112."
+    },
+    "favoritePlugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of plugin IDs the user has favorited in the plugin manager. New in v2.1.112."
+    },
     "resumeReturnDismissed": {
       "type": "boolean",
       "description": "Whether the resume-return prompt has been dismissed"
@@ -836,9 +862,33 @@
       "type": "array",
       "description": "Cached additional model options from server"
     },
+    "additionalModelCostsCache": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cached per-model cost metadata keyed by model id, populated alongside clientDataCache/additionalModelOptionsCache during bootstrap."
+    },
+    "bedrockDeclinedUpgrades": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Bedrock upgrade prompts the user has declined, keyed by tier."
+    },
+    "vertexDeclinedUpgrades": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Vertex upgrade prompts the user has declined, keyed by tier."
+    },
     "desktopUpsellSeenCount": {
       "type": "integer",
       "description": "Number of times the desktop upsell has been shown"
+    },
+    "fullscreenUpsellSeenCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of times the fullscreen upsell has been shown. New in v2.1.112."
     },
     "githubActionSetupCount": {
       "type": "integer",
