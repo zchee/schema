@@ -207,6 +207,199 @@
         "turn_id"
       ]
     },
+    "PreToolUseToolInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "command"
+      ]
+    },
+    "PreToolUseCommandInput": {
+      "title": "pre-tool-use.command.input",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "hook_event_name": {
+          "type": "string",
+          "const": "PreToolUse"
+        },
+        "model": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "$ref": "#/definitions/PermissionMode"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "tool_input": {
+          "$ref": "#/definitions/PreToolUseToolInput"
+        },
+        "tool_name": {
+          "type": "string",
+          "const": "Bash"
+        },
+        "tool_use_id": {
+          "type": "string"
+        },
+        "transcript_path": {
+          "$ref": "#/definitions/NullableString"
+        },
+        "turn_id": {
+          "type": "string",
+          "description": "Codex extension: expose the active turn id to internal turn-scoped hooks."
+        }
+      },
+      "required": [
+        "cwd",
+        "hook_event_name",
+        "model",
+        "permission_mode",
+        "session_id",
+        "tool_input",
+        "tool_name",
+        "tool_use_id",
+        "transcript_path",
+        "turn_id"
+      ]
+    },
+    "PostToolUseToolInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "command"
+      ]
+    },
+    "PostToolUseCommandInput": {
+      "title": "post-tool-use.command.input",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "hook_event_name": {
+          "type": "string",
+          "const": "PostToolUse"
+        },
+        "model": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "$ref": "#/definitions/PermissionMode"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "tool_input": {
+          "$ref": "#/definitions/PostToolUseToolInput"
+        },
+        "tool_name": {
+          "type": "string",
+          "const": "Bash"
+        },
+        "tool_response": true,
+        "tool_use_id": {
+          "type": "string"
+        },
+        "transcript_path": {
+          "$ref": "#/definitions/NullableString"
+        },
+        "turn_id": {
+          "type": "string",
+          "description": "Codex extension: expose the active turn id to internal turn-scoped hooks."
+        }
+      },
+      "required": [
+        "cwd",
+        "hook_event_name",
+        "model",
+        "permission_mode",
+        "session_id",
+        "tool_input",
+        "tool_name",
+        "tool_response",
+        "tool_use_id",
+        "transcript_path",
+        "turn_id"
+      ]
+    },
+    "PermissionRequestToolInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "command"
+      ]
+    },
+    "PermissionRequestCommandInput": {
+      "title": "permission-request.command.input",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cwd": {
+          "type": "string"
+        },
+        "hook_event_name": {
+          "type": "string",
+          "const": "PermissionRequest"
+        },
+        "model": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "$ref": "#/definitions/PermissionMode"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "tool_input": {
+          "$ref": "#/definitions/PermissionRequestToolInput"
+        },
+        "tool_name": {
+          "type": "string",
+          "const": "Bash"
+        },
+        "transcript_path": {
+          "$ref": "#/definitions/NullableString"
+        },
+        "turn_id": {
+          "type": "string",
+          "description": "Codex extension: expose the active turn id to internal turn-scoped hooks."
+        }
+      },
+      "required": [
+        "cwd",
+        "hook_event_name",
+        "model",
+        "permission_mode",
+        "session_id",
+        "tool_input",
+        "tool_name",
+        "transcript_path",
+        "turn_id"
+      ]
+    },
     "CommandHookInput": {
       "description": "Union of command hook stdin payloads. `hook_event_name` acts as the discriminator.",
       "oneOf": [
@@ -218,6 +411,15 @@
         },
         {
           "$ref": "#/definitions/StopCommandInput"
+        },
+        {
+          "$ref": "#/definitions/PreToolUseCommandInput"
+        },
+        {
+          "$ref": "#/definitions/PostToolUseCommandInput"
+        },
+        {
+          "$ref": "#/definitions/PermissionRequestCommandInput"
         }
       ]
     },
@@ -374,6 +576,69 @@
         "hooks"
       ]
     },
+    "PreToolUseMatcherGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Group of handlers for the `PreToolUse` event. When present, `matcher` is treated as a regular expression and matched against the tool name string.",
+      "properties": {
+        "matcher": {
+          "type": "string",
+          "description": "Regular expression matched against the `tool_name` field of the PreToolUse command input payload."
+        },
+        "hooks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/HookHandler"
+          }
+        }
+      },
+      "required": [
+        "hooks"
+      ]
+    },
+    "PostToolUseMatcherGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Group of handlers for the `PostToolUse` event. When present, `matcher` is treated as a regular expression and matched against the tool name string.",
+      "properties": {
+        "matcher": {
+          "type": "string",
+          "description": "Regular expression matched against the `tool_name` field of the PostToolUse command input payload."
+        },
+        "hooks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/HookHandler"
+          }
+        }
+      },
+      "required": [
+        "hooks"
+      ]
+    },
+    "PermissionRequestMatcherGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Group of handlers for the `PermissionRequest` event. When present, `matcher` is treated as a regular expression and matched against the tool name string.",
+      "properties": {
+        "matcher": {
+          "type": "string",
+          "description": "Regular expression matched against the `tool_name` field of the PermissionRequest command input payload."
+        },
+        "hooks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/HookHandler"
+          }
+        }
+      },
+      "required": [
+        "hooks"
+      ]
+    },
     "HookEvents": {
       "type": "object",
       "additionalProperties": false,
@@ -397,6 +662,27 @@
           "description": "Handlers triggered after Codex finishes a turn. Command hooks receive JSON on stdin matching `#/definitions/StopCommandInput`.",
           "items": {
             "$ref": "#/definitions/StopMatcherGroup"
+          }
+        },
+        "PreToolUse": {
+          "type": "array",
+          "description": "Handlers triggered after Codex creates tool parameters and before the tool executes. Command hooks receive JSON on stdin matching `#/definitions/PreToolUseCommandInput`.",
+          "items": {
+            "$ref": "#/definitions/PreToolUseMatcherGroup"
+          }
+        },
+        "PostToolUse": {
+          "type": "array",
+          "description": "Handlers triggered immediately after a tool completes successfully. Command hooks receive JSON on stdin matching `#/definitions/PostToolUseCommandInput`.",
+          "items": {
+            "$ref": "#/definitions/PostToolUseMatcherGroup"
+          }
+        },
+        "PermissionRequest": {
+          "type": "array",
+          "description": "Handlers triggered when Codex is about to request permission for a tool call. Command hooks receive JSON on stdin matching `#/definitions/PermissionRequestCommandInput`.",
+          "items": {
+            "$ref": "#/definitions/PermissionRequestMatcherGroup"
           }
         }
       }
