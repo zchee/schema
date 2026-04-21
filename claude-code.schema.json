@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Claude Code Global User Configuration",
   "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.112 using DEFAULT_GLOBAL_CONFIG (La() at line 190480, exported as uk8 and assigned at 191284), GLOBAL_CONFIG_KEYS (Lq4 at line 191285), PROJECT_CONFIG_KEYS (hq4 at line 191286), project defaults (rk6 at line 191273), NOTIFICATION_CHANNELS (Sk8 at line 190439), EDITOR_MODES (Ck8 at line 190440), TEAMMATE_MODES (Nq4 at line 190441), theme enum (Au_ at line 190482 via another module), MCP transport types (C5O at line 64074). Previously based on v2.1.104 (lo/r84/o84/Ho6).",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.113 using DEFAULT_GLOBAL_CONFIG (ha() at line 161601, assigned to qN_ at line 162412), GLOBAL_CONFIG_KEYS (Hoq at line 162413), PROJECT_CONFIG_KEYS (_oq at line 162414), project defaults (pkH at line 162401), NOTIFICATION_CHANNELS (ay_ at line 161563), EDITOR_MODES (sy_ at line 161564), TEAMMATE_MODES (arq at line 161565), theme enum (dl4 at line 191724 via another module), MCP transport types (bL3 at line 61299). Previously based on v2.1.104 (lo/r84/o84/Ho6) and an earlier v2.1.112 cut (La/uk8/Lq4/hq4/rk6/Sk8/Ck8/Nq4/Au_/C5O).",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -96,6 +96,11 @@
       "type": "boolean",
       "default": true,
       "description": "Show turn duration message after responses (e.g., \"Cooked for 1m 6s\")"
+    },
+    "showMessageTimestamps": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show timestamps on each message in the transcript. Synced via GLOBAL_CONFIG_KEYS."
     },
     "externalEditorContext": {
       "type": "boolean",
@@ -330,6 +335,10 @@
     "remoteDialogSeen": {
       "type": "boolean",
       "description": "Whether the remote control dialog has been seen"
+    },
+    "autoAddRemoteControlDaemonWorker": {
+      "type": "boolean",
+      "description": "Whether to automatically add a remote-control daemon worker. Synced via GLOBAL_CONFIG_KEYS (type inferred: no DEFAULT_GLOBAL_CONFIG entry, only referenced in the GLOBAL_CONFIG_KEYS list). New in v2.1.112."
     },
     "loopAutoEnabled": {
       "type": "boolean",
