@@ -8,7 +8,7 @@
       "fileMatch": [
         "**/.claude.json"
       ],
-      "url": "https://raw.githubusercontent.com/zchee/schema/main/claude-code.schema.json"
+      "url": "https://raw.githubusercontent.com/zchee/schema/refs/heads/main/claude-code.schema.json"
     },
     {
       "name": "Claude code settings JSON Schema",
@@ -17,7 +17,7 @@
         "**/.claude/settings.json",
         "**/claude/settings.json"
       ],
-      "url": "https://raw.githubusercontent.com/zchee/schema/main/claude-code.settings.schema.json"
+      "url": "https://raw.githubusercontent.com/zchee/schema/refs/heads/main/claude-code.settings.schema.json"
     },
     {
       "name": "Codex Configuration Schema",
@@ -26,7 +26,7 @@
         "**/.codex/config.toml",
         "**/codex/config.toml"
       ],
-      "url": "https://raw.githubusercontent.com/zchee/schema/main/codex.schema.json"
+      "url": "https://raw.githubusercontent.com/zchee/schema/refs/heads/main/codex.schema.json"
     },
     {
       "name": "Codex hooks.json Schema",
@@ -35,7 +35,7 @@
         "**/.claude/hooks.json",
         "**/claude/hooks.json"
       ],
-      "url": "https://raw.githubusercontent.com/zchee/schema/main/codex.hooks.schema.json"
+      "url": "https://raw.githubusercontent.com/zchee/schema/refs/heads/main/codex.hooks.schema.json"
     }
   ]
 }
