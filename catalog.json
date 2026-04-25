@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/schema-catalog.json",
+  "version": 1,
+  "schemas": [
+    {
+      "name": "Claude Code Global User Configuration",
+      "description": "Global user configuration/state file for Claude Code CLI",
+      "fileMatch": [
+        "**/.claude.json"
+      ],
+      "url": "https://raw.githubusercontent.com/zchee/schema/main/claude-code.schema.json"
+    },
+    {
+      "name": "Claude code settings JSON Schema",
+      "description": "Global user configuration/state file for Claude Code CLI settings",
+      "fileMatch": [
+        "**/.claude/settings.json"
+      ],
+      "url": "https://raw.githubusercontent.com/zchee/schema/main/claude-code.settings.schema.json"
+    },
+    {
+      "name": "Codex Configuration Schema",
+      "description": "Global user configuration/state file for Codex",
+      "fileMatch": [
+        "**/.codex/config.toml"
+      ],
+      "url": "https://raw.githubusercontent.com/zchee/schema/main/codex.schema.json"
+    },
+    {
+      "name": "Codex hooks.json Schema",
+      "description": "Schema for Codex lifecycle hooks loaded from hooks.json.",
+      "fileMatch": [
+        "**/.claude/hooks.json"
+      ],
+      "url": "https://raw.githubusercontent.com/zchee/schema/main/codex.hooks.schema.json"
+    }
+  ]
+}
