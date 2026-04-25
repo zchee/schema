@@ -13,47 +13,6 @@
   "required": [
     "hooks"
   ],
-  "examples": [
-    {
-      "hooks": {
-        "SessionStart": [
-          {
-            "matcher": "^(startup|resume|clear)$",
-            "hooks": [
-              {
-                "type": "command",
-                "command": "python3 ~/.codex/hooks/session_start.py",
-                "timeout": 30,
-                "statusMessage": "running session start hook"
-              }
-            ]
-          }
-        ],
-        "UserPromptSubmit": [
-          {
-            "hooks": [
-              {
-                "type": "command",
-                "command": "python3 ~/.codex/hooks/prompt_guard.py",
-                "timeoutSec": 10
-              }
-            ]
-          }
-        ],
-        "Stop": [
-          {
-            "hooks": [
-              {
-                "type": "command",
-                "command": "python3 ~/.codex/hooks/notify.py",
-                "statusMessage": "running stop hook"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ],
   "definitions": {
     "NullableString": {
       "type": [
@@ -687,5 +646,46 @@
         }
       }
     }
-  }
+  },
+  "examples": [
+    {
+      "hooks": {
+        "SessionStart": [
+          {
+            "matcher": "^(startup|resume|clear)$",
+            "hooks": [
+              {
+                "type": "command",
+                "command": "python3 ~/.codex/hooks/session_start.py",
+                "timeout": 30,
+                "statusMessage": "running session start hook"
+              }
+            ]
+          }
+        ],
+        "UserPromptSubmit": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "python3 ~/.codex/hooks/prompt_guard.py",
+                "timeoutSec": 10
+              }
+            ]
+          }
+        ],
+        "Stop": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "python3 ~/.codex/hooks/notify.py",
+                "statusMessage": "running stop hook"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }
