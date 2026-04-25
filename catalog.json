@@ -14,7 +14,8 @@
       "name": "Claude code settings JSON Schema",
       "description": "Global user configuration/state file for Claude Code CLI settings",
       "fileMatch": [
-        "**/.claude/settings.json"
+        "**/.claude/settings.json",
+        "**/claude/settings.json"
       ],
       "url": "https://raw.githubusercontent.com/zchee/schema/main/claude-code.settings.schema.json"
     },
@@ -22,7 +23,8 @@
       "name": "Codex Configuration Schema",
       "description": "Global user configuration/state file for Codex",
       "fileMatch": [
-        "**/.codex/config.toml"
+        "**/.codex/config.toml",
+        "**/codex/config.toml"
       ],
       "url": "https://raw.githubusercontent.com/zchee/schema/main/codex.schema.json"
     },
@@ -30,7 +32,8 @@
       "name": "Codex hooks.json Schema",
       "description": "Schema for Codex lifecycle hooks loaded from hooks.json.",
       "fileMatch": [
-        "**/.claude/hooks.json"
+        "**/.claude/hooks.json",
+        "**/claude/hooks.json"
       ],
       "url": "https://raw.githubusercontent.com/zchee/schema/main/codex.hooks.schema.json"
     }
