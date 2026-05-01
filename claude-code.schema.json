@@ -729,7 +729,7 @@
       "description": "Whether the resume-return prompt has been dismissed"
     },
     "firstStartTime": {
-      "type": "number",
+      "type": "string",
       "description": "Unix timestamp of the first startup"
     },
     "claudeCodeFirstTokenDate": {
