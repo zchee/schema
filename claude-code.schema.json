@@ -817,11 +817,17 @@
       "description": "Whether the Chrome extension is detected as installed"
     },
     "cachedExtraUsageDisabledReason": {
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Cached reason for extra usage being disabled"
     },
     "clientDataCache": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
         "data": {
           "type": "object",
