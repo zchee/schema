@@ -1,19 +1,21 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "RepoConfig",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gemini RepoConfig",
   "description": "Configuration for Gemini Code Assist on a repository. All fields are optional and have default values.",
   "type": "object",
   "properties": {
     "have_fun": {
       "type": "boolean",
-      "description": "Enables fun features such as a poem in the initial pull request summary. Default: false."
+      "description": "Enables fun features such as a poem in the initial pull request summary. Default: false.",
+      "default": false
     },
     "ignore_patterns": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "A list of glob patterns for files and directories that Gemini Code Assist should ignore. Default: []."
+      "description": "A list of glob patterns for files and directories that Gemini Code Assist should ignore. Default: [].",
+      "default": []
     },
     "memory_config": {
       "type": "object",
@@ -21,7 +23,8 @@
       "properties": {
         "disabled": {
           "type": "boolean",
-          "description": "Whether to disable persistent memory for this specific repository. Default: false."
+          "description": "Whether to disable persistent memory for this specific repository. Default: false.",
+          "default": false
         }
       }
     },
@@ -31,7 +34,8 @@
       "properties": {
         "disable": {
           "type": "boolean",
-          "description": "Disables Gemini from acting on pull requests. Default: false."
+          "description": "Disables Gemini from acting on pull requests. Default: false.",
+          "default": false
         },
         "comment_severity_threshold": {
           "type": "string",
@@ -41,12 +45,14 @@
             "HIGH",
             "CRITICAL"
           ],
-          "description": "The minimum severity of review comments to consider. Default: MEDIUM."
+          "description": "The minimum severity of review comments to consider. Default: MEDIUM.",
+          "default": "MEDIUM"
         },
         "max_review_comments": {
           "type": "integer",
           "format": "int64",
-          "description": "The maximum number of review comments to consider. Use -1 for unlimited. Default: -1."
+          "description": "The maximum number of review comments to consider. Use -1 for unlimited. Default: -1.",
+          "default": -1
         },
         "pull_request_opened": {
           "type": "object",
@@ -54,19 +60,23 @@
           "properties": {
             "help": {
               "type": "boolean",
-              "description": "Posts a help message on pull request open. Default: false."
+              "description": "Posts a help message on pull request open. Default: false.",
+              "default": false
             },
             "summary": {
               "type": "boolean",
-              "description": "Posts a pull request summary on the pull request open. Default: false."
+              "description": "Posts a pull request summary on the pull request open. Default: false.",
+              "default": false
             },
             "code_review": {
               "type": "boolean",
-              "description": "Posts a code review on pull request open. Default: true."
+              "description": "Posts a code review on pull request open. Default: true.",
+              "default": true
             },
             "include_drafts": {
               "type": "boolean",
-              "description": "Enables agent functionality on draft pull requests. Default: true."
+              "description": "Enables agent functionality on draft pull requests. Default: true.",
+              "default": true
             }
           }
         }
