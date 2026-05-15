@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Claude Code Global User Configuration",
-  "description": "Global user configuration/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.113 using DEFAULT_GLOBAL_CONFIG (ha() at line 161601, assigned to qN_ at line 162412), GLOBAL_CONFIG_KEYS (Hoq at line 162413), PROJECT_CONFIG_KEYS (_oq at line 162414), project defaults (pkH at line 162401), NOTIFICATION_CHANNELS (ay_ at line 161563), EDITOR_MODES (sy_ at line 161564), TEAMMATE_MODES (arq at line 161565), theme enum (dl4 at line 191724 via another module), MCP transport types (bL3 at line 61299). Previously based on v2.1.104 (lo/r84/o84/Ho6) and an earlier v2.1.112 cut (La/uk8/Lq4/hq4/rk6/Sk8/Ck8/Nq4/Au_/C5O).",
+  "title": "Claude Code Global User Configuration (~/.claude.json)",
+  "description": "Persisted global user config/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes the separately merged settings.json/project/policy configuration.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.113 using DEFAULT_GLOBAL_CONFIG (ha() at line 161601, assigned to qN_ at line 162412), GLOBAL_CONFIG_KEYS (Hoq at line 162413), PROJECT_CONFIG_KEYS (_oq at line 162414), project defaults (pkH at line 162401), NOTIFICATION_CHANNELS (ay_ at line 161563), EDITOR_MODES (sy_ at line 161564), TEAMMATE_MODES (arq at line 161565), theme enum (dl4 at line 191724), MCP transport types (bL3 at line 61299). Field discovery extended via saveGlobalConfig (U_, line 161726) call-site sweep across the bundle.",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -27,7 +27,7 @@
     },
     "autoUpdatesProtectedForNative": {
       "type": "boolean",
-      "description": "Whether auto-updates are protected for native installs"
+      "description": "Whether auto-updates are protected for native installs (set to true alongside autoUpdates=false for native installs that opt out of in-app updates)"
     },
     "autoUpdaterStatus": {
       "type": "string",
@@ -39,7 +39,7 @@
         "no_permissions",
         "not_configured"
       ],
-      "description": "Legacy auto-updater status (converted to installMethod)"
+      "description": "Legacy auto-updater status (migrated to installMethod via rb6 at line 161783)"
     },
     "theme": {
       "type": "string",
@@ -52,7 +52,7 @@
         "dark-ansi"
       ],
       "default": "dark",
-      "description": "Color theme for the UI"
+      "description": "Color theme for the UI (dl4 enum at line 191724)"
     },
     "preferredNotifChannel": {
       "type": "string",
@@ -66,7 +66,7 @@
         "notifications_disabled"
       ],
       "default": "auto",
-      "description": "Preferred notification channel"
+      "description": "Preferred notification channel (NOTIFICATION_CHANNELS / ay_ at line 161563)"
     },
     "verbose": {
       "type": "boolean",
@@ -80,7 +80,7 @@
         "vim"
       ],
       "default": "normal",
-      "description": "Key binding mode (\"emacs\" is mapped to \"normal\" for backward compatibility)"
+      "description": "Key binding mode (EDITOR_MODES / sy_ at line 161564; \"emacs\" is normalized to \"normal\")"
     },
     "autoCompactEnabled": {
       "type": "boolean",
@@ -90,7 +90,7 @@
     "autoScrollEnabled": {
       "type": "boolean",
       "default": true,
-      "description": "Auto-scroll the transcript to follow new output. Synced via GLOBAL_CONFIG_KEYS. New in v2.1.112."
+      "description": "Auto-scroll the transcript to follow new output. Synced via GLOBAL_CONFIG_KEYS."
     },
     "showTurnDuration": {
       "type": "boolean",
@@ -105,7 +105,7 @@
     "externalEditorContext": {
       "type": "boolean",
       "default": false,
-      "description": "Show the last response in an external editor. Synced via GLOBAL_CONFIG_KEYS. New in v2.1.112."
+      "description": "Show the last response in an external editor. Synced via GLOBAL_CONFIG_KEYS."
     },
     "hasSeenTasksHint": {
       "type": "boolean",
@@ -124,7 +124,7 @@
     },
     "hasUsedBackslashReturn": {
       "type": "boolean",
-      "description": "Whether the user has used backslash-return input"
+      "description": "Whether the user has used backslash-return input (set on first use at line 205803)"
     },
     "queuedCommandUpHintCount": {
       "type": "integer",
@@ -209,7 +209,7 @@
     "briefTranscript": {
       "type": "boolean",
       "default": false,
-      "description": "Render the transcript in brief mode (compact, less verbose). Toggled by the default-view chat/transcript setting and by focus-mode. New in v2.1.104."
+      "description": "Render the transcript in brief mode (compact, less verbose). Toggled by the default-view chat/transcript setting and by focus-mode."
     },
     "messageIdleNotifThresholdMs": {
       "type": "integer",
@@ -225,6 +225,17 @@
       "type": "boolean",
       "default": true,
       "description": "Auto-install IDE extension when connecting"
+    },
+    "hasIdeAutoConnectDialogBeenShown": {
+      "type": "boolean",
+      "description": "Whether the IDE auto-connect dialog has been shown (set when the user dismisses/accepts the prompt at line 515518)"
+    },
+    "hasIdeOnboardingBeenShown": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "description": "Map of IDE names to whether the per-IDE onboarding has been shown (line 278229)"
     },
     "fileCheckpointingEnabled": {
       "type": "boolean",
@@ -271,7 +282,11 @@
     "unpinOpus47LaunchEffort": {
       "type": "boolean",
       "default": false,
-      "description": "Whether the Opus 4.7 launch-effort pin has been released for this user. Flipped after the user explicitly opts in. New in v2.1.112."
+      "description": "Whether the Opus 4.7 launch-effort pin has been released for this user (flipped after explicit opt-in at line 219349)"
+    },
+    "opus47LaunchSeenCount": {
+      "type": "integer",
+      "description": "Number of times the Opus 4.7 launch notice has been shown (line 542711)"
     },
     "copyOnSelect": {
       "type": "boolean",
@@ -283,7 +298,7 @@
     },
     "shiftEnterKeyBindingInstalled": {
       "type": "boolean",
-      "description": "Whether Shift+Enter key binding has been installed"
+      "description": "Whether Shift+Enter key binding has been installed (line 205779)"
     },
     "taskCompleteNotifEnabled": {
       "type": "boolean",
@@ -326,7 +341,7 @@
     },
     "prStatusFooterEnabled": {
       "type": "boolean",
-      "description": "Enable PR status footer display"
+      "description": "Enable PR status footer display (default true at line 630959)"
     },
     "remoteControlAtStartup": {
       "type": "boolean",
@@ -338,15 +353,19 @@
     },
     "autoAddRemoteControlDaemonWorker": {
       "type": "boolean",
-      "description": "Whether to automatically add a remote-control daemon worker. Synced via GLOBAL_CONFIG_KEYS (type inferred: no DEFAULT_GLOBAL_CONFIG entry, only referenced in the GLOBAL_CONFIG_KEYS list). New in v2.1.112."
+      "description": "Whether to automatically add a remote-control daemon worker. Synced via GLOBAL_CONFIG_KEYS (type inferred; no DEFAULT_GLOBAL_CONFIG entry)."
     },
     "loopAutoEnabled": {
       "type": "boolean",
-      "description": "Whether the /loop auto mode has been enabled. Synced via GLOBAL_CONFIG_KEYS; added in v2.1.104."
+      "description": "Whether the /loop auto mode has been enabled. Synced via GLOBAL_CONFIG_KEYS."
     },
     "hasCompletedOnboarding": {
       "type": "boolean",
-      "description": "Whether the user has completed onboarding"
+      "description": "Whether the user has completed onboarding (paired with lastOnboardingVersion at line 659003)"
+    },
+    "lastOnboardingVersion": {
+      "type": "string",
+      "description": "VERSION string from the build that last completed onboarding (e.g. \"2.1.113\"; line 659006)"
     },
     "userID": {
       "type": "string",
@@ -632,7 +651,7 @@
           }
         ]
       },
-      "description": "MCP server configurations keyed by server name"
+      "description": "MCP server configurations keyed by server name (transport union from bL3 at line 61299)"
     },
     "claudeAiMcpEverConnected": {
       "type": "array",
@@ -648,7 +667,7 @@
         "tmux",
         "in-process"
       ],
-      "description": "How to spawn teammates: \"tmux\" for traditional tmux, \"in-process\" for same process, \"auto\" to choose automatically"
+      "description": "How to spawn teammates: \"tmux\" for traditional tmux, \"in-process\" for same process, \"auto\" to choose automatically (TEAMMATE_MODES / arq at line 161565)"
     },
     "teammateDefaultModel": {
       "type": "string",
@@ -668,7 +687,19 @@
     },
     "iterm2It2SetupComplete": {
       "type": "boolean",
-      "description": "Whether iTerm2 IT2 setup has been completed"
+      "description": "Whether iTerm2 IT2 setup has been completed (line 389185)"
+    },
+    "iterm2SetupInProgress": {
+      "type": "boolean",
+      "description": "Whether iTerm2 setup is currently in progress (line 673302)"
+    },
+    "appleTerminalSetupInProgress": {
+      "type": "boolean",
+      "description": "Whether Apple Terminal setup is currently in progress (line 205554)"
+    },
+    "appleTerminalBackupPath": {
+      "type": "string",
+      "description": "Filesystem path of the Apple Terminal settings backup created during setup (line 205555)"
     },
     "showSpinnerTree": {
       "type": "boolean",
@@ -715,21 +746,48 @@
     },
     "hasSeenUltrareviewTerms": {
       "type": "boolean",
-      "description": "Whether the user has seen and accepted ultrareview terms. New in v2.1.112."
+      "description": "Whether the user has seen and accepted ultrareview terms"
     },
     "favoritePlugins": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "List of plugin IDs the user has favorited in the plugin manager. New in v2.1.112."
+      "description": "List of plugin IDs the user has favorited in the plugin manager"
+    },
+    "officialMarketplaceAutoInstallAttempted": {
+      "type": "boolean",
+      "description": "Whether the official marketplace auto-install has been attempted (line 644011)"
+    },
+    "officialMarketplaceAutoInstalled": {
+      "type": "boolean",
+      "description": "Whether the official marketplace was successfully auto-installed (line 644014)"
+    },
+    "officialMarketplaceAutoInstallFailReason": {
+      "type": "string",
+      "enum": [
+        "policy_blocked",
+        "gcs_unavailable",
+        "git_unavailable",
+        "unknown",
+        "already_attempted"
+      ],
+      "description": "Reason the official marketplace auto-install failed (line 644017)"
+    },
+    "officialMarketplaceAutoInstallRetryCount": {
+      "type": "integer",
+      "description": "Number of times the official marketplace auto-install has been retried (line 644018)"
+    },
+    "changelogLastFetched": {
+      "type": "number",
+      "description": "Unix timestamp (ms) of the last changelog fetch (line 538544)"
     },
     "resumeReturnDismissed": {
       "type": "boolean",
       "description": "Whether the resume-return prompt has been dismissed"
     },
     "firstStartTime": {
-      "type": "string",
+      "type": "number",
       "description": "Unix timestamp of the first startup"
     },
     "claudeCodeFirstTokenDate": {
@@ -741,8 +799,8 @@
       "description": "Unix timestamp of the last startup prefetch"
     },
     "lastReleaseNotesSeen": {
-      "type": "object",
-      "description": "Last release notes version seen"
+      "type": "string",
+      "description": "VERSION string of the last release notes seen by the user (e.g. \"2.1.113\"; line 544021)"
     },
     "lastShownEmergencyTip": {
       "type": "string",
@@ -774,19 +832,27 @@
     },
     "opusProMigrationComplete": {
       "type": "boolean",
-      "description": "Whether Opus Pro migration has been completed"
+      "description": "Whether Opus Pro migration has been completed (line 672195)"
+    },
+    "opusProMigrationTimestamp": {
+      "type": "number",
+      "description": "Unix timestamp (ms) of when Opus Pro migration occurred (line 672207)"
+    },
+    "legacyOpusMigrationTimestamp": {
+      "type": "number",
+      "description": "Unix timestamp (ms) of the legacy Opus migration (line 672043)"
     },
     "sonnet1m45MigrationComplete": {
       "type": "boolean",
-      "description": "Whether Sonnet 1M 4.5 migration has been completed"
+      "description": "Whether Sonnet 1M 4.5 migration has been completed (line 672112)"
     },
     "sonnet45To46MigrationTimestamp": {
       "type": "number",
-      "description": "Unix timestamp of when Sonnet 4.5 to 4.6 migration occurred"
+      "description": "Unix timestamp of when Sonnet 4.5 to 4.6 migration occurred (line 672138)"
     },
     "migrationVersion": {
       "type": "number",
-      "description": "Config migration version number"
+      "description": "Config migration version number (line 682849)"
     },
     "feedbackSurveyState": {
       "type": "object",
@@ -795,12 +861,12 @@
           "type": "number"
         }
       },
-      "description": "State of the feedback survey"
+      "description": "State of the feedback survey (line 642202)"
     },
     "skillUsage": {
       "type": "object",
       "additionalProperties": true,
-      "description": "Per-skill usage tracking keyed by skill name"
+      "description": "Per-skill usage tracking keyed by skill name (line 280942)"
     },
     "githubRepoPaths": {
       "type": "object",
@@ -810,24 +876,18 @@
           "type": "string"
         }
       },
-      "description": "GitHub repository paths keyed by repo identifier"
+      "description": "GitHub repository paths keyed by repo identifier (line 656035)"
     },
     "cachedChromeExtensionInstalled": {
       "type": "boolean",
-      "description": "Whether the Chrome extension is detected as installed"
+      "description": "Whether the Chrome extension is detected as installed (line 573260)"
     },
     "cachedExtraUsageDisabledReason": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "Cached reason for extra usage being disabled"
+      "type": "string",
+      "description": "Cached reason for extra usage being disabled (line 219885)"
     },
     "clientDataCache": {
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": "object",
       "properties": {
         "data": {
           "type": "object",
@@ -835,21 +895,31 @@
         },
         "coral_reef_sonnet": {}
       },
-      "description": "Client data cache"
+      "additionalProperties": true,
+      "description": "Client data cache populated alongside additionalModelOptionsCache during bootstrap (line 655387)"
     },
     "metricsStatusCache": {
       "type": "object",
-      "description": "Cached metrics status"
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "timestamp": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Cached metrics status (line 323389)"
     },
     "groveConfigCache": {
       "type": "object",
       "additionalProperties": true,
-      "description": "Cached Grove configuration keyed by identifier"
+      "description": "Cached Grove configuration keyed by identifier (line 312183)"
     },
     "overageCreditGrantCache": {
       "type": "object",
       "additionalProperties": true,
-      "description": "Cached overage credit grant information keyed by identifier"
+      "description": "Cached overage credit grant information keyed by identifier (line 394386)"
     },
     "passesEligibilityCache": {
       "type": "object",
@@ -862,7 +932,7 @@
           }
         }
       },
-      "description": "Cached passes eligibility information"
+      "description": "Cached passes eligibility information (line 542135)"
     },
     "passesLastSeenRemaining": {
       "type": "number",
@@ -871,7 +941,7 @@
     "passesUpsellSeenCount": {
       "type": "integer",
       "default": 0,
-      "description": "Number of times the passes upsell has been shown"
+      "description": "Number of times the passes upsell has been shown (line 542653)"
     },
     "additionalModelOptionsCache": {
       "type": "array",
@@ -887,14 +957,14 @@
       "additionalProperties": {
         "type": "string"
       },
-      "description": "Bedrock upgrade prompts the user has declined, keyed by tier."
+      "description": "Bedrock upgrade prompts the user has declined, keyed by tier (line 659370)."
     },
     "vertexDeclinedUpgrades": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
       },
-      "description": "Vertex upgrade prompts the user has declined, keyed by tier."
+      "description": "Vertex upgrade prompts the user has declined, keyed by tier (line 659531)."
     },
     "desktopUpsellSeenCount": {
       "type": "integer",
@@ -903,19 +973,19 @@
     "fullscreenUpsellSeenCount": {
       "type": "integer",
       "default": 0,
-      "description": "Number of times the fullscreen upsell has been shown. New in v2.1.112."
+      "description": "Number of times the fullscreen upsell has been shown (line 542513)."
     },
     "githubActionSetupCount": {
       "type": "integer",
-      "description": "Number of times GitHub Action setup has been prompted"
+      "description": "Number of times GitHub Action setup has been prompted (line 519209)"
     },
     "ideHintShownCount": {
       "type": "integer",
-      "description": "Number of times IDE hint has been shown"
+      "description": "Number of times IDE hint has been shown (line 649161)"
     },
     "slackAppInstallCount": {
       "type": "integer",
-      "description": "Number of times Slack app install has been prompted"
+      "description": "Number of times Slack app install has been prompted (line 519983)"
     },
     "subscriptionNoticeCount": {
       "type": "integer",
@@ -929,6 +999,14 @@
       "type": "integer",
       "description": "Number of times voice footer hint has been shown"
     },
+    "voiceLangHintShownCount": {
+      "type": "integer",
+      "description": "Number of times the voice language hint has been shown (line 578950)"
+    },
+    "voiceLangHintLastLanguage": {
+      "type": "string",
+      "description": "Language code of the last voice input that triggered the language hint (line 578951)"
+    },
     "opus1mMergeNoticeSeenCount": {
       "type": "integer",
       "description": "Number of times Opus 1M merge notice has been shown"
@@ -936,6 +1014,14 @@
     "autoPermissionsNotificationCount": {
       "type": "integer",
       "description": "Number of times auto permissions notification has been shown"
+    },
+    "bridgeOauthDeadExpiresAt": {
+      "type": "number",
+      "description": "Expiry timestamp of the last OAuth token that the Chrome bridge marked as dead (line 607526)"
+    },
+    "bridgeOauthDeadFailCount": {
+      "type": "integer",
+      "description": "Number of consecutive failures observed for the dead OAuth token; gates cross-process backoff (line 607527)"
     },
     "claudeCodeHints": {
       "type": "object",
@@ -945,6 +1031,7 @@
           "type": "boolean"
         }
       },
+      "additionalProperties": true,
       "description": "Hint state for various UI hints"
     },
     "chromeExtension": {
@@ -957,7 +1044,8 @@
           "type": "string"
         }
       },
-      "description": "Chrome extension configuration"
+      "additionalProperties": true,
+      "description": "Chrome extension configuration (line 596617)"
     },
     "projects": {
       "type": "object",
@@ -1046,7 +1134,7 @@
           }
         },
         "additionalProperties": true,
-        "description": "Per-project configuration keyed by sanitized project path"
+        "description": "Per-project configuration keyed by sanitized project path (defaults from pkH at line 162401)"
       },
       "description": "Per-project configuration stored inside ~/.claude.json, keyed by sanitized project path."
     }
@@ -1066,9 +1154,13 @@
           "type": "string",
           "format": "uri",
           "pattern": "^https://"
+        },
+        "scopes": {
+          "type": "string",
+          "minLength": 1
         }
       },
-      "description": "OAuth configuration for MCP server connections"
+      "description": "OAuth configuration for MCP server connections (Gp8 at line 61306)"
     }
   }
 }
