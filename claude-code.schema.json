@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Claude Code Global User Configuration (~/.claude.json)",
   "description": "Persisted global user config/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes the separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.113 using DEFAULT_GLOBAL_CONFIG (ha() at line 161601, assigned to qN_ at line 162412), GLOBAL_CONFIG_KEYS (Hoq at line 162413), PROJECT_CONFIG_KEYS (_oq at line 162414), project defaults (pkH at line 162401), NOTIFICATION_CHANNELS (ay_ at line 161563), EDITOR_MODES (sy_ at line 161564), TEAMMATE_MODES (arq at line 161565), theme enum (dl4 at line 191724), MCP transport types (bL3 at line 61299). Field discovery extended via saveGlobalConfig (U_, line 161726) call-site sweep across the bundle.",
+  "$comment": "Reverse-engineered from cli.unpack.js v2.1.142 using DEFAULT_GLOBAL_CONFIG (Dl() at line 171017, assigned to Ml at line 171905), GLOBAL_CONFIG_KEYS (vi_ at line 171906), PROJECT_CONFIG_KEYS (uR9 at line 171907), project defaults (omH at line 171894), NOTIFICATION_CHANNELS, EDITOR_MODES, TEAMMATE_MODES, theme enum, and MCP transport types. Field discovery extended via saveGlobalConfig (t_, line 171141) call-site sweep across the bundle.",
   "additionalProperties": true,
   "type": "object",
   "properties": {
@@ -1033,6 +1033,81 @@
       },
       "additionalProperties": true,
       "description": "Hint state for various UI hints"
+    },
+    "leftArrowOpensAgents": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the left-arrow key opens the agents view (line 542519). Synced via GLOBAL_CONFIG_KEYS."
+    },
+    "defaultToAgentsView": {
+      "type": "boolean",
+      "default": false,
+      "description": "Open the agents view by default at startup (line 542500). Synced via GLOBAL_CONFIG_KEYS."
+    },
+    "autoUploadSessions": {
+      "type": "boolean",
+      "description": "Mirror local sessions to claude.ai as view-only (no remote control) (line 68104). Synced via GLOBAL_CONFIG_KEYS."
+    },
+    "agentLastUsed": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "Map of agent identifier to last-used Unix timestamp (line 717566)"
+    },
+    "autoModeOptInDismissed": {
+      "type": "boolean",
+      "description": "Whether the auto-mode opt-in prompt has been dismissed (line 681851)"
+    },
+    "cachedExperimentFeatures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cached experiment feature flags persisted alongside cachedGrowthBookFeatures (line 170196)"
+    },
+    "closedIssuesAcknowledged": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of issue IDs the user has acknowledged as closed (line 687038)"
+    },
+    "daemonInstallPromptDismissed": {
+      "type": "boolean",
+      "description": "Whether the daemon install prompt has been dismissed (line 640976)"
+    },
+    "fleetViewGroupMode": {
+      "type": "string",
+      "description": "Grouping mode for the FleetView UI (default \"state\"; line 718618)"
+    },
+    "fullscreenDownsellSeenCount": {
+      "type": "integer",
+      "description": "Number of times the fullscreen downsell has been shown (line 584747)"
+    },
+    "hasUsedAgentsFleet": {
+      "type": "boolean",
+      "description": "Whether the user has used the agents fleet feature (line 541333)"
+    },
+    "hasUsedRemoteControl": {
+      "type": "boolean",
+      "description": "Whether the user has used remote control (line 625282)"
+    },
+    "pushNotifUpsellSeenCount": {
+      "type": "integer",
+      "description": "Number of times the push notification upsell has been shown (line 625288)"
+    },
+    "remoteControlUpsellSeenCount": {
+      "type": "integer",
+      "description": "Number of times the remote control upsell has been shown (line 625271)"
+    },
+    "routineFiredWatermark": {
+      "description": "Watermark of the last fired scheduled routine to avoid duplicate triggers (line 727813)"
+    },
+    "seenNotifications": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Map of notification id to acknowledgement metadata (line 726183)"
     },
     "chromeExtension": {
       "type": "object",
