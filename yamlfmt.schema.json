@@ -3,6 +3,7 @@
   "title": "yamlfmt config file",
   "description": "The yamlfmt config file. For details, see https://github.com/google/yamlfmt/blob/main/docs/config-file.md.",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "line_ending": {
       "type": "string",
@@ -19,6 +20,16 @@
       "type": "boolean",
       "default": false,
       "description": "Continue formatting and don't exit with code 1 when there is an invalid yaml file found."
+    },
+    "match_style": {
+      "type": "string",
+      "enum": [
+        "standard", 
+        "doublestar", 
+        "gitignore"
+      ],
+      "default": "standard",
+      "description": "Controls how include and exclude are interpreted. See Specifying Paths for more details."
     },
     "include": {
       "type": "array",
@@ -71,7 +82,11 @@
       "properties": {
         "type": {
           "type": "string",
-          "default": "basic"
+          "default": "basic",
+          "enum": [
+            "basic", 
+            "kyaml"
+          ],
         },
         "indent": {
           "type": "integer",
@@ -168,6 +183,16 @@
           ],
           "default": "",
           "description": "If set, forces arrays to be output in a particular style, either flow ([]) or block (- x). If unset, the style from the original document is used."
+        },
+        "force_quote_style": {
+          "type": "string",
+          "enum": [
+            "",
+            "single",
+            "double"
+          ],
+          "default": "",
+          "description": "If set, forces all nodes with quotes into either single ' or double \" quotes."
         }
       }
     },
@@ -177,6 +202,5 @@
       "default": "default",
       "description": "The output format to use. See Output docs for more details."
     }
-  },
-  "additionalProperties": false
+  }
 }
