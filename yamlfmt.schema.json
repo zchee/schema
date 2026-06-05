@@ -86,7 +86,7 @@
           "enum": [
             "basic", 
             "kyaml"
-          ],
+          ]
         },
         "indent": {
           "type": "integer",
