@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/trusted-folders.schema.json",
+  "title": "Grok Folder Trust Store",
+  "description": "`~/.grok/trusted_folders.toml` (`<user_grok_home>/trusted_folders.toml`) — the durable backing store for the folder-trust gate that decides whether repo-local MCP/LSP servers (which run arbitrary commands from repo-controlled config files) are allowed to spawn. SINGLE USER-GLOBAL FILE ONLY: unlike `sandbox.toml`/`lsp.json`, there is deliberately no `<workspace>/.grok/trusted_folders.toml` project variant — the store is rooted at `xai_grok_config::user_grok_home()` (never a cwd-relative fallback), so a cloned repo can never ship a self-trusting `.grok/trusted_folders.toml`. FAIL-SOFT-TO-EMPTY: `trusted` has no `#[serde(default)]`, so if ANY single `[folders.<key>]` entry is malformed (missing `trusted`) — or the file is not valid TOML at all — `toml::from_str::<TrustDocument>` fails for the ENTIRE document and the reader falls back to an empty `TrustDocument::default()` (all folders untrusted), not a partial parse. Trust resolution (not a schema constraint) uses longest-matching canonicalized-path-prefix wins, with ties at the same depth AND'ed together; an empty/relative key, `/`, or the user's home directory are syntactically valid entries but are never honored as trusted on read (fail-closed enforcement, not schema-level). [src: crates/codegen/xai-grok-workspace/src/trust.rs:1-55,104-121]",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "properties": {
+    "folders": {
+      "type": "object",
+      "default": {},
+      "description": "`#[serde(default)] BTreeMap<String, FolderTrust>` on the private `TrustDocument` struct — the TOML table key under `[folders.\"<key>\"]` is the trust-scope path itself (an absolute, canonicalized filesystem path string in real usage, hence usually TOML-quoted since it contains `/`), NOT a `FolderTrust` struct field. [src: crates/codegen/xai-grok-workspace/src/trust.rs:50-55]",
+      "additionalProperties": { "$ref": "#/definitions/folderTrust" }
+    }
+  },
+  "definitions": {
+    "folderTrust": {
+      "type": "object",
+      "description": "`struct FolderTrust` — a single folder's trust record. [src: crates/codegen/xai-grok-workspace/src/trust.rs:41-48]",
+      "required": ["trusted"],
+      "properties": {
+        "trusted": {
+          "type": "boolean",
+          "description": "Whether the folder (and its subdirectories, via cascade) is trusted. `pub trusted: bool` — NO `#[serde(default)]`, so this is required per entry; a missing `trusted` on any single entry fails the whole document's parse (see top-level description). [src: crates/codegen/xai-grok-workspace/src/trust.rs:43-44]"
+        },
+        "decided_at": {
+          "type": "integer",
+          "description": "Unix timestamp (seconds) of when the decision was recorded. `#[serde(default, skip_serializing_if = \"Option::is_none\")] Option<i64>` — absent on read deserializes to `None`; `None` on write is omitted from the serialized TOML entirely (round-trips as absent, not `null`). [src: crates/codegen/xai-grok-workspace/src/trust.rs:45-48]"
+        }
+      }
+    }
+  }
+}

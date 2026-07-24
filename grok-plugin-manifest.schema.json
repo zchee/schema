@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/plugin-manifest.schema.json",
+  "title": "Grok Build / Claude plugin manifest",
+  "description": "Schema for plugin.json, .grok-plugin/plugin.json, and .claude-plugin/plugin.json, checked in that priority order within a plugin root (first found wins); if none is found the plugin still functions via convention-based discovery [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:1-13,292-333]. Forward-compatible: unknown top-level fields are silently ignored (no deny_unknown_fields), so this schema never restricts additional properties [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:12-13,136-138].",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "description": "User-facing plugin namespace, kebab-case. Required at the struct level (no serde default). The 1-64-char, lowercase-ascii-alnum-plus-hyphen, no-leading/trailing-hyphen shape is enforced by PluginManifest::validate(), which load_manifest() calls right after parsing -- it is not a raw-deserialization constraint (any non-empty JSON string deserializes fine as \"name\") [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:19-31,138-140,172-185,313-329]."
+    },
+    "version": {
+      "type": ["string", "null"],
+      "description": "Semver-style version string; not format-validated by this crate [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:141-143]."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Human-readable plugin description [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:144-145]."
+    },
+    "author": {
+      "description": "Author metadata [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:146-147].",
+      "anyOf": [
+        { "$ref": "#/$defs/author" },
+        { "type": "null" }
+      ]
+    },
+    "homepage": {
+      "type": ["string", "null"],
+      "description": "[src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:148-149]."
+    },
+    "repository": {
+      "type": ["string", "null"],
+      "description": "[src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:150-151]."
+    },
+    "license": {
+      "type": ["string", "null"],
+      "description": "SPDX-style license identifier; not format-validated [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:152-153]."
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Search/discovery keywords; defaults to an empty array [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:154-155]."
+    },
+    "skills": {
+      "description": "Overrides the default skills/ convention directory; a single path or an array of paths, each resolved relative to the plugin root and rejected (with a warning, not an error) if it escapes the plugin root via '..' [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:44-78,158-159,187-189,271-288].",
+      "anyOf": [
+        { "$ref": "#/$defs/pathOrPaths" },
+        { "type": "null" }
+      ]
+    },
+    "commands": {
+      "description": "Overrides the default commands/ convention directory; same single-or-multiple-path shape as skills [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:160-161,191-193].",
+      "anyOf": [
+        { "$ref": "#/$defs/pathOrPaths" },
+        { "type": "null" }
+      ]
+    },
+    "agents": {
+      "description": "Overrides the default agents/ convention directory; same single-or-multiple-path shape as skills [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:162-163,195-197].",
+      "anyOf": [
+        { "$ref": "#/$defs/pathOrPaths" },
+        { "type": "null" }
+      ]
+    },
+    "hooks": {
+      "description": "Path to a hooks JSON file, or an inline hooks document (e.g. {\"hooks\": {...}}), fully supported by the runtime; defaults to hooks/hooks.json at the plugin root when this field is absent [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:124-130,164-165,199-224].",
+      "anyOf": [
+        { "$ref": "#/$defs/pathOrInline" },
+        { "type": "null" }
+      ]
+    },
+    "mcpServers": {
+      "description": "Path to a .mcp.json file, or an inline MCP servers document; the Rust field mcp_servers is renamed to mcpServers by this struct's camelCase rename_all. Defaults to .mcp.json at the plugin root when absent; an inline value does not suppress a sibling .mcp.json file [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:166-167,205-236,370-376].",
+      "anyOf": [
+        { "$ref": "#/$defs/pathOrInline" },
+        { "type": "null" }
+      ]
+    },
+    "lspServers": {
+      "description": "Path to an LSP servers document, or an inline document; the Rust field lsp_servers is renamed to lspServers. Defaults to .lsp.json at the plugin root when absent [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:168-169,237-246].",
+      "anyOf": [
+        { "$ref": "#/$defs/pathOrInline" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "required": ["name"],
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "$defs": {
+    "author": {
+      "type": "object",
+      "description": "Author metadata block [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:34-42].",
+      "properties": {
+        "name": {
+          "type": ["string", "null"],
+          "description": "[src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:36-37]."
+        },
+        "email": {
+          "type": ["string", "null"],
+          "description": "[src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:38-39]."
+        },
+        "url": {
+          "type": ["string", "null"],
+          "description": "[src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:40-41]."
+        }
+      }
+    },
+    "pathOrPaths": {
+      "description": "Untagged PathOrPaths: a JSON string (single path) or an array of JSON strings (multiple paths). Any other shape, or an array containing a non-string element, fails to deserialize because neither enum variant matches [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:44-50].",
+      "anyOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "pathOrInline": {
+      "description": "Untagged PathOrInline: a JSON string is treated as a file path relative to the plugin root; any other JSON value (object, array, number, boolean, or null) is treated as an inline value via serde_json::Value, which accepts literally anything, so this schema places no shape constraint on the non-string case, matching that leniency [src: crates/codegen/xai-grok-agent/src/plugins/manifest.rs:124-130].",
+      "anyOf": [
+        { "type": "string" },
+        {}
+      ]
+    }
+  }
+}

@@ -1,0 +1,541 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/pager-config.schema.json",
+  "title": "Grok pager appearance configuration (~/.grok/pager.toml)",
+  "description": "Schema for ~/.grok/pager.toml (path resolved via display_user_grok_path(\"pager.toml\") [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1790]), the pager-owned, hot-reloadable appearance/rendering config. Models the TOML-facing RawAppearanceConfig [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:728-749]; every section carries #[serde(default)] so any subset of keys is valid and an empty file is valid. No struct uses deny_unknown_fields, so unknown keys are tolerated everywhere. The settings-modal registry (crates/codegen/xai-grok-pager/src/settings/) is deliberately NOT part of this schema: 43 of its 46 entries persist into [ui]/[cli]/[toolset.ask_user_question] of ~/.grok/config.toml (see grok-config.schema.json); the single registry entry that writes to pager.toml is [scrollback.scroll].respect_manual_folds.",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "type": "object",
+  "properties": {
+    "terminal": { "$ref": "#/$defs/terminal" },
+    "animation": { "$ref": "#/$defs/animation" },
+    "prompt": { "$ref": "#/$defs/promptView" },
+    "scrollback": { "$ref": "#/$defs/scrollback" },
+    "todo": { "$ref": "#/$defs/todo" },
+    "disable_plugins": {
+      "type": "boolean",
+      "default": false,
+      "description": "Disable hooks & plugins UI (/hooks and /plugins commands, scrollback annotations). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:742-744]"
+    },
+    "show_plan_chip": {
+      "type": "boolean",
+      "default": false,
+      "description": "Always show the \"plan\" chip in the status bar when plan content is available, even after the user exits plan mode. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:745-748]"
+    }
+  },
+  "$defs": {
+    "optionalColor": {
+      "description": "OptionalColor: \"none\"/\"null\" (case-insensitive) for no override, a named palette color (e.g. \"BLUE\", \"CYAN\", \"MAGENTA\", \"COMMENT\"; case-insensitive, GrokNight palette), a hex string (\"#rrggbb\" or \"#rgb\"), or an [r, g, b] array of three 0-255 integers. An unrecognized color name or malformed hex FAILS the parse. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1614-1695]",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "\"none\"/\"null\", \"#rgb\"/\"#rrggbb\" hex, or a named palette color. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1663-1695]"
+        },
+        {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "[r, g, b] triple, each 0-255. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1682-1687]"
+        }
+      ]
+    },
+    "terminal": {
+      "type": "object",
+      "description": "Terminal behavior settings (fullscreen policy). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:755-782]",
+      "properties": {
+        "alt_screen": {
+          "type": "string",
+          "enum": ["auto", "always", "never"],
+          "default": "auto",
+          "description": "Alt-screen (fullscreen) policy: \"auto\" = fullscreen in plain terminals and normal tmux, inline in tmux control mode and Zellij; \"always\"; \"never\". Any other string fails the parse (typed enum). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:758-763,784-795]"
+        },
+        "minimal": {
+          "type": "boolean",
+          "default": false,
+          "description": "Experimental scrollback-native rendering mode: finalized blocks are printed into the terminal's native scrollback. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:764-766]"
+        },
+        "minimal_live_rows": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "Pinned live-region height (rows) for minimal mode. Optional; default-at-use 10. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:767-768]"
+        },
+        "minimal_max_commit_rows": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "Maximum rows for a single committed block in minimal mode. Optional; default-at-use 2000. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:769-770]"
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "description": "Animation settings. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1075-1098]",
+      "properties": {
+        "fps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 30,
+          "description": "Animation frame rate (ticks per second). Higher = smoother but more CPU. Documented range 1-60, clamped at use; serde accepts any u8 (0-255). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1079-1081,1093]"
+        },
+        "wave_rows": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 32,
+          "description": "Rows per wave cycle for accent line animation. Lower = faster wave; min 1 applied at use. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1082-1084,1094]"
+        },
+        "show_fps": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show an FPS counter overlay in the top-right corner. Requires a debug build; also enabled by GROK_FPS=1. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1085-1087,1095]"
+        }
+      }
+    },
+    "promptView": {
+      "type": "object",
+      "description": "Prompt input view settings — the prompt editor widget at the bottom of the screen, NOT the user prompt block inside the scrollback (see scrollback.blocks.prompt). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:806-830]",
+      "properties": {
+        "collapse_unfocused": {
+          "type": "boolean",
+          "default": true,
+          "description": "Collapse the prompt to its minimum single-line height when focus is in the scrollback pane. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:813-815,825]"
+        },
+        "mouse_hover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show hover highlight box when mousing over the prompt widget. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:816-817,826]"
+        },
+        "show_prefix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the prompt prefix character in the prompt editor. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:818-819,827]"
+        }
+      }
+    },
+    "scrollback": {
+      "type": "object",
+      "description": "Scrollback pane settings (layout, scrollbar, scroll, blocks, display). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:832-846]",
+      "properties": {
+        "layout": {
+          "type": "object",
+          "description": "Layout settings (padding, spacing). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:900-926]",
+          "properties": {
+            "outer_vpad": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 1,
+              "description": "Vertical padding (top/bottom) for outer viewport. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:904-905,919]"
+            },
+            "outer_hpad_left": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 2,
+              "description": "Left horizontal padding for outer viewport (min 1 applied at use). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:906-907,920]"
+            },
+            "outer_hpad_right": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 2,
+              "description": "Right horizontal padding for outer viewport (min 1 applied at use). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:908-909,921]"
+            },
+            "block_pad_left": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 2,
+              "description": "Padding after accent line, before content. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:910-911,922]"
+            },
+            "block_pad_right": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 2,
+              "description": "Padding after content, at right edge. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:912-913,923]"
+            }
+          }
+        },
+        "scrollbar": {
+          "type": "object",
+          "description": "Scrollbar settings. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:928-959]",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether the scrollbar is enabled. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:932-933,952]"
+            },
+            "gap_left": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 0,
+              "description": "Gap between content/selection edge and scrollbar track; 0 = adjacent to content. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:934-937,953]"
+            },
+            "gap_right": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 0,
+              "description": "Gap between scrollbar track and screen edge; 0 = scrollbar at screen edge. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:938-940,954]"
+            },
+            "scrollbar_bg": {
+              "$ref": "#/$defs/optionalColor",
+              "description": "Override scrollbar background color; \"none\" = theme default. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:941-943,955]"
+            },
+            "scrollbar_fg": {
+              "$ref": "#/$defs/optionalColor",
+              "description": "Override scrollbar foreground/thumb color; \"none\" = theme default. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:944-946,956]"
+            }
+          }
+        },
+        "scroll": {
+          "type": "object",
+          "description": "Scroll behavior settings. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:961-999]",
+          "properties": {
+            "margin": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 0,
+              "description": "Minimum lines of context to keep above/below the selected entry when navigating; 0 = scroll to edge. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:965-968,990]"
+            },
+            "min_page_fraction": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "default": 0,
+              "description": "Minimum scroll as percentage of viewport height (documented 0-100, clamped at use; serde accepts any u8). 0 = minimal scroll, 25 = quarter page, 100 = full page. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:969-972,991]"
+            },
+            "follow_indicator": {
+              "type": "string",
+              "enum": ["none", "center"],
+              "default": "center",
+              "description": "Follow indicator in the gap row below scrollback: \"none\" = hidden, \"center\" = centered marker when content is below the viewport. Typed enum — other strings fail the parse. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:973-975,992,1001-1010]"
+            },
+            "follow_auto_select": {
+              "type": "boolean",
+              "default": true,
+              "description": "When follow mode scrolls to new content, auto-select the latest entry. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:976-977,993]"
+            },
+            "follow_by_overscroll": {
+              "type": "boolean",
+              "default": true,
+              "description": "Scrolling past the bottom (j, Ctrl-D, page-down, mousewheel) engages follow mode. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:978-979,994]"
+            },
+            "anchor_on_fold": {
+              "type": "boolean",
+              "default": true,
+              "description": "Anchor scroll on fold: keep the toggled block's header at the same screen y. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:980-981,995]"
+            },
+            "respect_manual_folds": {
+              "type": "boolean",
+              "default": false,
+              "description": "Opt-in: keep manually folded blocks as-is during streaming/completion, and stop auto-scroll when a fold expands a block while following. Also editable via the /settings registry — the one registry entry persisted to pager.toml rather than config.toml. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:982-984,996]"
+            }
+          }
+        },
+        "display": {
+          "type": "object",
+          "description": "Miscellaneous scrollback display options. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:848-898]",
+          "properties": {
+            "line_under_last_entry": {
+              "type": "boolean",
+              "default": false,
+              "description": "Render a subtle horizontal line below the last entry (end-of-content marker). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:852-853,884]"
+            },
+            "collapsed_accent_char": {
+              "type": "string",
+              "description": "Accent character for collapsed groupable blocks; default is a built-in glyph. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:854-855,885]"
+            },
+            "dim_accent": {
+              "type": "number",
+              "default": 0.5,
+              "description": "Blend factor for dimmed accents on collapsed groupable blocks (0.0-1.0). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:856-857,886]"
+            },
+            "group_selection_split": {
+              "type": "boolean",
+              "default": true,
+              "description": "Group selection box mode: true = \"split\" (Mode B), false = \"always\" (Mode A). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:858-859,887]"
+            },
+            "highlight_overlays_border": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the active-block highlight overlays selection box borders. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:860-861,888]"
+            },
+            "expandable_indicator": {
+              "type": "boolean",
+              "default": true,
+              "description": "Show the expand indicator on selected foldable collapsed entries. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:862-863,889]"
+            },
+            "expandable_indicator_running": {
+              "type": "boolean",
+              "default": true,
+              "description": "Show the expand indicator on running entries in their minimum fold mode. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:864-865,890]"
+            },
+            "expandable_indicator_char": {
+              "type": "string",
+              "default": "›",
+              "description": "Character for the expand indicator. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:866-867,891]"
+            },
+            "selection_buttons": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show copy/open buttons on the selection box. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:868-869,892]"
+            },
+            "sticky_headers": {
+              "type": "boolean",
+              "default": true,
+              "description": "Pin user prompts as sticky headers when scrolled past. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:870-871,893]"
+            },
+            "tab_width": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "default": 4,
+              "description": "Spaces used when expanding tab characters in content; 0 passes tabs through unchanged. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:872-875,894]"
+            },
+            "group_max_visible": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 10,
+              "description": "Maximum visible entries in a consecutive group of collapsed tool/thinking blocks; older entries hide behind a compact header; 0 = disable. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:876-878,895]"
+            }
+          }
+        },
+        "blocks": {
+          "type": "object",
+          "description": "Block rendering settings, one sub-table per block type. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1100-1116]",
+          "properties": {
+            "edit": {
+              "type": "object",
+              "description": "EditBlock rendering. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1118-1172]",
+              "properties": {
+                "indent": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Apply 2-char indent before line numbers. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1122-1123,1159]"
+                },
+                "vpad": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Apply vertical padding. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1124-1125,1160]"
+                },
+                "bg": {
+                  "type": "string",
+                  "enum": ["none", "dark", "light"],
+                  "default": "none",
+                  "description": "Block background. Typed enum RawBlockBackground (lowercase). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1126-1127,1161,1348-1355]"
+                },
+                "accent_bg": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Show background behind the accent. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1128-1129,1162]"
+                },
+                "accent": {
+                  "$ref": "#/$defs/optionalColor",
+                  "description": "Accent color for the vertical line; \"none\" disables. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1130-1134,1163]"
+                },
+                "gutter_bg": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Diff line background extends to include the gutter (line numbers). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1135-1136,1164]"
+                },
+                "indent_bg": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "true = skip indent columns in diff line background; false = include indent. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1137-1139,1165]"
+                },
+                "line_summary": {
+                  "type": "boolean",
+                  "description": "Show the +N/-M line summary in the collapsed header. Unset follows the [ui] collapsed_edit_blocks flag in config.toml. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1140-1143,1166]"
+                },
+                "expanded_by_default": {
+                  "type": "boolean",
+                  "description": "Start Edit blocks expanded (showing the diff). Unset follows the [ui] collapsed_edit_blocks flag in config.toml. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1144-1148,1167]"
+                },
+                "hunk_separator": {
+                  "type": "string",
+                  "default": "…",
+                  "description": "Separator between diff hunks; \"\" = none. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1149-1150,1168]"
+                },
+                "dual_line_numbers": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Show two line-number columns (old + new) like GitHub's unified diff. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1151-1153,1169]"
+                }
+              }
+            },
+            "prompt": {
+              "type": "object",
+              "description": "User prompt block rendering inside the scrollback (NOT the prompt editor widget). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1174-1204]",
+              "properties": {
+                "vpad": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Apply vertical padding (blank lines above/below). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1181-1182,1197]"
+                },
+                "bg": {
+                  "type": "string",
+                  "enum": ["none", "dark", "light"],
+                  "default": "light",
+                  "description": "Block background. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1183-1184,1198,1348-1355]"
+                },
+                "accent_bg": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Accent column gets the block's background. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1185-1186,1199]"
+                },
+                "min_lines": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 65535,
+                  "default": 2,
+                  "description": "Minimum content lines shown in truncated/sticky header mode (excludes vpad). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1187-1189,1200]"
+                },
+                "show_prefix": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Show the prefix character before the prompt text. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1190-1191,1201]"
+                }
+              }
+            },
+            "thinking": {
+              "type": "object",
+              "description": "Thinking/reasoning block rendering. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1206-1245]",
+              "properties": {
+                "accent": {
+                  "$ref": "#/$defs/optionalColor",
+                  "description": "Accent color for the vertical line; \"none\" = theme default (gray_dim). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1210-1212,1236]"
+                },
+                "accent_enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Whether the accent line is shown at all. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1213-1214,1237]"
+                },
+                "bg_blend": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255,
+                  "default": 70,
+                  "description": "Blend factor for markdown colors with background (documented 0-100 scale; serde accepts any u8). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1215-1217,1238]"
+                },
+                "truncated_lines": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 65535,
+                  "default": 3,
+                  "description": "Visual lines shown at start and end in truncated mode (min 1 applied at use). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1218-1220,1239,1602]"
+                },
+                "animate": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Accent line animates (traveling wave) while thinking is active. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1221-1223,1240]"
+                },
+                "header": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Show the header line (\"Thinking...\" / \"Thought for Xs\") in truncated/expanded modes. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1224-1227,1241]"
+                },
+                "header_bright": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Header uses brighter styling in non-collapsed modes (like tool titles); false = always dim gray. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1228-1230,1242]"
+                }
+              }
+            },
+            "tool": {
+              "type": "object",
+              "description": "Tool call block rendering (Read, Search, ListDir, etc.). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1247-1273]",
+              "properties": {
+                "muted_collapsed": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Collapsed tool calls render entirely in muted gray. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1251-1253,1268]"
+                },
+                "dim_details": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Parenthetical details use the dimmest gray (gray_dim). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1254-1257,1269]"
+                },
+                "bullet": {
+                  "type": "string",
+                  "enum": ["none", "dot", "small-circle", "circle", "small-triangle", "triangle", "diamond"],
+                  "default": "diamond",
+                  "description": "Bullet/icon before tool call headers. Typed enum RawToolBullet (kebab-case) — other strings fail the parse. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1258-1261,1270,1012-1031]"
+                }
+              }
+            },
+            "list_dir": {
+              "type": "object",
+              "description": "ListDir block rendering. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1275-1290]",
+              "properties": {
+                "terminal_bg": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Output has a terminal-style dark background. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1278-1281,1287]"
+                }
+              }
+            },
+            "execute": {
+              "type": "object",
+              "description": "Execute tool call block rendering. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1292-1326]",
+              "properties": {
+                "first_lines": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 65535,
+                  "default": 2,
+                  "description": "Output lines shown at the start in truncated mode (min 1 applied at use). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1296-1298,1318]"
+                },
+                "last_lines": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 65535,
+                  "default": 3,
+                  "description": "Output lines shown at the end in truncated mode (min 1 applied at use). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1299-1300,1319]"
+                },
+                "accent_enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Whether accent lines (running/success/error) are shown. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1301-1303,1320]"
+                },
+                "running_accent": {
+                  "$ref": "#/$defs/optionalColor",
+                  "description": "Accent color for running execute blocks (animated wave); \"none\" = theme accent_running (MAGENTA-family). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1304-1306,1321]"
+                },
+                "header_style": {
+                  "type": "string",
+                  "enum": ["shell", "label"],
+                  "default": "label",
+                  "description": "Header display style: \"shell\" = `$ command`, \"label\" = `Run command`. Struct default is \"label\" (the enum's own #[default] is Shell, but RawExecuteConfig::default() sets Label). [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1307-1309,1322,1328-1337]"
+                },
+                "muted_command_collapsed": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Command text is muted/uncolored when collapsed. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1310-1312,1323]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "todo": {
+      "type": "object",
+      "description": "Todo pane settings. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1033-1050]",
+      "properties": {
+        "badge_format": {
+          "type": "string",
+          "enum": ["default", "colon", "comma"],
+          "default": "default",
+          "description": "Badge format in the status bar: \"default\" = colored numbers only, \"colon\" = icon:count, \"comma\" = count icon comma-separated. Typed enum — other strings fail the parse. [src: crates/codegen/xai-grok-pager-render/src/appearance/config.rs:1037-1041,1047,1052-1063]"
+        }
+      }
+    }
+  }
+}

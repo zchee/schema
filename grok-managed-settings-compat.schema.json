@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/managed-settings-compat.schema.json",
+  "title": "Claude-compat managed-settings.json (Grok Build consumed subset)",
+  "description": "Describes ONLY the subset of Claude Code's vendor `managed-settings.json` (MDM/IT-administered policy file) keys that Grok Build (this codebase) actually reads. This is NOT the full Claude Code managed-settings schema; real managed-settings.json files may contain additional keys Grok Build ignores, so additionalProperties is never false anywhere in this schema. Platform paths: macOS `/Library/Application Support/ClaudeCode/managed-settings.json`, Linux `/etc/claude-code/managed-settings.json` [src: crates/codegen/xai-grok-config/src/paths.rs:8-12,81-97]. Supported surface today is a SINGLE file at that path; grok does NOT yet merge Claude's `managed-settings.d/` drop-ins, an MDM plist, or Windows registry delivery [src: crates/codegen/xai-grok-workspace/src/permission/resolution.rs:718-724]. `permissions.disableBypassPermissionsMode` from this file is deliberately NOT consulted for grok's own always-approve lock (grok must not inherit a host-wide Claude lockdown from this file); grok still honors this file's permission rules, MCP allow/deny lists, and marketplace allowlist. To hard-lock always-approve in grok itself, use a root-owned requirements.toml instead [src: resolution.rs:948-973].",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "type": "object",
+  "properties": {
+    "env": {
+      "type": "object",
+      "description": "Only two keys are read; both are read via a tolerant boolean coercion (json_env_flag): a JSON number is truthy iff nonzero, a JSON bool is used as-is, a JSON string is false for \"0\"/\"\"/\"false\" and true for anything else, any other JSON type (array/object/null) yields no value (key ignored, not an error) [src: crates/codegen/xai-grok-workspace/src/permission/resolution.rs:752,928-939].",
+      "properties": {
+        "DISABLE_TELEMETRY": {
+          "oneOf": [{ "type": "boolean" }, { "type": "number" }, { "type": "string" }],
+          "description": "[src: resolution.rs:754]"
+        },
+        "DISABLE_FEEDBACK_COMMAND": {
+          "oneOf": [{ "type": "boolean" }, { "type": "number" }, { "type": "string" }],
+          "description": "[src: resolution.rs:755]"
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Parsed via a STRICT (non-tolerant) serde deserialize of {allow, deny, ask} -- unlike the project-tier `.claude/settings.json` (which tolerantly skips individual malformed array entries), a single wrong-typed entry anywhere in `allow`/`deny`/`ask` fails deserialization of the WHOLE `permissions` object, silently dropping ALL permission rules from this file (still not a file-load error) [src: resolution.rs:868-901; crates/codegen/xai-grok-workspace/src/permission/claude_settings.rs:39-48].",
+      "properties": {
+        "allow": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "[src: claude_settings.rs:42-43; resolution.rs:868-901]"
+        },
+        "deny": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "[src: claude_settings.rs:44-45; resolution.rs:868-901]"
+        },
+        "ask": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "[src: claude_settings.rs:46-47; resolution.rs:868-901]"
+        },
+        "defaultMode": {
+          "type": "string",
+          "enum": ["acceptEdits", "bypassPermissions", "default", "plan", "dontAsk", "auto"],
+          "description": "Highest-precedence permission-mode source (overrides user-tier files). Shares the same extraction helper as project-tier settings.json: if present but not a string, the value is ignored [src: resolution.rs:729,804-815; claude_settings.rs:141-179]."
+        },
+        "disableBypassPermissionsMode": {
+          "type": "string",
+          "description": "Compared against the literal string \"disable\" (any other value, including a non-string JSON type, resolves to false rather than an error). Feeds `ManagedSettingsFeatures::disable_yolo`, which is READ but NOT used to hard-lock grok's own always-approve mode (see top-level description) [src: resolution.rs:756,941-946]."
+        }
+      }
+    },
+    "allowedMcpServers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/McpServerPolicyEntry" },
+      "description": "MCP server allowlist. Deny takes precedence over allow (deny-wins semantics) [src: resolution.rs:760,833,840-866,1027-1039]."
+    },
+    "deniedMcpServers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/McpServerPolicyEntry" },
+      "description": "MCP server denylist. An entry matching none of serverUrl/command/serverName is logged as an ignored/unsupported entry (allow-side entries fail silently instead, since an ungranted entry is fail-closed) [src: resolution.rs:761,834,840-866]."
+    },
+    "strictKnownMarketplaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Only entries with `source == \"git\"` AND a present `url` are loaded into the in-memory marketplace allowlist; entries with any other `source` value, or a `git` entry missing `url`, are silently dropped from the allowlist (not a validation failure of the document) [src: resolution.rs:778-792].",
+        "properties": {
+          "source": { "type": "string" },
+          "url": { "type": "string" }
+        }
+      },
+      "description": "[src: resolution.rs:778-792,1381-1382]"
+    }
+  },
+  "$defs": {
+    "McpServerPolicyEntry": {
+      "type": "object",
+      "description": "Matched in this order against a single JSON object: `serverUrl` (string) -> Http, else `command` (string) -> Stdio, else `serverName` (string) -> Name (match by config name, any transport). The three keys are not mutually exclusive in the schema (grok only inspects them in this priority order; extra sibling keys don't invalidate the entry) [src: resolution.rs:836-866,1013-1025].",
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": { "serverUrl": { "type": "string" } },
+          "required": ["serverUrl"]
+        },
+        {
+          "type": "object",
+          "properties": { "command": { "type": "string" } },
+          "required": ["command"]
+        },
+        {
+          "type": "object",
+          "properties": { "serverName": { "type": "string" } },
+          "required": ["serverName"]
+        }
+      ]
+    }
+  }
+}

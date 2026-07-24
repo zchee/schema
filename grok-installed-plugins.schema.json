@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/installed-plugins.schema.json",
+  "title": "Claude Code Installed Plugins Registry (compat)",
+  "description": "`~/.claude/plugins/installed_plugins.json` — a Claude-Code-owned, Claude-Code-written compat file that grok-build only READS, never writes. Deserialized into `ClaudeInstalledPlugins { plugins: HashMap<String, Vec<ClaudeInstalledEntry>> }` by `read_claude_installed_plugins`. Grok-build models only the narrow subset of fields it actually consumes (installPath/scope/projectPath); the real Claude Code writer's schema is richer (it carries additional presentation/version metadata not read here), so this schema deliberately never sets `additionalProperties: false` at any level. Parse failure of a SINGLE array entry (e.g. a missing installPath) fails `serde_json::from_str` for the WHOLE document, and the reader soft-fails to an empty result set (logged via `tracing::warn!`) rather than erroring — in practice the real Claude Code writer always populates installPath, so this schema still marks it required. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:796-812,849-888]",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "properties": {
+    "version": {
+      "type": "integer",
+      "description": "Known extra container-level key observed in real Claude-Code-written files (e.g. `\"version\": 2`). NOT modeled by `ClaudeInstalledPlugins` (no such field on the struct) — silently ignored by grok-build's reader since no `#[serde(deny_unknown_fields)]` is present. Documented here as a known/tolerated extra key, not enforced. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:799-803]"
+    },
+    "plugins": {
+      "type": "object",
+      "default": {},
+      "description": "Installed plugin entries keyed by `\"<plugin-name>@<marketplace>\"` or a bare `\"<plugin-name>\"` (no marketplace) — split via `key.splitn(2, '@')`: the part before `@` is the name, the part after (if any) is the marketplace. `#[serde(default)] HashMap<String, Vec<ClaudeInstalledEntry>>`. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:801-802,872-875]",
+      "additionalProperties": {
+        "type": "array",
+        "description": "One or more install records for this plugin key (e.g. installed at multiple scopes/versions). [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:802]",
+        "items": { "$ref": "#/definitions/installedEntry" }
+      }
+    }
+  },
+  "definitions": {
+    "installedEntry": {
+      "type": "object",
+      "description": "A single install entry within installed_plugins.json. `#[serde(rename_all = \"camelCase\")] struct ClaudeInstalledEntry`. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:806-812]",
+      "required": ["installPath"],
+      "properties": {
+        "installPath": {
+          "type": "string",
+          "description": "Filesystem path the plugin was installed to. `install_path: PathBuf` — the ONLY entry field without `#[serde(default)]`; a missing `installPath` fails deserialization of this array element, which in turn fails the entire document (soft-fails to an empty result, see top-level description). [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:809]"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Free-form install scope string. Only `\"local\"` and `\"project\"` are special-cased by `claude_install_visible` (project-gated visibility); any other value (including `\"user\"`, unrecognized values, or absent) is always-visible unless `projectPath` is also set non-empty. `scope: Option<String>`. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:810,820-839]"
+        },
+        "projectPath": {
+          "type": "string",
+          "description": "Path this install is tied to. When non-empty together with `scope` `local`/`project` (or even alone — a non-empty `projectPath` gates visibility regardless of `scope`), the entry is only visible when `cwd` canonicalizes under this path. `project_path: Option<PathBuf>`. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:811,825-838]"
+        },
+        "version": {
+          "type": "string",
+          "description": "Known extra entry-level key observed in real Claude-Code-written files (e.g. `\"version\": \"1.0.0\"`), distinct in type from the container-level integer `version`. NOT modeled by `ClaudeInstalledEntry` — silently ignored (no `deny_unknown_fields`). Documented here as a known/tolerated extra key, not enforced. [src: crates/codegen/xai-grok-agent/src/plugins/discovery.rs:806-812]"
+        }
+      }
+    }
+  }
+}

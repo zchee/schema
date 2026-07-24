@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/default-models.schema.json",
+  "title": "Default Models Registry",
+  "description": "`crates/codegen/xai-grok-models/default_models.json`, embedded at compile time via `include_str!` and parsed at runtime [src: crates/codegen/xai-grok-models/src/lib.rs:9-12,31-33]. Rust (`DefaultModels`/`DefaultModelEntry`) only reads `default`, `web_search`, `image_description`, `session_summary`, and `models[].model` [src: crates/codegen/xai-grok-models/src/lib.rs:14-29] — every other property below is part of the full on-disk key set (verified against the real file) that Rust ignores as forward-compatible unknown data, presumably consumed elsewhere (UI/model-picker code) rather than by this loader. A runtime assertion (not expressible in this schema) requires `default` to equal one of `models[].model` [src: crates/codegen/xai-grok-models/src/lib.rs:36-41]; enforce that invariant in the validation harness, not via JSON Schema alone. Model resolution order at runtime: CLI flag > ENV var > config.toml > remote settings > these defaults [src: crates/codegen/xai-grok-models/src/lib.rs:4-6].",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "required": ["default", "models"],
+  "properties": {
+    "default": {
+      "type": "string",
+      "description": "Primary model id for coding tasks and general fallback. Required field on `DefaultModels`; must equal one of `models[].model` (enforced by a runtime `assert!`, not by Deserialize). [src: crates/codegen/xai-grok-models/src/lib.rs:14,16,36-41,47-49]"
+    },
+    "web_search": {
+      "type": "string",
+      "description": "Model id for web search tool synthesis. `Option<String>`; falls back to `default` when absent. [src: crates/codegen/xai-grok-models/src/lib.rs:18-19,52-54]"
+    },
+    "image_description": {
+      "type": "string",
+      "description": "Model id for image description. `Option<String>`; falls back to `default` when absent. [src: crates/codegen/xai-grok-models/src/lib.rs:20-21,57-62]"
+    },
+    "session_summary": {
+      "type": "string",
+      "description": "Model id for session title generation. `Option<String>`; falls back to `default` when absent. [src: crates/codegen/xai-grok-models/src/lib.rs:22-23,65-70]"
+    },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/modelEntry" },
+      "description": "Model catalog. Required field on `DefaultModels` (`Vec<DefaultModelEntry>`); Rust itself only deserializes each item's `model` field, the rest is documented from the real on-disk file. [src: crates/codegen/xai-grok-models/src/lib.rs:23,26-29]"
+    }
+  },
+  "definitions": {
+    "modelEntry": {
+      "type": "object",
+      "description": "Single model catalog entry. Only `model` is required by `DefaultModelEntry`; every other property is the full on-disk key set observed in the real `default_models.json`, not enforced by this Rust loader. [src: crates/codegen/xai-grok-models/src/lib.rs:26-29]",
+      "required": ["model"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable catalog identifier for this model entry. On-disk-only field, not read by `DefaultModelEntry`. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model id string used for resolution/matching against `default`/`web_search`/`image_description`/`session_summary`. Required field on `DefaultModelEntry`. [src: crates/codegen/xai-grok-models/src/lib.rs:28,36-41]"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable display name. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable model description. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "context_window": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Context window size in tokens. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "api_backend": {
+          "type": "string",
+          "description": "Backend API this model is served through (e.g. \"responses\"). On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "supports_backend_search": {
+          "type": "boolean",
+          "description": "Whether the backend supports native search for this model. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "system_prompt_label": {
+          "type": "string",
+          "description": "Label surfaced to the model within the system prompt. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "show_model_fingerprint": {
+          "type": "boolean",
+          "description": "Whether to surface the model fingerprint in the UI. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "supports_reasoning_effort": {
+          "type": "boolean",
+          "description": "Whether this model accepts a configurable reasoning effort. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "reasoning_effort": {
+          "type": "string",
+          "description": "Default reasoning effort value for this model (e.g. \"high\"). On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "auto_compact_threshold_percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Context-usage percentage threshold that triggers auto-compaction. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "compaction_at_tokens": {
+          "type": "boolean",
+          "description": "Whether compaction is measured in absolute tokens (as opposed to percentage only). On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "compactions_remaining": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of compactions remaining before a hard session limit. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "reasoning_efforts": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/reasoningEffort" },
+          "description": "Selectable reasoning-effort presets for this model. On-disk-only field. [src: crates/codegen/xai-grok-models/default_models.json]"
+        }
+      }
+    },
+    "reasoningEffort": {
+      "type": "object",
+      "description": "One selectable reasoning-effort preset. On-disk-only shape. [src: crates/codegen/xai-grok-models/default_models.json]",
+      "required": ["value", "label", "description"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Effort level identifier (e.g. \"high\", \"medium\", \"low\"). [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable label (e.g. \"High Effort\"). [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the tradeoffs at this effort level. [src: crates/codegen/xai-grok-models/default_models.json]"
+        },
+        "default": {
+          "type": "boolean",
+          "description": "Whether this preset is the default for the model. Present only on the default entry in the real file; absent on others. [src: crates/codegen/xai-grok-models/default_models.json]"
+        }
+      }
+    }
+  }
+}

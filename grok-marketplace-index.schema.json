@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/marketplace-index.schema.json",
+  "title": "Grok Plugin Marketplace Index",
+  "description": "Repo-level marketplace index. Config files: `.grok-plugin/marketplace.json` (preferred), `.grok-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.claude-plugin/plugin.json` (checked in that order; first existing file wins) [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:211-246]. Deserialized into `MarketplaceIndex` [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:18]. Forward-compatible: unknown top-level keys (e.g. `$schema`, `metadata`) are ignored by serde [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:239 test parse_full_superpowers_marketplace].",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Marketplace display name. Required, non-optional field on `MarketplaceIndex`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:20]"
+    },
+    "description": {
+      "type": "string",
+      "description": "Marketplace description. `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:22-23]"
+    },
+    "owner": {
+      "$ref": "#/definitions/indexOwner",
+      "description": "Marketplace owner metadata. `#[serde(default)] Option<IndexOwner>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:25-26]"
+    },
+    "plugins": {
+      "type": "array",
+      "default": [],
+      "items": { "$ref": "#/definitions/indexEntry" },
+      "description": "Indexed plugin entries. `#[serde(default)] Vec<IndexEntry>` — absent key deserializes to an empty vec. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:27-29]"
+    }
+  },
+  "definitions": {
+    "indexOwner": {
+      "type": "object",
+      "description": "Marketplace owner. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:33-38]",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Owner display name. Required field on `IndexOwner`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:35]"
+        },
+        "email": {
+          "type": "string",
+          "description": "Owner email. `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:36-37]"
+        }
+      }
+    },
+    "indexEntry": {
+      "type": "object",
+      "description": "A single plugin entry in the marketplace index. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:40-72]",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Plugin name. Required field on `IndexEntry`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:43-44]"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version string from index metadata. `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:46-47]"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description. `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:49-50]"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category, e.g. \"development\", \"productivity\", \"design\". `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:52-53]"
+        },
+        "author": {
+          "$ref": "#/definitions/indexAuthor",
+          "description": "Author info. `#[serde(default)] Option<IndexAuthor>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:55-56]"
+        },
+        "source": {
+          "$ref": "#/definitions/indexSource",
+          "description": "Source location within the marketplace repo. `#[serde(default)] Option<IndexSource>`, hand-written `Deserialize` accepting a string shorthand or an object. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:58-59,80-168]"
+        },
+        "homepage": {
+          "type": "string",
+          "description": "Homepage URL. `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:61-62]"
+        },
+        "tags": {
+          "type": "array",
+          "default": [],
+          "items": { "type": "string" },
+          "description": "Tags/keywords. `#[serde(default)] Vec<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:64-65]"
+        },
+        "keywords": {
+          "type": "array",
+          "default": [],
+          "items": { "type": "string" },
+          "description": "Matcher keywords used to associate the plugin with a user request. `#[serde(default)] Vec<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:67-68]"
+        },
+        "domains": {
+          "type": "array",
+          "default": [],
+          "items": { "type": "string" },
+          "description": "Matcher domains used to associate the plugin with a user request. `#[serde(default)] Vec<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:70-71]"
+        }
+      }
+    },
+    "indexAuthor": {
+      "type": "object",
+      "description": "Author in an index entry. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:74-78]",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Author display name. Required field on `IndexAuthor`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:77]"
+        }
+      }
+    },
+    "indexSource": {
+      "description": "Source location in an index entry. Hand-written `Deserialize` (not derived) accepting either a plain string shorthand (a local relative path, e.g. \"./plugins/foo\") OR an object keyed by `type` (local sources, e.g. `{\"type\": \"local\", \"path\": \"./plugins/foo\"}`) or by the superpowers-style discriminator `source` (e.g. `{\"source\": \"url\", \"url\": \"https://...\", \"ref\": \"main\"}` or `{\"source\": \"url\", \"url\": \"https://...\", \"sha\": \"61f19...\"}`). Every object field is independently optional — the visitor tolerates any subset being absent. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:80-168]",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "String shorthand: interpreted as a local relative path; normalized to `{type: \"local\", path: <string>}`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:121-129]"
+        },
+        {
+          "type": "object",
+          "description": "Object form. No fields are required by the hand-written visitor — all keys are independently optional and default to `None` when absent. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:131-163]",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Source type discriminator, e.g. \"local\". [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:88-89,140]"
+            },
+            "source": {
+              "type": "string",
+              "description": "Superpowers-format discriminator alias for `type`, e.g. \"url\". Adopted as `type` when `type` itself is absent. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:91,133,141-142,152-155]"
+            },
+            "path": {
+              "type": "string",
+              "description": "Local path relative to the marketplace root (for local sources), or a subdirectory within a remote repo (for URL sources). [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:90,143]"
+            },
+            "url": {
+              "type": "string",
+              "description": "Remote git URL (used by superpowers-style marketplaces). [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:91-92,144]"
+            },
+            "ref": {
+              "type": "string",
+              "description": "Git ref (branch/tag/commit) for URL sources. Maps to `git_ref`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:93-94,145]"
+            },
+            "sha": {
+              "type": "string",
+              "description": "Full pinned commit SHA for URL sources (recommended for vendor pins). Maps to `git_sha`. [src: crates/codegen/xai-grok-plugin-marketplace/src/index.rs:95,146]"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

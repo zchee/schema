@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/campaigns-state.schema.json",
+  "title": "Campaigns Dismiss State",
+  "description": "`$GROK_HOME/campaigns_state.json` — on-disk record of dismissed campaign announcement ids. Read fail-open (missing/malformed file yields an empty dismissed set) via `load_dismissed_ids_from_home`; written by the shell's dismiss action using the same `CampaignsState` struct so read/write can't drift. No `rename_all` attribute on the struct, so the JSON key is the literal Rust field name `dismissed_ids` (snake_case, not camelCase). [src: crates/codegen/xai-grok-config/src/loader.rs:372-399]",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "properties": {
+    "dismissed_ids": {
+      "type": "array",
+      "default": [],
+      "items": { "type": "string" },
+      "description": "Campaign ids the user has dismissed. `#[serde(default)] Vec<String>` on `CampaignsState` — absent key deserializes to an empty vec (and a missing/unreadable file also fail-opens to an empty set at the `load_dismissed_ids_from_home` call site). [src: crates/codegen/xai-grok-config/src/loader.rs:377-381,388-399]"
+    }
+  }
+}

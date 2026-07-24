@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/lsp-config.schema.json",
+  "title": "Grok LSP Server Configuration",
+  "description": "`~/.grok/lsp.json` (user) and `<cwd>/.grok/lsp.json` (project) — a flat JSON object mapping server name to `LspServerConfig`, NOT wrapped in an outer key. Parsed directly via `serde_json::from_str::<BTreeMap<String, LspServerConfig>>`; a missing/unreadable file yields an empty map (no error). Project config is gated by folder trust: `filter_project_lsp_when_untrusted` drops project-sourced servers entirely when the workspace is untrusted, and the project-file presence itself is one of the signals used by the folder-trust prompt gate. User config is the base; project config overrides by server name; a `plugin.json` manifest's inline `lspServers` value shares this exact same `BTreeMap<String, LspServerConfig>` shape and only fills in server names not already present from user/project (`.or_insert_with`, never overrides) — so this one definition covers both the standalone file and the plugin-manifest-embedded form. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:19-105,113-132,134-204,229-258; crates/codegen/xai-grok-workspace/src/folder_trust.rs:330-333]",
+  "type": "object",
+  "default": {},
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "additionalProperties": { "$ref": "#/definitions/lspServerConfig" },
+  "definitions": {
+    "lspServerConfig": {
+      "type": "object",
+      "description": "`struct LspServerConfig` (config.rs:229-258). Serialized field names are snake_case; SEVEN of the eleven optional fields also accept a camelCase alias via `#[serde(alias = \"...\")]` — `command`, `args`, `env`, `transport`, and `settings` do NOT have a camelCase alias. Because no `#[serde(deny_unknown_fields)]` is present, this schema never sets `additionalProperties: false`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:229-258]",
+      "required": ["command"],
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "Executable to launch the LSP server. `command: String` — the only field without `#[serde(default)]`; required. No camelCase alias. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:231]"
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Command-line arguments passed to `command`. `#[serde(default)] Vec<String>`. No camelCase alias. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:232-233]"
+        },
+        "transport": {
+          "enum": ["stdio", "socket"],
+          "default": "stdio",
+          "description": "Wire transport. `#[serde(rename_all = \"lowercase\")] enum LspTransport { Stdio (default), Socket }`. No camelCase alias (already lowercase). [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:221-227,234-235]"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "default": {},
+          "description": "Extra environment variables passed to the server process. `#[serde(default)] HashMap<String, String>`. No camelCase alias. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:236-237]"
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "default": {},
+          "description": "Canonical spelling: maps a file extension (e.g. \".rs\") to an LSP languageId (e.g. \"rust\"). `#[serde(default, alias = \"extensionToLanguage\", alias = \"extensionToLanguageId\")] HashMap<String, String>`. Aliases: `extensionToLanguage`, `extensionToLanguageId` (see below). [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:238-243]"
+        },
+        "extensionToLanguage": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Alias spelling for `extensions` — same field, same shape. Documents that supplying this key populates `extensions`; supplying both `extensions` and this alias in the same document is a serde duplicate-field error, not modeled by JSON Schema. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:239-243]"
+        },
+        "extensionToLanguageId": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Second alias spelling for `extensions` — same field, same shape as `extensions`/`extensionToLanguage`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:239-243]"
+        },
+        "initialization_options": {
+          "description": "Canonical spelling: arbitrary JSON passed as the LSP `initializationOptions` payload. `#[serde(default, alias = \"initializationOptions\")] Option<serde_json::Value>`, default null. Alias: `initializationOptions`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:244-245]"
+        },
+        "initializationOptions": {
+          "description": "Alias spelling for `initialization_options` — same field, arbitrary JSON value. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:244-245]"
+        },
+        "settings": {
+          "description": "Arbitrary JSON passed as the LSP `workspace/didChangeConfiguration` settings payload. `#[serde(default)] Option<serde_json::Value>`, default null. NO camelCase alias (already lowercase, and unlike the others has no alternate spelling at all). [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:246-247]"
+        },
+        "workspace_folder": {
+          "type": "string",
+          "description": "Canonical spelling: workspace root path/URI advertised to the server. `#[serde(default, alias = \"workspaceFolder\")] Option<String>`, default null. Alias: `workspaceFolder`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:248-249]"
+        },
+        "workspaceFolder": {
+          "type": "string",
+          "description": "Alias spelling for `workspace_folder` — same field, same string type. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:248-249]"
+        },
+        "startup_timeout": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 15000,
+          "description": "Canonical spelling: milliseconds to wait for server startup. `#[serde(default, alias = \"startupTimeout\")] Option<u64>` — no serde-level default constant; `startup_timeout_ms()` accessor substitutes 15000 when None. Alias: `startupTimeout`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:250-251,261-263]"
+        },
+        "startupTimeout": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Alias spelling for `startup_timeout` — same field, same integer-milliseconds semantics. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:250-251,261-263]"
+        },
+        "shutdown_timeout": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 5000,
+          "description": "Canonical spelling: milliseconds to wait for graceful server shutdown. `#[serde(default, alias = \"shutdownTimeout\")] Option<u64>`; `shutdown_timeout_ms()` accessor substitutes 5000 when None. Alias: `shutdownTimeout`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:252-253,265-267]"
+        },
+        "shutdownTimeout": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Alias spelling for `shutdown_timeout` — same field, same integer-milliseconds semantics. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:252-253,265-267]"
+        },
+        "restart_on_crash": {
+          "type": "boolean",
+          "default": false,
+          "description": "Canonical spelling: whether to auto-restart the server after a crash. `#[serde(default, alias = \"restartOnCrash\")] Option<bool>`; `restart_on_crash()` accessor substitutes false when None. Alias: `restartOnCrash`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:254-255,269-271]"
+        },
+        "restartOnCrash": {
+          "type": "boolean",
+          "description": "Alias spelling for `restart_on_crash` — same field, same boolean semantics. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:254-255,269-271]"
+        },
+        "max_restarts": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 3,
+          "description": "Canonical spelling: maximum restart attempts across the lifetime of a server monitor (a lifetime budget, not per-crash-episode counter). `#[serde(default, alias = \"maxRestarts\")] Option<u32>`; `max_restarts()` accessor substitutes 3 when None. Alias: `maxRestarts`. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:256-257,273-277]"
+        },
+        "maxRestarts": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Alias spelling for `max_restarts` — same field, same integer semantics. [src: crates/codegen/xai-grok-tools/src/implementations/lsp/config.rs:256-257,273-277]"
+        }
+      }
+    }
+  }
+}

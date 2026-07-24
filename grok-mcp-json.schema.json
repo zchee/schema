@@ -1,0 +1,259 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/mcp-json.schema.json",
+  "title": "MCP server configuration (.mcp.json)",
+  "description": "Schema for <cwd..git-root>/.mcp.json, plugin .mcp.json files, and the mcpServers object embedded in ~/.claude.json and .cursor/mcp.json. Root type McpConfig has exactly one recognized field, \"mcpServers\" (serde rename of mcp_servers); any other top-level key is ignored by the loader and is therefore unconstrained here [src: crates/codegen/xai-grok-config-types/src/mcp.rs:478-482]. Each entry under mcpServers is a McpServerConfig: the transport (Stdio or StreamableHttp) is #[serde(flatten)] over an untagged enum, so transport-specific and server-level keys live in the same JSON object [src: crates/codegen/xai-grok-config-types/src/mcp.rs:34-67,166-189]. Server sources are merged in order: config.toml seeds the map (enabled=false blocks lower layers) -> plugins (or_insert) -> ~/.claude.json (or_insert) -> .mcp.json (or_insert, team baseline) -> client override (insert, always wins) -> managed header injection [src: crates/codegen/xai-grok-shell/src/session/managed_mcp.rs:5-16]. Because the transport enum is untagged and no struct in the chain sets deny_unknown_fields, an object containing both \"command\" and \"url\" deserializes successfully as Stdio (the first variant tried; the extra \"url\" key is simply ignored) -- this schema accepts such documents too, matching that behavior exactly [src: crates/codegen/xai-grok-config-types/src/mcp.rs:34-46].",
+  "type": "object",
+  "properties": {
+    "mcpServers": {
+      "type": "object",
+      "description": "Map of server name to server config; serde rename of mcp_servers (an IndexMap at runtime, preserving insertion order; immaterial to JSON Schema validation) [src: crates/codegen/xai-grok-config-types/src/mcp.rs:478-482].",
+      "additionalProperties": { "$ref": "#/$defs/mcpServerEntry" }
+    }
+  },
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "$defs": {
+    "stdioTransport": {
+      "type": "object",
+      "description": "Stdio transport variant of the untagged McpServerTransportConfig; matches when \"command\" is present as a JSON string [src: crates/codegen/xai-grok-config-types/src/mcp.rs:36-46].",
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "Executable to launch; the only field on this variant with no serde default, so its presence (as a string) is what makes an object match Stdio under untagged first-match resolution [src: crates/codegen/xai-grok-config-types/src/mcp.rs:38]."
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Command-line arguments; defaults to an empty array [src: crates/codegen/xai-grok-config-types/src/mcp.rs:39-40]."
+        },
+        "env": {
+          "description": "Extra environment variables for the spawned process; explicit null is accepted via standard Option<HashMap> deserialization [src: crates/codegen/xai-grok-config-types/src/mcp.rs:41-42].",
+          "anyOf": [
+            { "type": "object", "additionalProperties": { "type": "string" } },
+            { "type": "null" }
+          ]
+        },
+        "cwd": {
+          "type": ["string", "null"],
+          "description": "Working directory for the spawned process. Present in the on-disk MCP JSON format, but not yet forwarded to the ACP stdio server config [src: crates/codegen/xai-grok-config-types/src/mcp.rs:43-45]."
+        }
+      },
+      "required": ["command"]
+    },
+    "streamableHttpTransport": {
+      "type": "object",
+      "description": "StreamableHttp transport variant of the untagged McpServerTransportConfig; every field has a serde default, so this variant matches virtually any object once Stdio's required \"command\" is absent -- and an object can still match this variant even while carrying an ill-typed \"command\" key, since that key is simply an unrecognized/ignored extra property here [src: crates/codegen/xai-grok-config-types/src/mcp.rs:47-66].",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Canonical key for the endpoint URL; defaults to \"\" if absent, in which case to_acp_mcp_server treats the server as absent [src: crates/codegen/xai-grok-config-types/src/mcp.rs:48-49,372-375]."
+        },
+        "urlTemplate": {
+          "type": "string",
+          "description": "Accepted serde alias for \"url\"; \"url\" is canonical [src: crates/codegen/xai-grok-config-types/src/mcp.rs:48]."
+        },
+        "url_template": {
+          "type": "string",
+          "description": "Accepted serde alias for \"url\"; \"url\" is canonical [src: crates/codegen/xai-grok-config-types/src/mcp.rs:48]."
+        },
+        "type": {
+          "type": "string",
+          "description": "Transport hint; \"sse\" (case-insensitive) selects the SSE client, as does a url ending in \"/sse\" regardless of this field's value. No other values are validated by serde -- any string is accepted [src: crates/codegen/xai-grok-config-types/src/mcp.rs:50-51,404-407]."
+        },
+        "bearer_token_env_var": {
+          "type": ["string", "null"],
+          "description": "Name of the env var read for an \"Authorization: Bearer <token>\" header [src: crates/codegen/xai-grok-config-types/src/mcp.rs:52-54]."
+        },
+        "headers": {
+          "description": "Extra static HTTP headers [src: crates/codegen/xai-grok-config-types/src/mcp.rs:55-56].",
+          "anyOf": [
+            { "type": "object", "additionalProperties": { "type": "string" } },
+            { "type": "null" }
+          ]
+        },
+        "oauth_client_id": {
+          "type": ["string", "null"],
+          "description": "OAuth client ID for providers without Dynamic Client Registration [src: crates/codegen/xai-grok-config-types/src/mcp.rs:57-59]."
+        },
+        "oauth_client_secret_env_var": {
+          "type": ["string", "null"],
+          "description": "Name of the env var holding the OAuth client secret [src: crates/codegen/xai-grok-config-types/src/mcp.rs:60-62]."
+        },
+        "oauth_scopes": {
+          "description": "OAuth scopes to request during authorization [src: crates/codegen/xai-grok-config-types/src/mcp.rs:63-65].",
+          "anyOf": [
+            { "type": "array", "items": { "type": "string" } },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "mcpJsonOAuthBlock": {
+      "type": "object",
+      "description": "OAuth block for a server's top-level \"oauth\" field; camelCase on the wire [src: crates/codegen/xai-grok-config-types/src/mcp.rs:69-80].",
+      "properties": {
+        "clientId": {
+          "type": ["string", "null"],
+          "description": "OAuth client ID [src: crates/codegen/xai-grok-config-types/src/mcp.rs:72-73]."
+        },
+        "clientSecretEnvVar": {
+          "type": ["string", "null"],
+          "description": "Env var name holding the OAuth client secret [src: crates/codegen/xai-grok-config-types/src/mcp.rs:74-75]."
+        },
+        "scopes": {
+          "description": "OAuth scopes to request [src: crates/codegen/xai-grok-config-types/src/mcp.rs:76-77].",
+          "anyOf": [
+            { "type": "array", "items": { "type": "string" } },
+            { "type": "null" }
+          ]
+        },
+        "callbackPort": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "Local OAuth callback port (u16) [src: crates/codegen/xai-grok-config-types/src/mcp.rs:78-79]."
+        }
+      }
+    },
+    "mcpSetupConfig": {
+      "type": "object",
+      "description": "Setup-flow schema for servers requiring user input before the transport is usable; v0 supports exactly one select field [src: crates/codegen/xai-grok-config-types/src/mcp.rs:82-88,255-305].",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/mcpSetupField" },
+          "description": "Setup fields; the resolver currently requires exactly one field of type \"select\" [src: crates/codegen/xai-grok-config-types/src/mcp.rs:84-85,262-272]."
+        },
+        "variables": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/mcpSetupDerivedValue" },
+          "description": "Derived values keyed by name, substituted into {{name}} templates once setup resolves [src: crates/codegen/xai-grok-config-types/src/mcp.rs:86-87,191-250]."
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/mcpSetupDerivedValue" },
+          "description": "Accepted serde alias for \"variables\"; \"variables\" is canonical [src: crates/codegen/xai-grok-config-types/src/mcp.rs:86]."
+        }
+      }
+    },
+    "mcpSetupField": {
+      "type": "object",
+      "description": "One setup-flow input field [src: crates/codegen/xai-grok-config-types/src/mcp.rs:90-102].",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Field identifier, referenced by mcpSetupDerivedValue.from [src: crates/codegen/xai-grok-config-types/src/mcp.rs:92]."
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable field label [src: crates/codegen/xai-grok-config-types/src/mcp.rs:93]."
+        },
+        "type": {
+          "enum": ["select"],
+          "description": "Field kind; \"select\" is the only McpSetupFieldType variant today (rename_all = lowercase) [src: crates/codegen/xai-grok-config-types/src/mcp.rs:94-95,104-108]."
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user must supply a value [src: crates/codegen/xai-grok-config-types/src/mcp.rs:96-97]."
+        },
+        "default": {
+          "type": ["string", "null"],
+          "description": "Default option value [src: crates/codegen/xai-grok-config-types/src/mcp.rs:98-99]."
+        },
+        "options": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/mcpSetupOption" },
+          "description": "Selectable options for this field [src: crates/codegen/xai-grok-config-types/src/mcp.rs:100-101]."
+        }
+      },
+      "required": ["id", "label", "type"]
+    },
+    "mcpSetupOption": {
+      "type": "object",
+      "description": "One selectable option in a setup field [src: crates/codegen/xai-grok-config-types/src/mcp.rs:110-114].",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Human-readable option label [src: crates/codegen/xai-grok-config-types/src/mcp.rs:112]."
+        },
+        "value": {
+          "type": "string",
+          "description": "Option value, matched against user input and mcpSetupDerivedValue.map keys [src: crates/codegen/xai-grok-config-types/src/mcp.rs:113]."
+        }
+      },
+      "required": ["label", "value"]
+    },
+    "mcpSetupDerivedValue": {
+      "type": "object",
+      "description": "A value derived from a setup field's selected option [src: crates/codegen/xai-grok-config-types/src/mcp.rs:116-120].",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "References a field id declared in the same setup block [src: crates/codegen/xai-grok-config-types/src/mcp.rs:118]."
+        },
+        "map": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Field-value -> substituted string map [src: crates/codegen/xai-grok-config-types/src/mcp.rs:119]."
+        }
+      },
+      "required": ["from", "map"]
+    },
+    "mcpServerEntry": {
+      "type": "object",
+      "description": "One value under mcpServers: McpServerConfig, the flatten of the untagged transport (see stdioTransport/streamableHttpTransport) plus server-level fields declared below [src: crates/codegen/xai-grok-config-types/src/mcp.rs:166-189].",
+      "allOf": [
+        {
+          "anyOf": [
+            { "$ref": "#/$defs/stdioTransport" },
+            { "$ref": "#/$defs/streamableHttpTransport" }
+          ]
+        }
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this server is active; defaults to true. config.toml layer setting this to false blocks lower merge layers from re-enabling the server [src: crates/codegen/xai-grok-config-types/src/mcp.rs:13-15,170-171]."
+        },
+        "oauth": {
+          "description": "Server-level OAuth block; also settable via the StreamableHttp transport's oauth_client_id/oauth_client_secret_env_var/oauth_scopes fields, which take precedence when both are set [src: crates/codegen/xai-grok-config-types/src/mcp.rs:172-173,422-452].",
+          "anyOf": [
+            { "$ref": "#/$defs/mcpJsonOAuthBlock" },
+            { "type": "null" }
+          ]
+        },
+        "setup": {
+          "description": "Setup-flow schema gating this server until resolved [src: crates/codegen/xai-grok-config-types/src/mcp.rs:174-175].",
+          "anyOf": [
+            { "$ref": "#/$defs/mcpSetupConfig" },
+            { "type": "null" }
+          ]
+        },
+        "startup_timeout_sec": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Seconds to wait for the server to start [src: crates/codegen/xai-grok-config-types/src/mcp.rs:176-177]."
+        },
+        "tool_timeout_sec": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Default per-tool-call timeout in seconds [src: crates/codegen/xai-grok-config-types/src/mcp.rs:178-179]."
+        },
+        "tool_timeouts": {
+          "description": "Per-tool timeout overrides in seconds, keyed by tool name; falls back to tool_timeout_sec for tools not listed [src: crates/codegen/xai-grok-config-types/src/mcp.rs:180-183].",
+          "anyOf": [
+            { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+            { "type": "null" }
+          ]
+        },
+        "expose_image_base64": {
+          "type": ["boolean", "null"],
+          "description": "Also keep raw base64 in tool-result text so agents can forward image bytes via path-based tools; overridden per-call by _meta.mcpConfig.<server>.exposeImageBase64 [src: crates/codegen/xai-grok-config-types/src/mcp.rs:184-188]."
+        }
+      }
+    }
+  }
+}

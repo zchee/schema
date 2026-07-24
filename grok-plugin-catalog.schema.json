@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/plugin-catalog.schema.json",
+  "title": "Grok Plugin Marketplace Component Catalog",
+  "description": "CI-generated `plugin-index.json` component catalog. Directory precedence mirrors the marketplace index: `.grok-plugin/plugin-index.json` (preferred), then `.claude-plugin/plugin-index.json` — only one filename is probed per directory, and a present-but-broken preferred catalog does not fall back to the other directory. Presentation-layer enrichment only: a missing/malformed/unsupported-version catalog degrades to `None` and never fails a marketplace listing. [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:1-10,64-106]. Deserialized into `PluginCatalog`. [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:22-27]",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "required": ["version"],
+  "properties": {
+    "version": {
+      "const": 1,
+      "description": "Catalog format version. `PluginCatalog.version: u64` deserializes any integer, but `load_catalog` discards the entire catalog (falls back to `None`) unless it equals `SUPPORTED_VERSION = 1` — the current single supported version, enforced by application logic outside `Deserialize`. Required field on `PluginCatalog`. [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:19,24,92-99]"
+    },
+    "plugins": {
+      "type": "object",
+      "default": {},
+      "description": "Catalog entries keyed by index plugin name. `#[serde(default)] HashMap<String, CatalogEntry>` — absent key deserializes to an empty map. [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:25-26]",
+      "additionalProperties": { "$ref": "#/definitions/catalogEntry" }
+    }
+  },
+  "definitions": {
+    "catalogEntry": {
+      "type": "object",
+      "description": "Per-plugin catalog entry. [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:29-37]",
+      "required": ["components"],
+      "properties": {
+        "sha": {
+          "type": "string",
+          "description": "Commit the components were extracted from. Required for URL-sourced entries (gates `components_for` lookups against the pinned index SHA); optional for in-repo plugins. `#[serde(default)] Option<String>`. [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:32-35,43-61]"
+        },
+        "components": {
+          "$ref": "#/definitions/pluginComponents",
+          "description": "Component inventory for this plugin. Required field on `CatalogEntry` (no `#[serde(default)]`). [src: crates/codegen/xai-grok-plugin-marketplace/src/catalog.rs:36]"
+        }
+      }
+    },
+    "componentItem": {
+      "type": "object",
+      "description": "One concrete thing a plugin provides (a skill, command, agent, etc.). `#[serde(rename_all = \"camelCase\")]`. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:352-359]",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Component name. Required field on `ComponentItem`; sanitized (control chars stripped, truncated to 120 chars) on ingestion. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:356,346-347,374-381]"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional component description. `#[serde(default, skip_serializing_if = \"Option::is_none\")] Option<String>`; for the `hooks` category this holds the optional matcher. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:357-358,423]"
+        }
+      }
+    },
+    "pluginComponents": {
+      "type": "object",
+      "description": "Full inventory of a plugin's components, sourced from a marketplace catalog. `#[serde(rename_all = \"camelCase\")]`; every field is `#[serde(default, skip_serializing_if = \"Vec::is_empty\")] Vec<ComponentItem>`, so all six categories are optional and default to empty. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:412-428]",
+      "properties": {
+        "skills": {
+          "type": "array",
+          "default": [],
+          "items": { "$ref": "#/definitions/componentItem" },
+          "description": "Skill components. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:415-416]"
+        },
+        "commands": {
+          "type": "array",
+          "default": [],
+          "items": { "$ref": "#/definitions/componentItem" },
+          "description": "Command components (e.g. `/brainstorm`). [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:417-418]"
+        },
+        "agents": {
+          "type": "array",
+          "default": [],
+          "items": { "$ref": "#/definitions/componentItem" },
+          "description": "Agent/persona components. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:419-420]"
+        },
+        "mcpServers": {
+          "type": "array",
+          "default": [],
+          "items": { "$ref": "#/definitions/componentItem" },
+          "description": "MCP server components. Rust field `mcp_servers` renamed to `mcpServers` by `rename_all = \"camelCase\"`. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:421-422]"
+        },
+        "hooks": {
+          "type": "array",
+          "default": [],
+          "items": { "$ref": "#/definitions/componentItem" },
+          "description": "Hook components. `name` = hook event (e.g. \"PreToolUse\"), `description` = optional matcher. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:423-425]"
+        },
+        "lspServers": {
+          "type": "array",
+          "default": [],
+          "items": { "$ref": "#/definitions/componentItem" },
+          "description": "LSP server components. Rust field `lsp_servers` renamed to `lspServers` by `rename_all = \"camelCase\"`. [src: crates/codegen/xai-hooks-plugins-types/src/lib.rs:426-427]"
+        }
+      }
+    }
+  }
+}

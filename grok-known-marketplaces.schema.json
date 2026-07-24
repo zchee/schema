@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/known-marketplaces.schema.json",
+  "title": "Known Marketplaces Registry",
+  "description": "`~/.claude/plugins/known_marketplaces.json` (and the structurally identical `extraKnownMarketplaces` value shape embedded in `.claude/settings.json`/`settings.local.json`). Top-level object keyed by marketplace name. IMPORTANT: this single file is read by two independent Rust consumers with two independently-required fields per entry, so a real, fully-functional file must carry BOTH: (1) `source` — required by `SettingsEntry { source: SettingsSource }`, used to auto-register marketplace sources [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:116-183,202-265]; and (2) `installLocation` — required by `KnownMarketplaceEntry { install_location: PathBuf }` (camelCase), used to discover installed plugin directories under the marketplace root [src: crates/codegen/xai-grok-agent/src/plugins/marketplace.rs:150-176]. Neither consumer uses `deny_unknown_fields`, so each tolerates the other's required key as an ignored extra field; this schema documents the union so the file satisfies both.",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "additionalProperties": {
+    "$ref": "#/definitions/knownMarketplaceEntry"
+  },
+  "definitions": {
+    "knownMarketplaceEntry": {
+      "type": "object",
+      "description": "One marketplace entry. Required-by-union of two independent Rust structs reading the same file (see top-level description).",
+      "required": ["source", "installLocation"],
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/settingsSource",
+          "description": "Source descriptor. Required field on `SettingsEntry`. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:130-134]"
+        },
+        "installLocation": {
+          "type": "string",
+          "description": "Local filesystem path where the marketplace repo/dir was cloned/installed. Required field on `KnownMarketplaceEntry` (`#[serde(rename_all = \"camelCase\")]` renames `install_location`). [src: crates/codegen/xai-grok-agent/src/plugins/marketplace.rs:152-157]"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "ISO-8601 timestamp of the last marketplace refresh. Not read by either grok consumer (ignored as an unknown field); present in the real Claude-Code-compatible format. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:387-390 test extract_github_source]"
+        },
+        "autoUpdate": {
+          "type": "boolean",
+          "description": "Whether this marketplace auto-updates. Not read by either grok consumer (ignored as an unknown field); present in the real Claude-Code-compatible format. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:387-390 test extract_github_source]"
+        }
+      }
+    },
+    "settingsSource": {
+      "type": "object",
+      "description": "Discriminated by the inner `\"source\"` field. `#[serde(tag = \"source\", rename_all = \"lowercase\")] enum SettingsSource { Git{url}, Github{repo}, Local{path} }`. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:116-128]",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["source", "url"],
+          "properties": {
+            "source": { "const": "git", "description": "Discriminant for the `Git` variant. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:123-125]" },
+            "url": { "type": "string", "description": "Git remote URL. Required field of the `Git` variant. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:125]" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["source", "repo"],
+          "properties": {
+            "source": { "const": "github", "description": "Discriminant for the `Github` variant. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:123-126]" },
+            "repo": { "type": "string", "description": "`owner/repo` shorthand, expanded to `https://github.com/<repo>.git`. Required field of the `Github` variant. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:126,154-155]" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["source", "path"],
+          "properties": {
+            "source": { "const": "local", "description": "Discriminant for the `Local` variant. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:123-127]" },
+            "path": { "type": "string", "description": "Local filesystem path; `~` is expanded to the home directory. Required field of the `Local` variant. [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:127,161-176]" }
+          }
+        }
+      ]
+    }
+  }
+}

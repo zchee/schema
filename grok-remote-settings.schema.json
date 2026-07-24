@@ -1,0 +1,865 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/remote-settings.schema.json",
+  "title": "Grok Build remote settings (GET /v1/settings)",
+  "description": "Informational schema — tracks the `RemoteSettings` struct as of SOURCE_REV 0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899. Server-controlled payload fetched from cli-chat-proxy `GET /v1/settings`; NOT a user-authored config file. Every field is `Option`/`Vec` with `#[serde(default)]`, so nothing is required, unknown keys are tolerated, and `null` deserializes to `None`. Several nested values use tolerant deserializers that coerce wrong types to `None` rather than failing the parse; those fields are described as permissive here. Numeric clamps document the client-honored range (the resolver clamps out-of-range values). [src: crates/codegen/xai-grok-config-types/src/lib.rs:421]",
+  "type": "object",
+  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "properties": {
+    "leader_mode": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, the server recommends enabling leader mode; fallback when `[cli] use_leader` is unset locally. [src: crates/codegen/xai-grok-config-types/src/lib.rs:426]"
+    },
+    "max_upload_file_bytes": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Max per-file upload size in bytes. [src: crates/codegen/xai-grok-config-types/src/lib.rs:428]"
+    },
+    "max_upload_untracked_bytes": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Max aggregate untracked upload size in bytes. [src: crates/codegen/xai-grok-config-types/src/lib.rs:430]"
+    },
+    "non_git_workspace_capture": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, capture workspace files for non-git project dirs (client default: off). [src: crates/codegen/xai-grok-config-types/src/lib.rs:433]"
+    },
+    "login_shell_capture": {
+      "type": ["boolean", "null"],
+      "description": "Whether to capture the login shell environment. [src: crates/codegen/xai-grok-config-types/src/lib.rs:435]"
+    },
+    "scheduler_background_loops": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(false)`, scheduled task fires run as main-conversation turns instead of background subagents. [src: crates/codegen/xai-grok-config-types/src/lib.rs:439]"
+    },
+    "release_channel": {
+      "type": ["string", "null"],
+      "examples": ["stable", "alpha"],
+      "description": "Release channel; documented values `\"stable\"` | `\"alpha\"`. Plain `Option<String>` — any string is accepted by serde (unknown values fall back at the resolve site), so no `enum` constraint. Fallback when no local `[cli] channel` or `--alpha`/`--stable` flag is set. [src: crates/codegen/xai-grok-config-types/src/lib.rs:443]"
+    },
+    "loc_tracking": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable LOC attribution tracking for this session. [src: crates/codegen/xai-grok-config-types/src/lib.rs:446]"
+    },
+    "memory_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the experimental memory system remotely. [src: crates/codegen/xai-grok-config-types/src/lib.rs:449]"
+    },
+    "memory_search_max_results": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Max results returned by memory search. [src: crates/codegen/xai-grok-config-types/src/lib.rs:451]"
+    },
+    "memory_search_min_score": {
+      "type": ["number", "null"],
+      "description": "Minimum similarity score for a memory search hit (f32; typically a 0.0-1.0 score, not clamped at parse time). [src: crates/codegen/xai-grok-config-types/src/lib.rs:453]"
+    },
+    "memory_initial_injection_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Whether to inject top memories at session start. [src: crates/codegen/xai-grok-config-types/src/lib.rs:455]"
+    },
+    "memory_initial_injection_min_score": {
+      "type": ["number", "null"],
+      "description": "Minimum score for initial memory injection (f32; typically a 0.0-1.0 score, not clamped at parse time). [src: crates/codegen/xai-grok-config-types/src/lib.rs:457]"
+    },
+    "memory_embedding_model": {
+      "type": ["string", "null"],
+      "description": "Embedding model id for memory vectors. [src: crates/codegen/xai-grok-config-types/src/lib.rs:459]"
+    },
+    "memory_embedding_dimensions": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Embedding vector dimensionality. [src: crates/codegen/xai-grok-config-types/src/lib.rs:461]"
+    },
+    "pruning_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable turn-history pruning. [src: crates/codegen/xai-grok-config-types/src/lib.rs:463]"
+    },
+    "pruning_keep_last_n_turns": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Number of most-recent turns pruning always keeps. [src: crates/codegen/xai-grok-config-types/src/lib.rs:465]"
+    },
+    "pruning_soft_trim_threshold": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Soft-trim trigger threshold for pruning. [src: crates/codegen/xai-grok-config-types/src/lib.rs:467]"
+    },
+    "flush_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable background memory flush. [src: crates/codegen/xai-grok-config-types/src/lib.rs:469]"
+    },
+    "flush_soft_threshold_tokens": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Token threshold that triggers a soft flush. [src: crates/codegen/xai-grok-config-types/src/lib.rs:471]"
+    },
+    "flush_idle_timeout_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Idle seconds before an automatic flush. [src: crates/codegen/xai-grok-config-types/src/lib.rs:473]"
+    },
+    "flush_semantic_dedup_threshold": {
+      "type": ["number", "null"],
+      "description": "Similarity threshold for semantic dedup on flush (f64; typically a 0.0-1.0 score, not clamped at parse time). [src: crates/codegen/xai-grok-config-types/src/lib.rs:475]"
+    },
+    "memory_temporal_decay_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable temporal decay weighting of memories. [src: crates/codegen/xai-grok-config-types/src/lib.rs:477]"
+    },
+    "memory_temporal_decay_half_life_days": {
+      "type": ["number", "null"],
+      "description": "Half-life in days for temporal memory decay (f64). [src: crates/codegen/xai-grok-config-types/src/lib.rs:479]"
+    },
+    "memory_mmr_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable Maximal Marginal Relevance reranking on memory retrieval. [src: crates/codegen/xai-grok-config-types/src/lib.rs:481]"
+    },
+    "memory_mmr_lambda": {
+      "type": ["number", "null"],
+      "description": "MMR lambda trade-off (f64; typically a 0.0-1.0 weight, not clamped at parse time). [src: crates/codegen/xai-grok-config-types/src/lib.rs:483]"
+    },
+    "memory_watcher_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the filesystem memory watcher. [src: crates/codegen/xai-grok-config-types/src/lib.rs:485]"
+    },
+    "dream_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the background \"dream\" consolidation pass. [src: crates/codegen/xai-grok-config-types/src/lib.rs:487]"
+    },
+    "dream_min_hours": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Minimum hours between dream passes. [src: crates/codegen/xai-grok-config-types/src/lib.rs:489]"
+    },
+    "dream_min_sessions": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Minimum sessions between dream passes. [src: crates/codegen/xai-grok-config-types/src/lib.rs:491]"
+    },
+    "dream_check_interval_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Seconds between dream-eligibility checks. [src: crates/codegen/xai-grok-config-types/src/lib.rs:493]"
+    },
+    "subscription_watch_interval_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Cadence (seconds) of the pager's free-to-paid subscription watch; `0` disables it (pager clamps and defaults). [src: crates/codegen/xai-grok-config-types/src/lib.rs:499]"
+    },
+    "writeback_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable memory write-back. [src: crates/codegen/xai-grok-config-types/src/lib.rs:501]"
+    },
+    "oauth2_issuer": {
+      "type": ["string", "null"],
+      "description": "OAuth2 provider issuer URL (e.g. \"https://auth.x.ai\"); paired with `oauth2_client_id`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:506]"
+    },
+    "oauth2_client_id": {
+      "type": ["string", "null"],
+      "description": "OAuth2 client_id for the CLI; paired with `oauth2_issuer`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:509]"
+    },
+    "grok_oauth_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable grok's default OAuth2 (xAI auth.x.ai); `--oauth` CLI flag overrides. [src: crates/codegen/xai-grok-config-types/src/lib.rs:514]"
+    },
+    "lsp_tools_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the LSP-backed tools. [src: crates/codegen/xai-grok-config-types/src/lib.rs:516]"
+    },
+    "folder_trust_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Folder-trust gate kill-switch / remote default (gates repo-local MCP/LSP servers). `Some(false)` is a kill-switch; `None` falls back to client default (on). [src: crates/codegen/xai-grok-config-types/src/lib.rs:525]"
+    },
+    "write_file_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the file-writing tool. [src: crates/codegen/xai-grok-config-types/src/lib.rs:527]"
+    },
+    "file_toolset": {
+      "type": ["string", "null"],
+      "examples": ["standard", "hashline"],
+      "description": "File toolset; documented values `\"standard\"` | `\"hashline\"`. Plain `Option<String>`, arbitrary strings accepted; local `[toolset] file_toolset` takes precedence. [src: crates/codegen/xai-grok-config-types/src/lib.rs:532]"
+    },
+    "inference_idle_timeout_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Per-chunk idle timeout (seconds) for inference streaming; fallback when no per-model value is set. [src: crates/codegen/xai-grok-config-types/src/lib.rs:536]"
+    },
+    "mcp_startup_timeout_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Global default MCP startup-handshake timeout (seconds), lowest-precedence fallback. [src: crates/codegen/xai-grok-config-types/src/lib.rs:540]"
+    },
+    "max_mcp_output_bytes": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Global default MCP tool-result inline cap (bytes); built-in default 20000, overridden by requirements/env/config. [src: crates/codegen/xai-grok-config-types/src/lib.rs:545]"
+    },
+    "session_registry_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable session registry hooks; absent/`Some(false)` disables all (default: disabled). [src: crates/codegen/xai-grok-config-types/src/lib.rs:549]"
+    },
+    "doom_loop_recovery": {
+      "oneOf": [{ "$ref": "#/definitions/doomLoopRecoverySettings" }, { "type": "null" }],
+      "description": "Doom-loop recovery settings object; absent ⇒ every knob falls through to TOML/defaults, a partial object falls through per-field. [src: crates/codegen/xai-grok-config-types/src/lib.rs:554]"
+    },
+    "worktree_auto_gc": {
+      "oneOf": [{ "$ref": "#/definitions/worktreeAutoGcSettings" }, { "type": "null" }],
+      "description": "Automatic worktree GC policy. Present-but-malformed nested value is dropped to `None` (tolerant deserializer, does not fail the whole `RemoteSettings` parse). [src: crates/codegen/xai-grok-config-types/src/lib.rs:561]"
+    },
+    "todo_gate_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable/disable the runtime turn-end TodoGate remotely; ships disabled. Precedence: CLI `--todo-gate` > this > default false. [src: crates/codegen/xai-grok-config-types/src/lib.rs:568]"
+    },
+    "todo_gate_max_fires_per_prompt": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Hard cap on TodoGate fires per user prompt; no CLI override. [src: crates/codegen/xai-grok-config-types/src/lib.rs:573]"
+    },
+    "auto_wake_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the auto-wake scheduler behavior. [src: crates/codegen/xai-grok-config-types/src/lib.rs:575]"
+    },
+    "cursor_skills_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Cursor skills. [src: crates/codegen/xai-grok-config-types/src/lib.rs:577]"
+    },
+    "cursor_rules_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Cursor rules. [src: crates/codegen/xai-grok-config-types/src/lib.rs:579]"
+    },
+    "cursor_agents_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Cursor agents. [src: crates/codegen/xai-grok-config-types/src/lib.rs:581]"
+    },
+    "claude_skills_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Claude skills. [src: crates/codegen/xai-grok-config-types/src/lib.rs:583]"
+    },
+    "claude_rules_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Claude rules. [src: crates/codegen/xai-grok-config-types/src/lib.rs:585]"
+    },
+    "claude_agents_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Claude agents. [src: crates/codegen/xai-grok-config-types/src/lib.rs:587]"
+    },
+    "cursor_mcps_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Cursor MCP servers. [src: crates/codegen/xai-grok-config-types/src/lib.rs:589]"
+    },
+    "cursor_hooks_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Cursor hooks. [src: crates/codegen/xai-grok-config-types/src/lib.rs:591]"
+    },
+    "claude_mcps_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Claude MCP servers. [src: crates/codegen/xai-grok-config-types/src/lib.rs:593]"
+    },
+    "claude_hooks_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Claude hooks. [src: crates/codegen/xai-grok-config-types/src/lib.rs:595]"
+    },
+    "cursor_sessions_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Cursor sessions. [src: crates/codegen/xai-grok-config-types/src/lib.rs:597]"
+    },
+    "claude_sessions_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Claude sessions. [src: crates/codegen/xai-grok-config-types/src/lib.rs:599]"
+    },
+    "codex_sessions_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable importing Codex sessions. [src: crates/codegen/xai-grok-config-types/src/lib.rs:601]"
+    },
+    "goal_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable goal mode remotely; `Some(false)` is a kill-switch; absent ⇒ client default (enabled). [src: crates/codegen/xai-grok-config-types/src/lib.rs:606]"
+    },
+    "goal_classifier_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the goal-completion classifier; absent ⇒ tracks goal mode. [src: crates/codegen/xai-grok-config-types/src/lib.rs:611]"
+    },
+    "goal_planner_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the goal planner; absent ⇒ tracks goal mode. [src: crates/codegen/xai-grok-config-types/src/lib.rs:616]"
+    },
+    "goal_summary_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the goal summarizer (closing summary on a verified achievement); `Some(false)` kill-switch; absent ⇒ tracks goal mode. [src: crates/codegen/xai-grok-config-types/src/lib.rs:622]"
+    },
+    "goal_verifier_count": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Number of adversarial skeptics per goal-verification attempt; clamped to 1..=5 at the resolver (client-honored range encoded here). Absent ⇒ harness default (3 today). [src: crates/codegen/xai-grok-config-types/src/lib.rs:628]"
+    },
+    "goal_classifier_max_runs": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Max per-goal classifier runs before auto-pause; clamped to 1..=10 at the resolver (client-honored range encoded here). Absent ⇒ harness default (3 today). [src: crates/codegen/xai-grok-config-types/src/lib.rs:634]"
+    },
+    "goal_strategist_every": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Fire the stall-triggered strategist every N consecutive NotAchieved verifications; clamped to >= 1 at the resolver. Absent ⇒ max(1, goal_classifier_max_runs / 2). [src: crates/codegen/xai-grok-config-types/src/lib.rs:639]"
+    },
+    "goal_planner_model": {
+      "allOf": [{ "$ref": "#/definitions/goalRoleModel" }],
+      "description": "Planner role model+harness pair. Tolerant deserializer: a present-but-malformed value (or explicit null) is dropped to `None` rather than failing the parse, so real servers may send other shapes; the well-formed object shape is modeled here. Absent ⇒ inherit current model. [src: crates/codegen/xai-grok-config-types/src/lib.rs:649]"
+    },
+    "goal_strategist_model": {
+      "allOf": [{ "$ref": "#/definitions/goalRoleModel" }],
+      "description": "Strategist role model+harness pair. Tolerant deserializer (malformed/null ⇒ `None`). Absent ⇒ inherit current model. [src: crates/codegen/xai-grok-config-types/src/lib.rs:658]"
+    },
+    "goal_skeptic_models": {
+      "type": ["array", "null"],
+      "items": { "$ref": "#/definitions/goalRoleModel" },
+      "description": "Ordered skeptic model pool (skeptics 1..N assigned round-robin). Tolerant deserializer: a non-array value (or null/absent) yields an empty pool and each malformed entry is dropped; survivor order is preserved. Well-formed entries modeled here. [src: crates/codegen/xai-grok-config-types/src/lib.rs:669]"
+    },
+    "workflows_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the workflows feature remotely. [src: crates/codegen/xai-grok-config-types/src/lib.rs:671]"
+    },
+    "managed_mcps_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Remote fallback for managed MCP connector fetching. [src: crates/codegen/xai-grok-config-types/src/lib.rs:674]"
+    },
+    "managed_mcp_gateway_tools_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable managed MCP gateway tools. [src: crates/codegen/xai-grok-config-types/src/lib.rs:676]"
+    },
+    "external_otel_disabled": {
+      "type": ["boolean", "null"],
+      "description": "Fleet kill-switch for the external OTEL stream (customer collectors); tighten-only. [src: crates/codegen/xai-grok-config-types/src/lib.rs:685]"
+    },
+    "external_otel_content_gates_locked": {
+      "type": ["boolean", "null"],
+      "description": "Force the external stream's content gates off regardless of local env/config; tighten-only. [src: crates/codegen/xai-grok-config-types/src/lib.rs:690]"
+    },
+    "telemetry_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Master telemetry enable flag. [src: crates/codegen/xai-grok-config-types/src/lib.rs:692]"
+    },
+    "telemetry_mode": {
+      "type": ["string", "null"],
+      "examples": ["session-metrics", "full", "off"],
+      "description": "Telemetry mode override; documented values `\"session-metrics\"` | `\"full\"` | `\"off\"`. Plain `Option<String>`, arbitrary strings accepted; takes precedence over `telemetry_enabled` when present. [src: crates/codegen/xai-grok-config-types/src/lib.rs:696]"
+    },
+    "trace_upload_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable trace upload. [src: crates/codegen/xai-grok-config-types/src/lib.rs:698]"
+    },
+    "feedback_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable user-facing feedback (heuristic popups, `/feedback`). [src: crates/codegen/xai-grok-config-types/src/lib.rs:703]"
+    },
+    "two_pass_compaction_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Two-pass (prefire) compaction; `Some(true)` enables, `Some(false)` forces off, `None` falls back to local config/env/default (off). [src: crates/codegen/xai-grok-config-types/src/lib.rs:712]"
+    },
+    "tips": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Dynamic tip list; one is shown at startup (rotated daily by UTC day). `None` or `[]` = no tips. [src: crates/codegen/xai-grok-config-types/src/lib.rs:717]"
+    },
+    "non_git_warning": {
+      "type": ["boolean", "null"],
+      "description": "Controls the non-Git-repo warning at session start; `Some(false)` is a kill-switch; `None` falls back to `[features] non_git_warning`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:723]"
+    },
+    "official_marketplace_auto_register": {
+      "type": ["boolean", "null"],
+      "description": "Gate for first-run auto-registration of the official xAI marketplace source; `None` falls back to env/default (off). [src: crates/codegen/xai-grok-config-types/src/lib.rs:728]"
+    },
+    "plugin_cta": {
+      "type": ["boolean", "null"],
+      "description": "Gate for the inline plugin-install CTA (keyword-matched marketplace upsell); `None` falls back to env/default (off). [src: crates/codegen/xai-grok-config-types/src/lib.rs:733]"
+    },
+    "announcements": {
+      "type": ["array", "null"],
+      "items": { "$ref": "#/definitions/remoteAnnouncement" },
+      "description": "Remote announcements list. Tolerant deserializer: malformed items are skipped; a non-array value ⇒ `None`. `None` or `[]` = nothing to display. [src: crates/codegen/xai-grok-config-types/src/lib.rs:737]"
+    },
+    "web_search_model": {
+      "type": ["string", "null"],
+      "description": "Model id used for web search. [src: crates/codegen/xai-grok-config-types/src/lib.rs:739]"
+    },
+    "session_summary_model": {
+      "type": ["string", "null"],
+      "description": "Model id used for session summaries. [src: crates/codegen/xai-grok-config-types/src/lib.rs:741]"
+    },
+    "image_description_model": {
+      "type": ["string", "null"],
+      "description": "Model id used to describe images. [src: crates/codegen/xai-grok-config-types/src/lib.rs:743]"
+    },
+    "prompt_suggestion_model": {
+      "type": ["string", "null"],
+      "description": "Server-side pin for the next-prompt suggestion model (tab-autocomplete ghost text); catalog-guarded at use. [src: crates/codegen/xai-grok-config-types/src/lib.rs:753]"
+    },
+    "default_model": {
+      "type": ["string", "null"],
+      "description": "Server-recommended default model id for new sessions. [src: crates/codegen/xai-grok-config-types/src/lib.rs:756]"
+    },
+    "campaigns": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/campaignOverride" },
+      "description": "Remote `campaigns[]` overlays: each an `id` gate plus a flattened config patch. Plain `Vec<CampaignOverride>` with `#[serde(default)]` — absent key ⇒ empty list. [src: crates/codegen/xai-grok-config-types/src/lib.rs:758]"
+    },
+    "auto_background_on_timeout": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, foreground commands that hit the default timeout are auto-backgrounded; fallback for `[toolset.bash] auto_background_on_timeout`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:763]"
+    },
+    "allow_background_operator": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(false)`, foreground commands containing a background `&` operator are rejected; absent ⇒ client default (allow). [src: crates/codegen/xai-grok-config-types/src/lib.rs:768]"
+    },
+    "ask_user_question_timeout_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Fallback for `[toolset.ask_user_question] timeout_enabled`; when `Some(false)`, questionnaires wait forever unless a higher tier sets otherwise. [src: crates/codegen/xai-grok-config-types/src/lib.rs:773]"
+    },
+    "ask_user_question_timeout_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Fallback for `[toolset.ask_user_question] timeout_secs` (positive seconds); absent ⇒ client default (1800). [src: crates/codegen/xai-grok-config-types/src/lib.rs:777]"
+    },
+    "subagent_worktree_snapshot_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, a completed subagent's isolated worktree is snapshotted into a durable git ref; absent ⇒ disabled (ships dark). [src: crates/codegen/xai-grok-config-types/src/lib.rs:783]"
+    },
+    "image_gen_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable the `image_gen` tool for session-auth users; absent/`Some(false)` hides it. [src: crates/codegen/xai-grok-config-types/src/lib.rs:787]"
+    },
+    "image_gen_model_override": {
+      "type": ["string", "null"],
+      "description": "Optional Imagine model override for `image_gen`; absent/empty ⇒ default quality model. [src: crates/codegen/xai-grok-config-types/src/lib.rs:793]"
+    },
+    "video_gen_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable the `video_gen` tool for session-auth users; absent/`Some(false)` hides it. [src: crates/codegen/xai-grok-config-types/src/lib.rs:797]"
+    },
+    "image_normalize_cache_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable the process-wide image normalize cache; default disabled. [src: crates/codegen/xai-grok-config-types/src/lib.rs:802]"
+    },
+    "path_not_found_hints": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enrich path-not-found errors with CWD reminders and \"did you mean?\" corrections. [src: crates/codegen/xai-grok-config-types/src/lib.rs:807]"
+    },
+    "contextual_hints": {
+      "oneOf": [{ "$ref": "#/definitions/contextualHintsRemote" }, { "type": "null" }],
+      "description": "Remote enable tier for per-tip contextual hints; each field is a soft default (absent/null ⇒ client default on). User config beats this tier. [src: crates/codegen/xai-grok-config-types/src/lib.rs:812]"
+    },
+    "worktree_type": {
+      "type": ["string", "null"],
+      "description": "Server-recommended worktree creation type; fallback when no local `[cli] worktree_type` is set. [src: crates/codegen/xai-grok-config-types/src/lib.rs:816]"
+    },
+    "restore_code": {
+      "type": ["boolean", "null"],
+      "description": "Server-recommended default for `restore_code` in worktree resume; fallback for local `[cli] restore_code`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:820]"
+    },
+    "cancel_rewind_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, Ctrl+C before first server activity rewinds the prompt back into the input box instead of cancelling the turn. [src: crates/codegen/xai-grok-config-types/src/lib.rs:824]"
+    },
+    "session_recap": {
+      "type": ["boolean", "null"],
+      "description": "Enables the session recap feature (`/recap` + automatic return-from-away); remote kill-switch, shell defaults ON when unset. [src: crates/codegen/xai-grok-config-types/src/lib.rs:828]"
+    },
+    "ask_user_question_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enables the `ask_user_question` tool; `Some(false)` strips it, `Some(true)`/absent ⇒ shell default (ON). [src: crates/codegen/xai-grok-config-types/src/lib.rs:833]"
+    },
+    "web_fetch_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable the `web_fetch` tool; absent/`Some(false)` ⇒ not registered. [src: crates/codegen/xai-grok-config-types/src/lib.rs:838]"
+    },
+    "web_fetch_proxy": {
+      "type": ["string", "null"],
+      "description": "Egress proxy endpoint for the web_fetch tool; fallback for local `[toolset.web_fetch] proxy_endpoint`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:842]"
+    },
+    "web_fetch_allowed_domains": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Domain allowlist for the web_fetch tool; fallback for local `[toolset.web_fetch] allowed_domains`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:846]"
+    },
+    "show_resolved_model": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(false)`, hide the resolved model id in /session-info. [src: crates/codegen/xai-grok-config-types/src/lib.rs:849]"
+    },
+    "sharing_enabled": {
+      "type": ["boolean", "null"],
+      "description": "When `Some(true)`, enable session sharing; absent/`Some(false)` ⇒ disabled. [src: crates/codegen/xai-grok-config-types/src/lib.rs:853]"
+    },
+    "voice_mode_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Voice mode (STT dictation); client default on when absent, `Some(false)` is a remote kill-switch. [src: crates/codegen/xai-grok-config-types/src/lib.rs:859]"
+    },
+    "zdr_access_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Whether ZDR (Zero Data Retention) users may use the product; default false (blocked) during beta. [src: crates/codegen/xai-grok-config-types/src/lib.rs:863]"
+    },
+    "remember_tool_approvals": {
+      "type": ["boolean", "null"],
+      "description": "Tier of the `remember_tool_approvals` gate (whether per-tool \"Always allow …\" options show); default false. [src: crates/codegen/xai-grok-config-types/src/lib.rs:868]"
+    },
+    "crash_handler_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Tier of the crash-handler install gate; lowest precedence, default off, `Some(false)` is a kill-switch. [src: crates/codegen/xai-grok-config-types/src/lib.rs:872]"
+    },
+    "show_thinking_blocks": {
+      "type": ["boolean", "null"],
+      "description": "Whether the TUI shows agent thinking/reasoning blocks; `None` defers to local/env/default (true), `Some(false)` is a kill-switch. [src: crates/codegen/xai-grok-config-types/src/lib.rs:879]"
+    },
+    "group_tool_verbs": {
+      "type": ["boolean", "null"],
+      "description": "Whether the TUI folds consecutive non-destructive tool calls into one row; `None` defers to local/env/default (true), `Some(false)` is a kill-switch. [src: crates/codegen/xai-grok-config-types/src/lib.rs:886]"
+    },
+    "collapsed_edit_blocks": {
+      "type": ["boolean", "null"],
+      "description": "Whether the TUI shows Edit tool calls as a collapsed diffstat and merges back-to-back edits; `None` defers to local/env/default (false), `Some(false)` is a kill-switch. [src: crates/codegen/xai-grok-config-types/src/lib.rs:896]"
+    },
+    "display_refresh": {
+      "oneOf": [{ "$ref": "#/definitions/displayRefreshSettings" }, { "type": "null" }],
+      "description": "Display-refresh probe + auto-cadence settings; a partial object falls through per-field. [src: crates/codegen/xai-grok-config-types/src/lib.rs:900]"
+    },
+    "auto_mode": {
+      "description": "Raw remote JSON for the `[auto_mode]` table (gate `enabled`, `prompt_type`, `classifier_model`); coerced into the shell's typed `AutoModeConfig`. Field is `Option<serde_json::Value>`, so ANY JSON value (object/scalar/array/null) is accepted. [src: crates/codegen/xai-grok-config-types/src/lib.rs:906]"
+    },
+    "permission_mode": {
+      "type": ["string", "null"],
+      "examples": ["ask", "auto", "always-approve", "default"],
+      "description": "Soft default permission mode; documented values `\"ask\"` | `\"auto\"` | `\"always-approve\"` | `\"default\"`. Plain `Option<String>`, arbitrary strings accepted; used only when no effective TOML permission key is set. [src: crates/codegen/xai-grok-config-types/src/lib.rs:910]"
+    },
+    "subscription_tier": {
+      "type": ["string", "null"],
+      "examples": ["free", "premium", "supergrok", "supergrok_heavy"],
+      "description": "User's subscription tier from `grok_build_access_gate`; stamped on analytics + user profile. Plain `Option<String>`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:915]"
+    },
+    "gate_message": {
+      "type": ["string", "null"],
+      "description": "Access-gate message text. [src: crates/codegen/xai-grok-config-types/src/lib.rs:917]"
+    },
+    "gate_url": {
+      "type": ["string", "null"],
+      "description": "Access-gate URL. [src: crates/codegen/xai-grok-config-types/src/lib.rs:919]"
+    },
+    "gate_label": {
+      "type": ["string", "null"],
+      "description": "Access-gate label text. [src: crates/codegen/xai-grok-config-types/src/lib.rs:921]"
+    },
+    "session_picker_grouped": {
+      "type": ["boolean", "null"],
+      "description": "Whether the session picker groups entries by repo name; `None`/`Some(false)` ⇒ flat list. [src: crates/codegen/xai-grok-config-types/src/lib.rs:925]"
+    },
+    "allow_access": {
+      "type": ["boolean", "null"],
+      "description": "Whether the user may use Grok Build (set by `grok_build_access_gate`); `None` = no server response yet, `Some(false)` = blocked. [src: crates/codegen/xai-grok-config-types/src/lib.rs:930]"
+    },
+    "subscription_tier_display": {
+      "type": ["string", "null"],
+      "examples": ["SuperGrok", "X Premium+", "Free", "API Key"],
+      "description": "User-friendly display name for the subscription tier. Plain `Option<String>`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:937]"
+    },
+    "on_demand_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Whether on-demand credit usage is enabled; when `Some(false)`, on-demand cap changes are blocked. [src: crates/codegen/xai-grok-config-types/src/lib.rs:941]"
+    },
+    "usage_billing_redirect_url": {
+      "type": ["string", "null"],
+      "description": "When non-empty, `/usage` shows a link to this URL instead of fetching billing data; `None`/empty keeps default behavior. [src: crates/codegen/xai-grok-config-types/src/lib.rs:948]"
+    },
+    "suggestions_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable the shell command suggestion pipeline remotely. [src: crates/codegen/xai-grok-config-types/src/lib.rs:951]"
+    },
+    "suggestions_ai_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Enable AI-powered shell command suggestions remotely. [src: crates/codegen/xai-grok-config-types/src/lib.rs:954]"
+    },
+    "auto_compact_threshold_percent": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 255,
+      "description": "Global auto-compact threshold percent from `grok_build_settings`. Field is `u8` so serde accepts 0..=255 (maximum 255 encoded); the value is a percentage (semantically 0-100). Per-model override, user config, and env further override. [src: crates/codegen/xai-grok-config-types/src/lib.rs:960]"
+    },
+    "system_prompt_label": {
+      "type": ["string", "null"],
+      "description": "Global system-prompt identity label; per-model override wins. [src: crates/codegen/xai-grok-config-types/src/lib.rs:964]"
+    },
+    "compaction_wall_clock_budget_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Global per-compaction wall-clock budget (seconds); `0` disables. Env override applies. [src: crates/codegen/xai-grok-config-types/src/lib.rs:969]"
+    },
+    "compaction_mode": {
+      "type": ["string", "null"],
+      "examples": ["summary", "transcript", "segments"],
+      "description": "Compaction mode; documented values `\"summary\"` | `\"transcript\"` | `\"segments\"`. Plain `Option<String>`, arbitrary strings accepted; env and user config override. [src: crates/codegen/xai-grok-config-types/src/lib.rs:973]"
+    },
+    "compaction_detail": {
+      "type": ["string", "null"],
+      "examples": ["none", "minimal", "balanced", "verbose"],
+      "description": "Segments verbatim detail; documented values `\"none\"` | `\"minimal\"` | `\"balanced\"` | `\"verbose\"`. Plain `Option<String>`, arbitrary strings accepted; env and config override. [src: crates/codegen/xai-grok-config-types/src/lib.rs:977]"
+    },
+    "compaction_verbatim_input": {
+      "type": ["boolean", "null"],
+      "description": "Verbatim-input flag; env and config override; `None` = default (true). [src: crates/codegen/xai-grok-config-types/src/lib.rs:980]"
+    },
+    "compaction_tool_choice": {
+      "type": ["string", "null"],
+      "description": "Compaction tool-choice override. Plain `Option<String>`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:982]"
+    },
+    "imagine_tools_disabled": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Denylist of optional imagine tools to disable (e.g. [\"image_edit\"]); a listed tool is authoritatively removed and local env/config can't re-enable it. [src: crates/codegen/xai-grok-config-types/src/lib.rs:989]"
+    },
+    "workspace_command_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Gate for the `grok workspace` CLI command (Computer Hub workspace exposure); `Some(true)` enables, `None`/`Some(false)` keep it off. [src: crates/codegen/xai-grok-config-types/src/lib.rs:994]"
+    },
+    "jemalloc_heap_profile_enabled": {
+      "type": ["boolean", "null"],
+      "description": "Master switch for jemalloc heap sampling + threshold dumps; `Some(false)` kill-switch, `None` = client default off. [src: crates/codegen/xai-grok-config-types/src/lib.rs:998]"
+    },
+    "jemalloc_heap_profile_thresholds_bytes": {
+      "type": ["array", "null"],
+      "items": { "type": "integer", "minimum": 0 },
+      "description": "Resident-byte thresholds (u64 items, e.g. 2G/5G/10G as byte counts); `None` and `[]` are distinct on the wire. [src: crates/codegen/xai-grok-config-types/src/lib.rs:1002]"
+    },
+    "jemalloc_heap_profile_poll_interval_secs": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Stats poll interval in seconds when set. [src: crates/codegen/xai-grok-config-types/src/lib.rs:1005]"
+    }
+  },
+  "definitions": {
+    "doomLoopRecoverySettings": {
+      "type": "object",
+      "description": "Doom-loop recovery settings (one struct for local `[doom_loop_recovery]` TOML and remote `doom_loop_recovery` JSON); all fields optional with per-field defaults. [src: crates/codegen/xai-grok-config-types/src/lib.rs:38]",
+      "properties": {
+        "enabled": {
+          "type": ["boolean", "null"],
+          "description": "Send the doom-loop-check header and parse reported triggers; `Some(false)` is a kill-switch, absent ⇒ client default (off). [src: crates/codegen/xai-grok-config-types/src/lib.rs:42]"
+        },
+        "max_threshold": {
+          "type": ["integer", "null"],
+          "minimum": 2,
+          "maximum": 64,
+          "default": 8,
+          "description": "Highest tail_repetition threshold considered confident; clamped to 2..=64 (client-honored range encoded here). Absent ⇒ client default 8. [src: crates/codegen/xai-grok-config-types/src/lib.rs:48]"
+        },
+        "max_retries": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 5,
+          "default": 2,
+          "description": "Resample budget per turn; clamped to 0..=5 (client-honored range encoded here). Absent ⇒ client default 2. [src: crates/codegen/xai-grok-config-types/src/lib.rs:52]"
+        }
+      }
+    },
+    "worktreeAutoGcSettings": {
+      "type": "object",
+      "description": "Local `[worktree.auto_gc]` / remote `worktree_auto_gc` policy. Field-wise tolerant deserialize (a bad key cannot drop a sibling kill-switch); wrong-typed scalar fields coerce to `None` and are never a parse error, so each scalar is permissive here. [src: crates/codegen/xai-grok-config-types/src/lib.rs:107]",
+      "properties": {
+        "enabled": {
+          "description": "`Some(false)` kill-switch; absent ⇒ default on. Intended bool; tolerant — wrong types coerce to `None` (never rejected). [src: crates/codegen/xai-grok-config-types/src/lib.rs:114]"
+        },
+        "max_age_secs": {
+          "description": "Age cutoff seconds when platform age-expiry is allowed; clamped by resolver. Intended non-negative integer; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:121]"
+        },
+        "min_interval_secs": {
+          "description": "Min seconds between successful auto-GC stamps; clamped by resolver. Intended non-negative integer; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:128]"
+        },
+        "dry_run": {
+          "description": "Count age candidates without deleting. Intended bool; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:135]"
+        },
+        "include_orphan_snapshots": {
+          "description": "Linux only. Intended bool; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:142]"
+        },
+        "max_age_by_kind": {
+          "type": ["object", "null"],
+          "additionalProperties": { "$ref": "#/definitions/worktreeKindMaxAge" },
+          "description": "Per-kind max ages. Recognized keys: `session`/`ab`/`pool`/`fork`/`manual`/`subagent` (unknown kind keys are accepted then ignored at resolve). Tolerant: a non-object whole value coerces to `None`; a per-entry invalid value is silently dropped. Each value is seconds, `\"never\"`, or null. [src: crates/codegen/xai-grok-config-types/src/lib.rs:152]"
+        },
+        "include_rebuild": {
+          "description": "Optional discovery rebuild + stale `.git/worktrees/` prune (default off). Intended bool; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:159]"
+        },
+        "rebuild_min_interval_secs": {
+          "description": "Independent rebuild throttle seconds; absent ⇒ 24h. Intended non-negative integer; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:166]"
+        }
+      }
+    },
+    "worktreeKindMaxAge": {
+      "description": "Per-kind age policy for auto-GC: non-negative integer seconds, the literal string `\"never\"`, or null (⇒ Never). Hand-written visitor also accepts a numeric string and case-insensitive \"never\"; the server only ever emits a u64 number or `\"never\"`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:56]",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Age cutoff in seconds. [src: crates/codegen/xai-grok-config-types/src/lib.rs:57]"
+        },
+        {
+          "const": "never",
+          "description": "Literal `\"never\"`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:58]"
+        },
+        {
+          "type": "null",
+          "description": "null / unit ⇒ Never. [src: crates/codegen/xai-grok-config-types/src/lib.rs:93]"
+        }
+      ]
+    },
+    "goalRoleModel": {
+      "type": "object",
+      "required": ["model", "agent_type"],
+      "description": "A model + harness `agent_type` pair; the atomic configurable unit (a model is only guaranteed to work with a compatible harness). Both fields are required strings for a well-formed value. [src: crates/codegen/xai-grok-config-types/src/lib.rs:1135]",
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Model id, e.g. \"grok-4\"; resolved against available models at spawn time (unknown/unauthorized ⇒ fail-open to current model). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1138]"
+        },
+        "agent_type": {
+          "type": "string",
+          "description": "Harness `agent_type` (e.g. \"cursor\", \"grok-build-plan\") whose AgentDefinition decides the role subagent's harness flavor; resolved by name, fails open before commit. [src: crates/codegen/xai-grok-config-types/src/lib.rs:1150]"
+        }
+      }
+    },
+    "contextualHintsRemote": {
+      "type": "object",
+      "description": "Remote enable tier for per-tip contextual hints (mirrors the client's `[ui.contextual_hints]` shape); each field is a soft default, `None` defers to the client default (on). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1022]",
+      "properties": {
+        "undo": {
+          "type": ["boolean", "null"],
+          "description": "Undo tip (Ctrl+Z after a substantial draft wipe). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1025]"
+        },
+        "plan_mode": {
+          "type": ["boolean", "null"],
+          "description": "Plan-mode nudge (typing a planning keyword). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1028]"
+        },
+        "image_input": {
+          "type": ["boolean", "null"],
+          "description": "Clipboard-image input tip. [src: crates/codegen/xai-grok-config-types/src/lib.rs:1031]"
+        },
+        "send_now": {
+          "type": ["boolean", "null"],
+          "description": "Send-now tip after queuing a mid-turn follow-up (InterjectPrompt chord). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1034]"
+        },
+        "small_screen": {
+          "type": ["boolean", "null"],
+          "description": "Small-screen tip (`/compact-mode` hint on smallish terminals). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1037]"
+        },
+        "word_select": {
+          "type": ["boolean", "null"],
+          "description": "Word-select tip after double-click fold/nav. [src: crates/codegen/xai-grok-config-types/src/lib.rs:1040]"
+        },
+        "ssh_wrap": {
+          "type": ["boolean", "null"],
+          "description": "SSH wrap session-load tip (recommend `grok wrap ssh` for remote sessions). [src: crates/codegen/xai-grok-config-types/src/lib.rs:1043]"
+        }
+      }
+    },
+    "displayRefreshSettings": {
+      "type": "object",
+      "description": "Display-refresh probe + auto-cadence settings (one struct for local `[ui.display_refresh]`, remote `display_refresh`, and `UiConfig`). Field-wise tolerant deserialize (wrong types ⇒ `None`); unknown keys are preserved in a flatten `extra` catch-all, so `additionalProperties` are kept. Client defaults: probe on, auto off, floor 8ms, ceiling 16ms, Hz band 55-165. [src: crates/codegen/xai-grok-config-types/src/lib.rs:176]",
+      "properties": {
+        "probe_enabled": {
+          "description": "Once-per-process primary-display Hz probe; `Some(false)` is a kill-switch. Intended bool; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:183]"
+        },
+        "auto_cadence_enabled": {
+          "description": "Derive paint/scroll cadence from a successful probe (default off). Intended bool; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:190]"
+        },
+        "floor_ms": {
+          "default": 8,
+          "description": "Lower clamp for auto-derived ms (default 8). Intended u32; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:197]"
+        },
+        "ceiling_ms": {
+          "default": 16,
+          "description": "Upper clamp for auto-derived ms (default 16). Intended u32; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:204]"
+        },
+        "min_hz": {
+          "default": 55,
+          "description": "Minimum accepted probe Hz for auto-cadence (default 55). Intended u32; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:211]"
+        },
+        "max_hz": {
+          "default": 165,
+          "description": "Maximum accepted probe Hz for auto-cadence (default 165). Intended u32; tolerant — wrong types coerce to `None`. [src: crates/codegen/xai-grok-config-types/src/lib.rs:218]"
+        }
+      }
+    },
+    "campaignOverride": {
+      "type": "object",
+      "description": "A remote `campaigns[]` entry: an `id` gate plus a full-power flattened config patch (the JSON sibling of a `[[campaigns]]` TOML override). The patch is a flatten catch-all, so arbitrary sibling keys are expected (`additionalProperties` kept). [src: crates/codegen/xai-grok-config-types/src/lib.rs:23]",
+      "properties": {
+        "id": {
+          "type": ["string", "null"],
+          "description": "Campaign id gate (alias `campaign_id`). [src: crates/codegen/xai-grok-config-types/src/lib.rs:25]"
+        },
+        "campaign_id": {
+          "type": ["string", "null"],
+          "description": "Alias for `id` (`#[serde(alias = \"campaign_id\")]`); both spellings deserialize into the same field. [src: crates/codegen/xai-grok-config-types/src/lib.rs:24]"
+        }
+      }
+    },
+    "remoteAnnouncement": {
+      "type": "object",
+      "description": "Announcement from remote settings or local override; every field is optional and tolerant (malformed items are dropped by the parent list deserializer). [src: crates/codegen/xai-grok-announcements/src/lib.rs:20]",
+      "properties": {
+        "id": {
+          "type": ["string", "null"],
+          "description": "Stable announcement id (used as the hide key). [src: crates/codegen/xai-grok-announcements/src/lib.rs:22]"
+        },
+        "message": {
+          "type": ["string", "null"],
+          "description": "Announcement body text. [src: crates/codegen/xai-grok-announcements/src/lib.rs:24]"
+        },
+        "severity": {
+          "type": ["string", "null"],
+          "description": "Severity label. [src: crates/codegen/xai-grok-announcements/src/lib.rs:26]"
+        },
+        "title": {
+          "type": ["string", "null"],
+          "description": "Announcement title. [src: crates/codegen/xai-grok-announcements/src/lib.rs:28]"
+        },
+        "cta": {
+          "oneOf": [{ "$ref": "#/definitions/announcementCta" }, { "type": "null" }],
+          "description": "Optional call-to-action link/button. [src: crates/codegen/xai-grok-announcements/src/lib.rs:30]"
+        },
+        "updated_at": {
+          "type": ["string", "null"],
+          "description": "Last-updated timestamp string. [src: crates/codegen/xai-grok-announcements/src/lib.rs:32]"
+        },
+        "expires_at": {
+          "type": ["string", "null"],
+          "description": "Expiry timestamp string. [src: crates/codegen/xai-grok-announcements/src/lib.rs:34]"
+        },
+        "dismissible": {
+          "type": ["boolean", "null"],
+          "description": "Whether the user may dismiss the announcement. [src: crates/codegen/xai-grok-announcements/src/lib.rs:36]"
+        },
+        "persistent": {
+          "type": ["boolean", "null"],
+          "description": "Whether the announcement persists across sessions. [src: crates/codegen/xai-grok-announcements/src/lib.rs:38]"
+        }
+      }
+    },
+    "announcementCta": {
+      "type": "object",
+      "description": "Optional call-to-action on an announcement (clients render it as a clickable link/button); the server only emits it with both fields non-empty and the url https, kept tolerant here. [src: crates/codegen/xai-grok-announcements/src/lib.rs:48]",
+      "properties": {
+        "label": {
+          "type": ["string", "null"],
+          "description": "Button label text. [src: crates/codegen/xai-grok-announcements/src/lib.rs:50]"
+        },
+        "url": {
+          "type": ["string", "null"],
+          "description": "Target URL (https). [src: crates/codegen/xai-grok-announcements/src/lib.rs:52]"
+        },
+        "caption": {
+          "type": ["string", "null"],
+          "description": "Optional dim helper text after the button; absent = none. [src: crates/codegen/xai-grok-announcements/src/lib.rs:54]"
+        }
+      }
+    }
+  }
+}
