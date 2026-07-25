@@ -1,48 +1,49 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/sandbox-config.schema.json",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/grok-sandbox-config.schema.json",
   "title": "Grok Sandbox Custom Profiles",
-  "description": "`~/.grok/sandbox.toml` (global) and `<workspace>/.grok/sandbox.toml` (project) — a map of custom sandbox profile name to `ProfileConfig`, under `[profiles.<name>]`. Only CUSTOM profile names live here; the five built-ins (`workspace` default, `devbox`, `read-only`/`readonly`, `strict`, `off`/`none`) are code-resolved and never looked up in this table. `load_sandbox_config` loads the global file first as the base `SandboxConfig`, then merges the project file ADDITIVELY ONLY (`config.profiles.entry(name).or_insert(profile)`) — a project file CANNOT redefine or override a profile name already present in the global file; this prevents a workspace from hollowing out a trusted custom profile while keeping its name. `deny` paths are kernel-enforced (read + write/rename) on both platforms regardless of which base profile was extended. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:1-4,39-127]",
+  "description": "`~/.grok/sandbox.toml` (global) and `<workspace>/.grok/sandbox.toml` (project) — a map of custom sandbox profile name to `ProfileConfig`, under `[profiles.<name>]`. Only CUSTOM profile names live here; the five built-ins (`workspace` default, `devbox`, `read-only`/`readonly`, `strict`, `off`/`none`) are code-resolved and never looked up in this table. `load_sandbox_config` loads the global file first as the base `SandboxConfig`, then merges the project file ADDITIVELY ONLY (`config.profiles.entry(name).or_insert(profile)`) — a project file CANNOT redefine or override a profile name already present in the global file; this prevents a workspace from hollowing out a trusted custom profile while keeping its name. `deny` paths are kernel-enforced (read + write/rename) on both platforms regardless of which base profile was extended.",
   "type": "object",
-  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "x-source-rev": "9b8d35b46d959c042ea9aa31cbbebbd1f0c5c527",
   "properties": {
     "profiles": {
       "type": "object",
       "default": {},
-      "description": "`#[serde(default)] HashMap<String, ProfileConfig>` on `SandboxConfig` — the sole field; the TOML table key under `[profiles.<name>]` is the custom profile's name (referenced elsewhere as `extends = \"<name>\"` or a sandbox-profile CLI selection resolving to `ProfileName::Custom(name)`). [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:53-57]",
+      "description": "`#[serde(default)] HashMap<String, ProfileConfig>` on `SandboxConfig` — the sole field; the TOML table key under `[profiles.<name>]` is the custom profile's name (referenced elsewhere as `extends = \"<name>\"` or a sandbox-profile CLI selection resolving to `ProfileName::Custom(name)`).",
       "additionalProperties": { "$ref": "#/definitions/profileConfig" }
     }
   },
   "definitions": {
     "profileConfig": {
       "type": "object",
-      "description": "`struct ProfileConfig` — all five fields are optional/defaulted; no `rename_all`, no aliases, literal snake_case TOML keys. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:39-51]",
+      "description": "`struct ProfileConfig` — all five fields are optional/defaulted; no `rename_all`, no aliases, literal snake_case TOML keys.",
       "properties": {
         "extends": {
           "enum": ["workspace", "devbox", "read-only", "readonly", "strict"],
-          "description": "Base built-in profile this custom profile extends, resolved via `ProfileName::from_str`. `#[serde(default)] Option<String>`; absent (`None`) defaults to extending `workspace`. DEPTH-1 ONLY: the base must be one of the four non-`off` built-ins (`workspace`/`devbox`/`read-only` — `readonly` is an accepted alias spelling with no hyphen — /`strict`); `extends = \"off\"`/`\"none\"` is a HARD ERROR (`bail!`), and naming ANOTHER custom profile is also a hard error — custom profiles cannot chain-extend other custom profiles. The resolved base's `read_only`/`read_write`/`deny`/`default_read`/`restrict_network` seed this profile before this profile's own overrides (below) are applied. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:41-42,89-103,413-445]"
+          "default": "workspace",
+          "description": "Base built-in profile this custom profile extends, resolved via `ProfileName::from_str`. `#[serde(default)] Option<String>`; absent (`None`) defaults to extending `workspace`. DEPTH-1 ONLY: the base must be one of the four non-`off` built-ins (`workspace`/`devbox`/`read-only` — `readonly` is an accepted alias spelling with no hyphen — /`strict`); `extends = \"off\"`/`\"none\"` is a HARD ERROR (`bail!`), and naming ANOTHER custom profile is also a hard error — custom profiles cannot chain-extend other custom profiles. The resolved base's `read_only`/`read_write`/`deny`/`default_read`/`restrict_network` seed this profile before this profile's own overrides (below) are applied."
         },
         "restrict_network": {
           "type": ["boolean", "null"],
-          "description": "When `Some(_)`, REPLACES (not merges with) the resolved base profile's `restrict_network` value; when `None`/absent, the base's value is kept as-is. `#[serde(default)] Option<bool>`. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:43-44,450-452]"
+          "description": "When `Some(_)`, REPLACES (not merges with) the resolved base profile's `restrict_network` value; when `None`/absent, the base's value is kept as-is. `#[serde(default)] Option<bool>`."
         },
         "read_only": {
           "type": "array",
           "items": { "type": "string" },
           "default": [],
-          "description": "Extra read-only paths APPENDED onto (not replacing) the resolved base profile's `read_only` list. `#[serde(default)] Vec<String>`. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:45-46,454-457]"
+          "description": "Extra read-only paths APPENDED onto (not replacing) the resolved base profile's `read_only` list. `#[serde(default)] Vec<String>`."
         },
         "read_write": {
           "type": "array",
           "items": { "type": "string" },
           "default": [],
-          "description": "Extra read-write paths APPENDED onto (not replacing) the resolved base profile's `read_write` list. `#[serde(default)] Vec<String>`. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:47-48,459-462]"
+          "description": "Extra read-write paths APPENDED onto (not replacing) the resolved base profile's `read_write` list. `#[serde(default)] Vec<String>`."
         },
         "deny": {
           "type": "array",
           "items": { "type": "string" },
           "default": [],
-          "description": "Extra denied paths APPENDED onto (not replacing) the resolved base profile's `deny` list; kernel-enforced (read + write/rename) on both platforms on top of the base profile, regardless of which base was extended. `#[serde(default)] Vec<String>`. [src: crates/codegen/xai-grok-sandbox/src/profiles.rs:3-4,49-50,464-467]"
+          "description": "Extra denied paths APPENDED onto (not replacing) the resolved base profile's `deny` list; kernel-enforced (read + write/rename) on both platforms on top of the base profile, regardless of which base was extended. `#[serde(default)] Vec<String>`."
         }
       }
     }

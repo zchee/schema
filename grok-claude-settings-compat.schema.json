@@ -1,86 +1,92 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/claude-settings-compat.schema.json",
+  "$id": "https://raw.githubusercontent.com/xai-org/grok-build/main/schemas/grok-claude-settings-compat.schema.json",
   "title": "Claude-compat settings.json (Grok Build consumed subset)",
-  "description": "Describes ONLY the subset of Claude Code `.claude/settings.json` / `.claude/settings.local.json` / `~/.claude/settings.json` keys that Grok Build (this codebase) actually reads. This is NOT the full Claude Code settings schema -- real Claude Code settings files may contain many additional keys (e.g. apiKeyHelper, model, cleanupPeriodDays, statusLine, includeCoAuthoredBy, spinnerTipsEnabled) that Grok Build ignores; such keys are permitted (additionalProperties is never false anywhere in this schema) and MUST validate as a valid document. Discovery and precedence [src: crates/codegen/xai-grok-workspace/src/permission/claude_settings.rs:337-461]: files are discovered walking from cwd up to the git repo root, then the user-global `~/.claude` tier; within each directory, `settings.local.json` overrides `settings.json` [src: claude_settings.rs:374-382,403-429]; permission rules and `env` are merged cumulatively across all discovered files with precedence CWD > intermediate directories > repo-root > global (`~/.claude`), i.e. the most-specific file wins for conflicting keys, and `defaultMode` uses \"most specific file that sets it wins\" scope precedence [src: claude_settings.rs:351-353,454-467]. The repo-tree (project) `env` contribution is dropped entirely when the folder is untrusted; the user's own `~/.claude` env always loads [src: claude_settings.rs:468-499]. Reading of `.claude/` at runtime is skipped entirely once the user has migrated via Claude-import (`[claude_compat].imported` in config.toml) [src: claude_settings.rs:510-554].",
-  "x-source-rev": "0f4d7c91b8b2b408333f6de1e8a76cb8eaa71899",
+  "description": "Describes ONLY the subset of Claude Code `.claude/settings.json` / `.claude/settings.local.json` / `~/.claude/settings.json` keys that Grok Build (this codebase) actually reads. This is NOT the full Claude Code settings schema -- real Claude Code settings files may contain many additional keys (e.g. apiKeyHelper, model, cleanupPeriodDays, statusLine, includeCoAuthoredBy, spinnerTipsEnabled) that Grok Build ignores; such keys are permitted (additionalProperties is never false anywhere in this schema) and MUST validate as a valid document. Discovery and precedence: files are discovered walking from cwd up to the git repo root, then the user-global `~/.claude` tier; within each directory, `settings.local.json` overrides `settings.json`; permission rules and `env` are merged cumulatively across all discovered files with precedence CWD > intermediate directories > repo-root > global (`~/.claude`), i.e. the most-specific file wins for conflicting keys, and `defaultMode` uses \"most specific file that sets it wins\" scope precedence. The repo-tree (project) `env` contribution is dropped entirely when the folder is untrusted; the user's own `~/.claude` env always loads. Reading of `.claude/` at runtime is skipped entirely once the user has migrated via Claude-import (`[claude_compat].imported` in config.toml).",
+  "x-source-rev": "9b8d35b46d959c042ea9aa31cbbebbd1f0c5c527",
   "type": "object",
   "properties": {
     "permissions": {
       "type": "object",
-      "description": "Canonical location for permission rules and their two grok-recognized sibling keys [src: claude_settings.rs:39-48].",
+      "description": "Canonical location for permission rules and their two grok-recognized sibling keys. Project-tier rules are gated on folder trust: in an untrusted folder the project-scoped `.claude/settings.json` (and `.grok/config.toml`) contribute no allow/deny/ask rules at all, while the global/user/admin tiers always load.",
       "properties": {
         "allow": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Permission-rule strings translated into grok's native PermissionConfig via parse_permission_rule; extracted tolerantly element-by-element from the raw JSON array -- a non-string entry is skipped with a warning rather than rejecting the whole file [src: claude_settings.rs:42-68,226-252]."
+          "default": [],
+          "description": "Permission-rule strings translated into grok's native PermissionConfig via parse_permission_rule; extracted tolerantly element-by-element from the raw JSON array -- a non-string entry is skipped with a warning rather than rejecting the whole file."
         },
         "deny": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Same tolerant extraction and translation as `allow`, action=Deny [src: claude_settings.rs:42-68,226-252]."
+          "default": [],
+          "description": "Same tolerant extraction and translation as `allow`, action=Deny."
         },
         "ask": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Same tolerant extraction and translation as `allow`, action=Ask [src: claude_settings.rs:42-68,226-252]."
+          "default": [],
+          "description": "Same tolerant extraction and translation as `allow`, action=Ask."
         },
         "defaultMode": {
           "type": "string",
           "enum": ["acceptEdits", "bypassPermissions", "default", "plan", "dontAsk", "auto"],
-          "description": "Canonical location for the default permission mode. If present but not a string, the value is ignored and NOT replaced by a fallback root-level `defaultMode` (a malformed canonical key must not revive stale legacy) [src: claude_settings.rs:23-27,141-179]."
+          "description": "Canonical location for the default permission mode. If present but not a string, the value is ignored and NOT replaced by a fallback root-level `defaultMode` (a malformed canonical key must not revive stale legacy)."
         },
         "additionalDirectories": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Canonical location for additional trusted directories. Parsed but not yet acted on by grok. Non-string array entries are skipped individually with a warning. If present but not an array, the value is ignored and NOT replaced by a fallback root-level `additionalDirectories` [src: claude_settings.rs:29-31,181-221]."
+          "description": "Canonical location for additional trusted directories. Parsed but not yet acted on by grok. Non-string array entries are skipped individually with a warning. If present but not an array, the value is ignored and NOT replaced by a fallback root-level `additionalDirectories`."
         }
       }
     },
     "defaultMode": {
       "type": "string",
-      "description": "Grok-only legacy back-compat root key (NOT part of the vendor Claude Code schema). Used only as a fallback when `permissions.defaultMode` is entirely absent from the document -- never when it is present but malformed [src: claude_settings.rs:23-27,141-179]."
+      "description": "Grok-only legacy back-compat root key (NOT part of the vendor Claude Code schema). Used only as a fallback when `permissions.defaultMode` is entirely absent from the document -- never when it is present but malformed."
     },
     "additionalDirectories": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Grok-only legacy back-compat root key (NOT part of the vendor Claude Code schema). Used only as a fallback when `permissions.additionalDirectories` is entirely absent from the document [src: claude_settings.rs:29-31,181-221]."
+      "description": "Grok-only legacy back-compat root key (NOT part of the vendor Claude Code schema). Used only as a fallback when `permissions.additionalDirectories` is entirely absent from the document."
     },
     "env": {
       "type": "object",
-      "description": "Environment variables applied to every grok session; injected into every spawned subprocess (BASH_ENV / GIT_SSH_COMMAND / PATH / LD_PRELOAD, etc). Merged cumulatively across all discovered settings files with higher-precedence keys overriding lower ones via HashMap::extend [src: claude_settings.rs:33-36,254-308,450-499]. Must be a JSON object; a non-object `env` value is dropped entirely (with a warning) rather than rejecting the file.",
+      "description": "Environment variables applied to every grok session; injected into every spawned subprocess (BASH_ENV / GIT_SSH_COMMAND / PATH / LD_PRELOAD, etc). Merged cumulatively across all discovered settings files with higher-precedence keys overriding lower ones via HashMap::extend. Must be a JSON object; a non-object `env` value is dropped entirely (with a warning) rather than rejecting the file.",
       "additionalProperties": {
         "type": ["string", "number", "boolean"],
-        "description": "String values are used as-is. Number and boolean values are coerced to their string form. `null`, array, and object values are intentionally skipped (with a warning) rather than coerced -- e.g. `null` is NOT turned into the literal string \"null\" [src: claude_settings.rs:254-308]."
+        "description": "String values are used as-is. Number and boolean values are coerced to their string form. `null`, array, and object values are intentionally skipped (with a warning) rather than coerced -- e.g. `null` is NOT turned into the literal string \"null\"."
       }
     },
     "hooks": {
       "type": "object",
-      "description": "Event name (any of the canonical PascalCase names, their snake_case/camelCase spellings, or per-operation aliases such as `beforeShellExecution`) -> array of matcher groups. Only the `hooks` key of the settings file is consumed; parsing is lenient -- an unrecognized event-name key is skipped (recorded in `skipped_events`) rather than rejecting the file, so this schema does not restrict which key strings are accepted [src: crates/codegen/xai-grok-hooks/src/discovery.rs:126-130,208-237; crates/codegen/xai-grok-hooks/src/config.rs:20-54]. Recognized event-name spellings, canonicalized: SessionStart (`session_start`,`sessionStart`); PreToolUse (`pre_tool_use`,`preToolUse`,`beforeShellExecution`,`beforeMCPExecution`,`beforeReadFile`); PostToolUse (`post_tool_use`,`postToolUse`,`afterShellExecution`,`afterMCPExecution`,`afterFileEdit`,`afterAgentResponse`,`afterAgentThought`); PostToolUseFailure (`post_tool_use_failure`,`postToolUseFailure`); SessionEnd (`session_end`,`sessionEnd`); Stop (`stop`); StopFailure (`stop_failure`,`stopFailure`); Notification (`notification`); UserPromptSubmit (`user_prompt_submit`,`beforeSubmitPrompt`); PermissionDenied (`permission_denied`,`permissionDenied`); SubagentStart (`subagent_start`,`subagentStart`); SubagentStop (`subagent_stop`,`subagentStop`); SubagentEnd (`subagent_end`,`subagentEnd`, alias of SubagentStop); PreCompact (`pre_compact`,`preCompact`); PostCompact (`post_compact`,`postCompact`) [src: crates/codegen/xai-grok-hooks/src/event.rs:12-91].",
+      "description": "Event name (any of the canonical PascalCase names, their snake_case/camelCase spellings, or per-operation aliases such as `beforeShellExecution`) -> array of matcher groups. Only the `hooks` key of the settings file is consumed; parsing is lenient -- an unrecognized event-name key is skipped (recorded in `skipped_events`) rather than rejecting the file, so this schema does not restrict which key strings are accepted. Recognized event-name spellings, canonicalized: SessionStart (`session_start`,`sessionStart`); PreToolUse (`pre_tool_use`,`preToolUse`,`beforeShellExecution`,`beforeMCPExecution`,`beforeReadFile`); PostToolUse (`post_tool_use`,`postToolUse`,`afterShellExecution`,`afterMCPExecution`,`afterFileEdit`,`afterAgentResponse`,`afterAgentThought`); PostToolUseFailure (`post_tool_use_failure`,`postToolUseFailure`); SessionEnd (`session_end`,`sessionEnd`); Stop (`stop`); StopFailure (`stop_failure`,`stopFailure`); Notification (`notification`); UserPromptSubmit (`user_prompt_submit`,`beforeSubmitPrompt`); PermissionDenied (`permission_denied`,`permissionDenied`); SubagentStart (`subagent_start`,`subagentStart`); SubagentStop (`subagent_stop`,`subagentStop`); SubagentEnd (`subagent_end`,`subagentEnd`, alias of SubagentStop); PreCompact (`pre_compact`,`preCompact`); PostCompact (`post_compact`,`postCompact`).",
       "additionalProperties": {
         "type": "array",
         "items": { "$ref": "#/$defs/MatcherGroup" },
-        "description": "Array of matcher groups for this event; groups from aliased spellings that canonicalize to the same event (e.g. SubagentEnd -> SubagentStop) are merged, not replaced [src: crates/codegen/xai-grok-hooks/src/config.rs:44-48]."
+        "description": "Array of matcher groups for this event; groups from aliased spellings that canonicalize to the same event (e.g. SubagentEnd -> SubagentStop) are merged, not replaced."
       }
     },
     "enabledPlugins": {
       "type": "object",
-      "description": "Map of `\"pluginName@marketplaceName\"` -> boolean. `true` marks the plugin enabled, `false` marks it installed-but-disabled; on key collision across marketplaces for the same plugin name, `false` wins (safe default). The `@marketplace` suffix is stripped to obtain the plugin name [src: crates/codegen/xai-grok-agent/src/plugins/marketplace.rs:82-132].",
-      "additionalProperties": { "type": "boolean" }
+      "description": "Map of `\"pluginName@marketplaceName\"` -> boolean. `true` marks the plugin enabled, `false` marks it installed-but-disabled; on key collision across marketplaces for the same plugin name, `false` wins (safe default). The `@marketplace` suffix is stripped to obtain the plugin name.",
+      "additionalProperties": {
+        "type": "boolean",
+        "description": "Whether this plugin is enabled (`true`) or installed-but-disabled (`false`)."
+      }
     },
     "extraKnownMarketplaces": {
       "type": "object",
-      "description": "Map of marketplace name -> source descriptor, merged into grok's marketplace registry (deduplicated by URL against config.toml-configured sources) [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:184-241]. Also consumed directly (local/path sources only) by the plugin resolver [src: crates/codegen/xai-grok-agent/src/plugins/marketplace.rs:17-80].",
+      "description": "Map of marketplace name -> source descriptor, merged into grok's marketplace registry (deduplicated by URL against config.toml-configured sources). Also consumed directly (local/path sources only) by the plugin resolver.",
       "additionalProperties": { "$ref": "#/$defs/MarketplaceSettingsEntry" }
     }
   },
   "$defs": {
     "MarketplaceSettingsEntry": {
       "type": "object",
-      "description": "A single `extraKnownMarketplaces` entry: `{ \"source\": <SourceDescriptor> }` [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:130-134].",
+      "description": "A single `extraKnownMarketplaces` entry: `{ \"source\": <SourceDescriptor> }`.",
       "properties": {
         "source": {
-          "description": "Internally-tagged by its own `source` field (discriminant reuses the same JSON key name as the wrapping struct field). Discriminated by value: `git` requires `url`, `github` requires `repo`, `local` requires `path` [src: crates/codegen/xai-grok-plugin-marketplace/src/config.rs:116-128].",
+          "description": "Internally-tagged by its own `source` field (discriminant reuses the same JSON key name as the wrapping struct field). Discriminated by value: `git` requires `url`, `github` requires `repo`, `local` requires `path`.",
           "oneOf": [
             {
               "type": "object",
@@ -113,44 +119,46 @@
     },
     "MatcherGroup": {
       "type": "object",
-      "description": "[src: crates/codegen/xai-grok-hooks/src/config.rs:57-62]",
+      "description": "One matcher group: a regex pattern plus the handlers that fire for it.",
       "properties": {
         "matcher": {
           "type": "string",
-          "description": "Optional glob/regex-like pattern tested against the event's match value (tool name, notification type, etc). Ignored (never compiled, hook always fires) for events whose MatcherPolicy is `Ignored` (Stop, UserPromptSubmit) [src: crates/codegen/xai-grok-hooks/src/config.rs:59-60; crates/codegen/xai-grok-hooks/src/event.rs:123-129,161-176]."
+          "description": "Optional glob/regex-like pattern tested against the event's match value (tool name, notification type, etc). Ignored (never compiled, hook always fires) for events whose MatcherPolicy is `Ignored` (Stop, UserPromptSubmit)."
         },
         "hooks": {
           "type": "array",
           "items": { "$ref": "#/$defs/RawHandler" },
-          "description": "[src: crates/codegen/xai-grok-hooks/src/config.rs:61]"
+          "description": "Handlers to run when this group's matcher fires."
         }
       },
       "required": ["hooks"]
     },
     "RawHandler": {
       "type": "object",
-      "description": "One hook handler invocation spec [src: crates/codegen/xai-grok-hooks/src/config.rs:64-76].",
+      "description": "One hook handler invocation spec.",
       "properties": {
         "type": {
           "type": "string",
           "enum": ["command", "http"],
-          "description": "Validated into HandlerType so consumers dispatch exhaustively [src: crates/codegen/xai-grok-hooks/src/config.rs:66-67,109-123]."
+          "description": "Validated into HandlerType so consumers dispatch exhaustively."
         },
         "command": {
           "type": "string",
-          "description": "Shell command to invoke for `type: \"command\"` handlers [src: crates/codegen/xai-grok-hooks/src/config.rs:68]."
+          "description": "Shell command to invoke for `type: \"command\"` handlers."
         },
         "url": {
           "type": "string",
-          "description": "HTTP endpoint to invoke for `type: \"http\"` handlers [src: crates/codegen/xai-grok-hooks/src/config.rs:69]."
+          "description": "HTTP endpoint to invoke for `type: \"http\"` handlers."
         },
         "timeout": {
           "type": "integer",
           "minimum": 0,
-          "description": "Seconds (converted to milliseconds internally). Default 5s for most events, 600s for Stop-gate events (Stop, SubagentStop) so real verification (builds/tests) isn't cut short [src: crates/codegen/xai-grok-hooks/src/config.rs:70-71,89-105]."
+          "default": 5,
+          "description": "Seconds (converted to milliseconds internally). Default 5s for most events, 600s for Stop-gate events (Stop, SubagentStop) so real verification (builds/tests) isn't cut short."
         },
         "env": {
-          "description": "Extra env vars for the hook process, merged into HookSpec::extra_env. Accepts `null`, an absent field, or a string map -- `null` is treated the same as \"no env\" rather than a deserialize error [src: crates/codegen/xai-grok-hooks/src/config.rs:72-87].",
+          "default": {},
+          "description": "Extra env vars for the hook process, merged into HookSpec::extra_env. Accepts `null`, an absent field, or a string map -- `null` is treated the same as \"no env\" rather than a deserialize error.",
           "oneOf": [
             { "type": "null" },
             { "type": "object", "additionalProperties": { "type": "string" } }
