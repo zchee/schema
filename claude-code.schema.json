@@ -1,33 +1,94 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Claude Code Global User Configuration (~/.claude.json)",
-  "description": "Persisted global user config/state file for Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, IDs, and nested per-project state) and intentionally excludes the separately merged settings.json/project/policy configuration.",
-  "$comment": "Reverse-engineered from cli.unpack.js v2.1.154 using DEFAULT_GLOBAL_CONFIG (zr() factory at line 173988, assigned to Yr at line 174874), GLOBAL_CONFIG_KEYS (F66 at line 174875), PROJECT_CONFIG_KEYS (FU9 at line 174876, now [\"allowedTools\",\"hasTrustDialogAccepted\",\"hasCompletedProjectOnboarding\"]), NOTIFICATION_CHANNELS (AF_ at line 67222), EDITOR_MODES (wF_ at line 67223), TEAMMATE_MODES (vvq at line 67224), theme enum (pr6 at line 67225, with auto-prefixed Br6 at line 67226), and MCP transport enum (sse-ide/ws-ide/sdk/claudeai-proxy confirmed present around lines 67756-67834 and 331485-331491). All keys in DEFAULT_GLOBAL_CONFIG and GLOBAL_CONFIG_KEYS verified against the v2.1.154 bundle. Delta v2.1.146→v2.1.154: one new key added, unpinOpus48LaunchEffort (DEFAULT_GLOBAL_CONFIG default false, the Opus 4.8 companion to unpinOpus47LaunchEffort); all enums (theme, notification channels, editor modes, teammate modes, MCP transports) unchanged; remaining differences are identifier renames only (e.g. wn→zr/Yr, Ca_→F66, av9→FU9, Xx_→AF_). Symbol names are minified and shift every release; per-field line-number citations in property descriptions were authored against earlier tags and are approximate version-specific evidence pointers, not stable anchors.",
-  "additionalProperties": true,
+  "description": "Persisted global user config/state for the Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, identifiers and nested per-project state) and intentionally excludes the separately merged settings.json / managed-policy configuration, which has its own schema inside the bundle.",
+  "$comment": "Reverse-engineered from cli.unpack.js at tag 2.1.220 (a Bun-compiled bundle; package.json bin is bin/claude.exe). Anchors used: the config getter Rt() (line 677762); DEFAULT_GLOBAL_CONFIG factory yDe() (line ~677152) aliased to Koe (line 678797); GLOBAL_CONFIG_KEYS n3o (line 678798, 47 keys); DEFAULT_PROJECT_CONFIG JKe (line 678786); PROJECT_CONFIG_KEYS dcp (line 678799); NOTIFICATION_CHANNELS Toe and EDITOR_MODES z5n (lines 78194-78195); TEAMMATE_MODES sql (line 78196); theme enum XHi (line 78197); the MCP transport zod schemas (lines 78560-78680). Verified against an independent second pass over the getter/mutator machinery (Rt/hr for global, Rd/Yv/Vcr for per-project). Delta 2.1.154 -> 2.1.220: 33 keys added (including pluginUsage, clientDataCacheSlots, modelAccessCache, orgModelDefaultCache, cachedUsageUtilization, autoCompactWindowsCache, the fotw* family, workflowSizeGuideline, diffSidebarOpen, machineID and unpinFable5LaunchEffort); 10 keys removed and verified absent from the bundle (cachedStatsigGates, loopAutoEnabled, anonymousId, companionMuted, idleReturnDismissed, hasVisitedExtraUsage, overageCreditGrantCache, desktopUpsellSeenCount, ideHintShownCount, autoPermissionsNotificationCount); TEAMMATE_MODES gained \"iterm2\"; the MCP server union gained the shared timeout/alwaysLoad/role/tools/toolPermissions/discoveryCache fields and the \"streamable-http\" alias for http. \"default\" carries the literal DEFAULT_GLOBAL_CONFIG value where the key is seeded at file creation, otherwise the code-level ?? fallback used when the key is absent; each description states which of the two applies. teammateMode was REMOVED from this schema: it is read via the settings accessor (Hc) from settings.json and is never read through Rt() or written through hr(), so it is not a ~/.claude.json key. The theme enum includes \"auto\" (W3r = [\"auto\", ...XHi]). firstStartTime is an ISO 8601 string, and lastReleaseNotesSeen / lastOnboardingVersion are full build-metadata objects compared on their VERSION field, not bare version strings. The per-project object carries a resume-summary bundle of last* session statistics (cost, durations, token totals, fps, model usage) written by Yv(dZu(...)); the legacy per-project history array is stripped on every config load. Minified symbol names and line numbers shift every release and are version-specific evidence pointers, not stable anchors.",
   "type": "object",
+  "additionalProperties": true,
   "properties": {
-    "numStartups": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times Claude Code has been started"
+    "additionalModelCostsCache": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-model cost metadata keyed by model id, cached from bootstrap alongside additionalModelOptionsCache and used to display and estimate spend offline. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
     },
-    "installMethod": {
+    "additionalModelOptionsCache": {
+      "type": "array",
+      "description": "Server-supplied extra model options cached from the bootstrap response so the model picker renders without waiting on the network. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "agentLastUsed": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "Last-used Unix-ms timestamp per agent identifier, used to order the agent picker most-recent-first. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "agentPushNotifEnabled": {
+      "type": "boolean",
+      "description": "When true agents may send push notifications to the paired device; false keeps agent notifications local to the terminal. No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "announcementImpressions": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-announcement impression state keyed by announcement id, merged in on each show. Used to cap how often an in-app announcement is re-displayed; deleting an entry makes that announcement eligible again. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "apiKeyHelper": {
       "type": "string",
-      "enum": [
-        "native",
-        "local",
-        "global",
-        "unknown"
+      "description": "Path to an executable that prints an auth value (API key or token) on stdout. Invoked instead of reading a static key; its output is cached for CLAUDE_CODE_API_KEY_HELPER_TTL_MS. Not written by default; absent means unset."
+    },
+    "appleTerminalBackupPath": {
+      "type": "string",
+      "description": "Filesystem path of the Apple Terminal preferences backup taken before Claude Code modified them, used to restore the original settings. Not written by default; absent means unset."
+    },
+    "appleTerminalSetupInProgress": {
+      "type": "boolean",
+      "description": "True while Apple Terminal setup is mid-flight; persisted so an interrupted run can be detected and rolled back using appleTerminalBackupPath. No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "autoAddRemoteControlDaemonWorker": {
+      "type": "boolean",
+      "description": "When true a Remote Control daemon worker is registered automatically instead of requiring an explicit add. Synced via GLOBAL_CONFIG_KEYS. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "autoCompactEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) the conversation is automatically summarized and compacted once context usage crosses the auto-compact threshold. False lets the context fill until the request would overflow."
+    },
+    "autoCompactWindowsCache": {
+      "type": [
+        "object",
+        "null"
       ],
-      "description": "How Claude Code was installed"
+      "additionalProperties": true,
+      "description": "Server-supplied auto-compact window definitions (the token thresholds at which the context is compacted per model), cached from the bootstrap client-data response so compaction can be decided offline. Refreshed when the bootstrap payload differs. Absent is read as null, meaning no cached windows and a fresh bootstrap fetch."
     },
-    "autoUpdates": {
+    "autoConnectIde": {
       "type": "boolean",
-      "description": "Whether auto-updates are enabled"
+      "default": false,
+      "description": "When true Claude Code automatically attaches to a detected IDE when launched from an external terminal; default false requires an explicit /ide connect."
     },
-    "autoUpdatesProtectedForNative": {
+    "autoInstallIdeExtension": {
       "type": "boolean",
-      "description": "Whether auto-updates are protected for native installs (set to true alongside autoUpdates=false for native installs that opt out of in-app updates)"
+      "default": true,
+      "description": "When true (default) the companion IDE extension is installed automatically on first connect; false connects without ever installing."
+    },
+    "autoModeEnvSetup": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Recorded environment-setup state for auto mode, merged rather than replaced on write. Tracks what the auto-mode bootstrap has already provisioned so it is not redone every session; `undefined` means setup has not run. Not written by default; the key only appears once there is something to record."
+    },
+    "autoModeOptInDismissed": {
+      "type": "boolean",
+      "description": "True once the auto-mode opt-in prompt has been dismissed; suppresses the prompt without opting in. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "autoScrollEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) the transcript follows new output; false pins the viewport so incoming output does not steal scroll position. Synced via GLOBAL_CONFIG_KEYS."
     },
     "autoUpdaterStatus": {
       "type": "string",
@@ -39,20 +100,1381 @@
         "no_permissions",
         "not_configured"
       ],
-      "description": "Legacy auto-updater status (migrated to installMethod via rb6 at line 161783)"
+      "description": "Legacy pre-installMethod updater state, retained only for migration. \"migrated\" means it has been converted to installMethod; \"no_permissions\" means the install directory was not writable; \"not_configured\" means it was never initialized. Any other value maps to \"unknown\" during migration. Not written by default; absent means unset."
     },
-    "theme": {
+    "autoUpdates": {
+      "type": "boolean",
+      "description": "Master switch for in-app auto-updates. False disables the updater entirely; for native installs it is normally paired with autoUpdatesProtectedForNative so the setting survives reinstall. Reads fall back to true when the key is absent, so auto-update is on until explicitly disabled. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "autoUpdatesProtectedForNative": {
+      "type": "boolean",
+      "description": "Set true alongside autoUpdates=false on native installs so the opt-out is treated as deliberate and is not undone by the installer on the next run. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "autoUploadSessions": {
+      "type": "boolean",
+      "description": "When true local sessions are mirrored to claude.ai as view-only copies. This enables viewing, not remote control, which is governed separately by remoteControlAtStartup. Synced via GLOBAL_CONFIG_KEYS. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "bedrockDeclinedUpgrades": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Bedrock model-upgrade offers the user declined, keyed by tier with the declined target as the value; a recorded entry suppresses that upgrade prompt. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "bridgeOauthDeadExpiresAt": {
+      "type": "number",
+      "description": "Expiry timestamp (Unix ms) of the OAuth token the Chrome bridge last marked dead, so other processes recognize the same bad token instead of retrying it. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "bridgeOauthDeadFailCount": {
+      "type": "integer",
+      "description": "Consecutive failures observed for that dead token. Persisted so backoff is shared across processes rather than restarting per process. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "briefTranscript": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true the transcript renders in brief (compact) mode with reduced per-message detail. Toggled by the default-view chat/transcript setting and by focus mode."
+    },
+    "btwUseCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Lifetime count of accepted \"by the way\" (BTW) inline suggestions; used to decide whether to keep offering them. DEFAULT_GLOBAL_CONFIG writes 0 when the config file is created."
+    },
+    "bypassPermissionsModeAccepted": {
+      "type": "boolean",
+      "description": "One-way flag set after the user explicitly accepts the risk warning for bypass-permissions mode. While false, that mode refuses to start. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "cachedChangelog": {
+      "type": "string",
+      "description": "Transient holding slot for freshly fetched changelog markdown. It is written to a real file on disk and then stripped from the config object in the same pass, so it should never persist in a settled config file."
+    },
+    "cachedChromeExtensionInstalled": {
+      "type": "boolean",
+      "description": "Last known result of the Chrome extension presence check, cached to avoid probing the browser on every launch. Refreshed when the probe next runs. No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "cachedDynamicConfigs": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "Locally cached dynamic (server-driven) configuration values, keyed by config name, so startup does not block on a fetch. Overwritten on each successful refresh. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created."
+    },
+    "cachedExperimentFeatures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Experiment feature names cached alongside cachedGrowthBookFeatures so experiment membership is known before the next flag fetch. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "cachedExtraUsageDisabledReason": {
+      "type": "string",
+      "description": "Server-supplied reason string explaining why extra usage is unavailable, cached so the explanation can be shown without a fetch. Not written by default; absent means unset."
+    },
+    "cachedGrowthBookFeatures": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "Locally cached GrowthBook feature-flag values keyed by flag name. Its freshness is tracked separately by cachedGrowthBookFeaturesAt; stale entries are refreshed in the background and reused until then. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created."
+    },
+    "cachedGrowthBookFeaturesAt": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds when cachedGrowthBookFeatures was last written. Compared against the refresh interval to decide whether to re-fetch feature flags; a future or recent value suppresses the next fetch. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "cachedUsageUtilization": {
+      "type": "object",
+      "properties": {
+        "fetchedAtMs": {
+          "type": "number",
+          "description": "Unix ms when the utilization snapshot was fetched; staleness is measured from here."
+        },
+        "accountUuid": {
+          "type": "string",
+          "description": "Account the snapshot belongs to; a mismatch with the current account discards the cache."
+        },
+        "utilization": {
+          "description": "The cached rate-limit/usage utilization payload as returned by the server."
+        }
+      },
+      "additionalProperties": true,
+      "description": "Cached rate-limit utilization for the signed-in account. Reused only while it is younger than the refresh window and its accountUuid matches the current account; otherwise it is refetched and overwritten. Not written by default; the key only appears once there is something to record."
+    },
+    "changelogLastFetched": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds of the last changelog fetch. Compared against the refresh interval so the changelog is not re-fetched on every launch. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "chromeExtension": {
+      "type": "object",
+      "properties": {
+        "pairedDeviceId": {
+          "type": "string"
+        },
+        "pairedDeviceName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Pairing state for the Chrome extension: pairedDeviceId and pairedDeviceName identify the browser instance currently paired with this CLI. Not written by default; the key only appears once there is something to record."
+    },
+    "chromeInstallUpsellDismissed": {
+      "type": "boolean",
+      "description": "Set to true once the user dismisses the \"install the Chrome extension\" upsell. True permanently suppresses that upsell; it is one of several conditions (alongside platform, teleport and sandbox checks) that must all pass for the prompt to appear. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "claudeAiMcpEverConnected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Names of claude.ai cloud MCP connectors that have successfully connected at least once. Used to distinguish a never-configured connector from one that is merely offline right now. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "claudeCodeFirstTokenDate": {
+      "type": "string",
+      "description": "Date string marking when this install first consumed tokens; used for usage-tenure calculations distinct from firstStartTime. Not written by default; absent means unset."
+    },
+    "claudeCodeHints": {
+      "type": "object",
+      "properties": {
+        "plugin": {},
+        "disabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true,
+      "description": "State for assorted inline UI hints. disabled true turns hints off wholesale; per-hint entries record what has already been shown. Not written by default; the key only appears once there is something to record."
+    },
+    "claudeInChromeDefaultEnabled": {
+      "type": "boolean",
+      "description": "When true the Claude-in-Chrome browser integration is active by default in new sessions rather than requiring per-session opt-in. No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "clientDataCache": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "coral_reef_sonnet": {}
+      },
+      "additionalProperties": true,
+      "description": "Legacy single-slot bootstrap client-data cache. Superseded by clientDataCacheSlots and now read only as a fallback when no matching slot exists. Not written by default; the key only appears once there is something to record."
+    },
+    "clientDataCacheSlots": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "The cached bootstrap client-data payload for this slot."
+          },
+          "at": {
+            "type": "number",
+            "description": "Unix ms when the slot was written; used for the staleness check."
+          },
+          "entrypoint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Entrypoint the slot was captured under (e.g. cli, sdk)."
+          },
+          "model": {
+            "type": "string",
+            "description": "Model the slot was captured under."
+          },
+          "org": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Organization UUID the slot was captured under."
+          }
+        }
+      },
+      "description": "Bootstrap client-data cache partitioned into per-context slots, keyed by a composite of entrypoint, model and organization, so switching model or org does not thrash a single shared cache. Supersedes the older flat clientDataCache, which is still read as a legacy fallback. Not written by default; the key only appears once there is something to record."
+    },
+    "closedIssuesAcknowledged": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Ids of closed GitHub issues whose closure has already been surfaced to the user, so each is announced only once. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "closedIssuesLastChecked": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds of the last check for closed GitHub issues the user had reported. Gates how often that check runs; pairs with closedIssuesAcknowledged, which records which results were already shown. Absent is read as 0, forcing a check on next launch. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "companion": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 14,
+          "description": "User-chosen companion name, 1-14 characters."
+        },
+        "personality": {
+          "type": "string",
+          "description": "AI-generated personality blurb that shapes the companion's idle messages."
+        },
+        "hatchedAt": {
+          "type": "number",
+          "description": "Unix timestamp in milliseconds when the companion hatched; drives age-based companion state."
+        }
+      },
+      "description": "State of the companion pet (buddy) feature: its user-chosen name, an AI-generated personality string, and the hatch time. Absent means no companion has been created. Not written by default; the key only appears once there is something to record."
+    },
+    "copyFullResponse": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true /copy immediately copies the entire response; default false opens a picker to choose which part (code block, full text, etc.) to copy."
+    },
+    "copyOnSelect": {
+      "type": "boolean",
+      "description": "When true, selecting text in the transcript copies it to the clipboard immediately. Defaults to true only on platforms where select-to-copy is idiomatic. No entry is written at config creation; code reads it as true when absent.",
+      "default": true
+    },
+    "customApiKeyResponses": {
+      "type": "object",
+      "properties": {
+        "approved": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Truncated hashes of custom API keys the user approved; a match here skips the \"use this API key?\" prompt."
+        },
+        "rejected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Truncated hashes of custom API keys the user rejected; a match here keeps the key unused without re-prompting."
+        }
+      },
+      "additionalProperties": false,
+      "default": {
+        "approved": [],
+        "rejected": []
+      },
+      "description": "Record of which custom API keys the user approved or rejected when Claude Code detected an ANTHROPIC_API_KEY it did not set. Entries are truncated key hashes, not the keys themselves; a hash in \"approved\" skips the prompt, one in \"rejected\" keeps the key unused. DEFAULT_GLOBAL_CONFIG writes {\"approved\":[],\"rejected\":[]} when the config file is created."
+    },
+    "daemonInstallPromptDismissed": {
+      "type": "boolean",
+      "description": "True once the background-daemon install prompt has been dismissed; suppresses it permanently. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "deepLinkTerminal": {
+      "type": "string",
+      "description": "Name of the terminal application that claude:// deep links should open, as chosen during protocol-handler registration. Not written by default; absent means unset."
+    },
+    "defaultToAgentsView": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true Claude Code opens directly into the agents view at startup instead of the transcript; default false. Synced via GLOBAL_CONFIG_KEYS. No entry is written at config creation; code reads it as false when absent."
+    },
+    "diffSidebarOpen": {
+      "type": "boolean",
+      "description": "Whether the diff sidebar panel is open. Persisted across sessions and settings-syncable via GLOBAL_CONFIG_KEYS so the panel reopens in the same state. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "diffTool": {
       "type": "string",
       "enum": [
-        "dark",
-        "light",
-        "light-daltonized",
-        "dark-daltonized",
-        "light-ansi",
-        "dark-ansi"
+        "auto",
+        "terminal"
       ],
-      "default": "dark",
-      "description": "Color theme for the UI (dl4 enum at line 191724)"
+      "default": "auto",
+      "description": "Which viewer renders diffs. \"auto\" hands the diff to a connected IDE when one is available and otherwise falls back to the terminal renderer; \"terminal\" always renders inline in the terminal, even with an IDE attached. DEFAULT_GLOBAL_CONFIG writes \"auto\" when the config file is created."
+    },
+    "editorMode": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "vim"
+      ],
+      "default": "normal",
+      "description": "Input key bindings. \"normal\" is the default readline-style editor; \"vim\" enables modal (normal/insert) editing. The legacy value \"emacs\" is normalized to \"normal\" on read."
+    },
+    "env": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {},
+      "description": "Environment variables injected into every Claude Code session, as a flat name-to-string map. Applied on top of the inherited process environment; only names on the settings env allowlist take effect for first-party knobs. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created."
+    },
+    "externalEditorContext": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true the last assistant response is opened in $EDITOR/$VISUAL instead of only being rendered inline; default false. Synced via GLOBAL_CONFIG_KEYS."
+    },
+    "fableOverageConsentV2": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "description": "Per-scope consent to incur overage charges when using Fable-class models, keyed by scope identifier. Only an explicit `true` counts as consent; a missing key or `false` re-prompts. The \"V2\" suffix marks a reset of the earlier consent record. Not written by default; the key only appears once there is something to record."
+    },
+    "favoritePlugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Plugin ids the user pinned in the plugin manager; membership only affects ordering and filtering in that UI. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "feedbackSurveyState": {
+      "type": "object",
+      "properties": {
+        "lastShownTime": {
+          "type": "number"
+        }
+      },
+      "description": "Throttling state for the feedback survey. lastShownTime is a Unix timestamp in milliseconds; the survey is suppressed until the cooldown since that time elapses. Not written by default; the key only appears once there is something to record."
+    },
+    "fileCheckpointingEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) file states are checkpointed before edits so /rewind can restore them; false disables checkpointing and the rewind feature."
+    },
+    "firstStartTime": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of the very first run of this install, written exactly once and never overwritten (`r.firstStartTime ?? now`). Anchors tenure-based gating for features and notices that require an account of a certain age. Not written by default; absent means the first run has not been recorded yet."
+    },
+    "fleetViewGroupMode": {
+      "type": "string",
+      "description": "Grouping applied to the agents FleetView list, cycled with a key press. \"state\" groups by agent run-state, \"directory\" by working directory, \"group\" by explicit agent group; \"group\" is only offered when the grouping feature flag is on. Absent behaves as \"state\". No entry is written at config creation; code reads it as \"state\" when absent.",
+      "enum": [
+        "state",
+        "directory",
+        "group"
+      ],
+      "default": "state"
+    },
+    "fotwClaimedFeatures": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": "Feature-of-the-week entitlements the user has already claimed, keyed by campaign/period with the list of claimed feature ids. Presence of an id prevents re-claiming in that period. Not written by default; the key only appears once there is something to record."
+    },
+    "fotwEligibilityCache": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "description": "Two-level cache of feature-of-the-week eligibility results, keyed by campaign then by feature, so eligibility is not re-queried every session. Not written by default; the key only appears once there is something to record."
+    },
+    "fotwUpsellFulfilled": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": "Feature-of-the-week upsells already shown and satisfied, keyed by campaign with the fulfilled feature ids; listed ids are not upsold again. Not written by default; the key only appears once there is something to record."
+    },
+    "fullscreenDownsellSeenCount": {
+      "type": "integer",
+      "description": "How many times the prompt suggesting leaving fullscreen has been shown; capped. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "fullscreenUpsellSeenCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "How many times the fullscreen-mode upsell has been shown; incremented per display and capped so it stops repeating. No entry is written at config creation; code reads it as 0 when absent."
+    },
+    "githubActionSetupCount": {
+      "type": "integer",
+      "description": "How many times the GitHub Action setup prompt has been offered; compared against a cap so it stops being suggested. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "githubRepoPaths": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": "Local checkout paths for each known GitHub repository, keyed by repo identifier, so a repo can be located without re-scanning the filesystem. Multiple paths per repo are allowed. Not written by default; the key only appears once there is something to record."
+    },
+    "groveConfigCache": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cached Grove configuration keyed by identifier, so Grove settings are available without a network round trip. Not written by default; the key only appears once there is something to record."
+    },
+    "hasAcknowledgedCostThreshold": {
+      "type": "boolean",
+      "description": "True once the user has acknowledged the spend/cost warning; the warning is not shown again while true. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasAvailableSubscription": {
+      "type": "boolean",
+      "description": "Whether the account currently has an active Claude subscription. Refreshed from the server and forced to false on logout. Not written by default; absent is falsy."
+    },
+    "hasCompletedClaudeInChromeOnboarding": {
+      "type": "boolean",
+      "description": "One-way flag set once the Claude-in-Chrome onboarding flow finishes; true skips the flow on subsequent launches. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasCompletedOnboarding": {
+      "type": "boolean",
+      "description": "One-way flag set when first-run onboarding completes. Read together with lastOnboardingVersion: a newer build can re-run onboarding even when this is true. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasIdeAutoConnectDialogBeenShown": {
+      "type": "boolean",
+      "description": "One-way flag set when the IDE auto-connect prompt is answered or dismissed, so the dialog is offered only once. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasIdeOnboardingBeenShown": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "description": "Per-IDE one-way flags keyed by IDE name (for example \"vscode\", \"jetbrains\"); true means that IDE's onboarding has run and will not be shown again. Not written by default; the key only appears once there is something to record."
+    },
+    "hasOpenedAgentsView": {
+      "type": "boolean",
+      "description": "Set to true the first time the agents view is opened, and never cleared. While false, first-run affordances for the agents view are shown. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasRemoteEnvironment": {
+      "type": "boolean",
+      "description": "Whether this user has a remote (cloud) environment available. Only a true value is persisted and forwarded into request metadata; it is refreshed when the server-reported value changes. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasResetAutoModeOptInForDefaultOffer": {
+      "type": "boolean",
+      "description": "One-time migration marker: true means the stored auto-mode opt-in was already cleared for the default-offer rollout, so the reset does not run twice. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasSeenAutoDefaultNotice": {
+      "type": "boolean",
+      "description": "One-way flag set once the \"now defaulting to Auto mode\" notice has been shown. Not written by default; absent is falsy."
+    },
+    "hasSeenAutoDefaultNudge": {
+      "type": "boolean",
+      "description": "One-way flag for a second, distinct Auto-mode-default nudge, tracked separately from hasSeenAutoDefaultNotice. Not written by default; absent is falsy."
+    },
+    "hasSeenAutoModeEntryWarning": {
+      "type": "boolean",
+      "description": "Set to true once the auto-mode entry warning has been acknowledged. The warning is shown only while this is false AND no settings source sets skipAutoPermissionPrompt, so an enterprise policy can suppress it independently. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasSeenAutofixPrChatOpsNotice": {
+      "type": "boolean",
+      "description": "Set to true once the autofix pull-request ChatOps notice has been displayed; true suppresses any further showing. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasSeenTasksHint": {
+      "type": "boolean",
+      "default": false,
+      "description": "One-way flag set to true the first time the tasks hint is displayed; true permanently suppresses it. DEFAULT_GLOBAL_CONFIG writes false when the config file is created."
+    },
+    "hasSeenUltraplanTerms": {
+      "type": "boolean",
+      "description": "One-way flag set once the ultraplan terms have been shown and accepted; false blocks the feature until accepted. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasSeenUltrareviewTerms": {
+      "type": "boolean",
+      "description": "One-way flag set once the ultrareview terms have been shown and accepted; false blocks the feature until accepted. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasUsedAgentsFleet": {
+      "type": "boolean",
+      "description": "One-way flag set the first time the agents fleet view is used; suppresses its discovery affordances. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasUsedBackgroundTask": {
+      "type": "boolean",
+      "default": false,
+      "description": "One-way flag set the first time a background task is started; suppresses background-task discovery hints thereafter. DEFAULT_GLOBAL_CONFIG writes false when the config file is created."
+    },
+    "hasUsedBackslashReturn": {
+      "type": "boolean",
+      "description": "One-way flag set the first time backslash-return (multi-line continuation) is used; suppresses the hint teaching that key sequence. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasUsedRemoteControl": {
+      "type": "boolean",
+      "description": "One-way flag set the first time Remote Control is used; suppresses Remote Control upsells. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "hasUsedStash": {
+      "type": "boolean",
+      "default": false,
+      "description": "One-way flag set on first use of the stash feature; used to hide first-run discovery affordances once the feature is known. DEFAULT_GLOBAL_CONFIG writes false when the config file is created."
+    },
+    "hasVisitedPasses": {
+      "type": "boolean",
+      "description": "True once the user has opened the passes page; used to switch the entry point from a first-time to a returning treatment. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "inputNeededNotifEnabled": {
+      "type": "boolean",
+      "description": "When true a notification fires whenever Claude Code is blocked waiting on user input (a permission prompt or question). No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "installMethod": {
+      "type": "string",
+      "enum": [
+        "native",
+        "local",
+        "global",
+        "unknown"
+      ],
+      "description": "How this copy of Claude Code was installed, which selects the updater path. \"native\" is the standalone binary installer (self-updating), \"global\" is a global npm install, \"local\" is a project-local install, \"unknown\" means detection failed and auto-update is skipped. Not written by default; absent means unset."
+    },
+    "iterm2BackupPath": {
+      "type": "string",
+      "description": "Filesystem path of the iTerm2 profile backup taken before Claude Code patched it, used to roll back an interrupted setup. Not written by default."
+    },
+    "iterm2It2SetupComplete": {
+      "type": "boolean",
+      "description": "One-way flag recording that the iTerm2 it2 helper integration finished installing, so setup is not retried. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "iterm2SetupInProgress": {
+      "type": "boolean",
+      "description": "True while iTerm2 setup is mid-flight. Persisted so an interrupted setup (crash or quit) is detected and can be recovered or rolled back on the next launch. No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "lastOnboardingVersion": {
+      "type": "object",
+      "properties": {
+        "VERSION": {
+          "type": "string",
+          "description": "The build version string; this is the field actually compared."
+        },
+        "GIT_SHA": {
+          "type": "string"
+        },
+        "BUILD_TIME": {
+          "type": "string"
+        },
+        "PACKAGE_URL": {
+          "type": "string"
+        },
+        "README_URL": {
+          "type": "string"
+        },
+        "ISSUES_EXPLAINER": {
+          "type": "string"
+        },
+        "FEEDBACK_CHANNEL": {
+          "type": "string"
+        },
+        "DD_SOURCEMAP_GROUP": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Snapshot of the full build-metadata object stamped when onboarding completed — not a bare version string. Read together with hasCompletedOnboarding: a newer build can re-run onboarding even when that flag is true. Not written by default."
+    },
+    "lastPlanModeUse": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds of the most recent plan-mode session, used to decide whether plan-mode related hints are still relevant. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "lastReleaseNotesSeen": {
+      "type": "object",
+      "properties": {
+        "VERSION": {
+          "type": "string",
+          "description": "The build version string; this is the field actually compared."
+        },
+        "GIT_SHA": {
+          "type": "string"
+        },
+        "BUILD_TIME": {
+          "type": "string"
+        },
+        "PACKAGE_URL": {
+          "type": "string"
+        },
+        "README_URL": {
+          "type": "string"
+        },
+        "ISSUES_EXPLAINER": {
+          "type": "string"
+        },
+        "FEEDBACK_CHANNEL": {
+          "type": "string"
+        },
+        "DD_SOURCEMAP_GROUP": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Snapshot of the full build-metadata object (VERSION, GIT_SHA, BUILD_TIME, …) as of the last time release notes were shown — not a bare version string. Only its VERSION field is compared against the running build to decide whether to show notes again. Not written by default."
+    },
+    "lastSeenOrgDefaultUpdatedAt": {
+      "type": "string",
+      "description": "The `updated_at` stamp of the organization default-model policy the user has already been notified about. When the server reports a newer stamp the change notice is shown again and this value is advanced to match. Not written by default; absent means unset."
+    },
+    "lastShownEmergencyTip": {
+      "type": "string",
+      "description": "Id of the most recently shown emergency tip, so the same urgent notice is not repeated back-to-back. Not written by default; absent means unset."
+    },
+    "leftArrowOpensAgents": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) the left-arrow key opens the agents view from the main transcript. Synced via GLOBAL_CONFIG_KEYS. No entry is written at config creation; code reads it as true when absent."
+    },
+    "legacyOpusMigrationTimestamp": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds of the earlier legacy Opus migration, retained so migrations can be ordered. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "lspRecommendationDisabled": {
+      "type": "boolean",
+      "description": "When true Claude Code never suggests installing an LSP plugin for the detected language; false (default) allows recommendations subject to the per-plugin opt-outs below. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "lspRecommendationIgnoredCount": {
+      "type": "integer",
+      "description": "How many LSP recommendations the user has dismissed. Compared against a threshold so repeated dismissals stop the prompts globally. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "lspRecommendationNeverPlugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Plugin names the user chose \"never ask again\" for. Membership permanently suppresses the recommendation for that plugin only. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "machineID": {
+      "type": "string",
+      "description": "Locally generated stable machine identifier, distinct from userID, used to correlate installs on the same host. Not written by default; absent means unset."
+    },
+    "mcpServers": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "stdio",
+                "description": "Transport discriminator. Optional for stdio: a definition with `command` and no `type` is treated as stdio."
+              },
+              "command": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Executable to spawn. Must be non-empty."
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "Arguments passed to the command. Defaults to an empty array when omitted."
+              },
+              "env": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Extra environment variables for the spawned process, layered over the inherited environment."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "description": "Stdio MCP server: Claude Code spawns the command and speaks MCP over its stdin/stdout."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sse",
+                "description": "Transport discriminator."
+              },
+              "url": {
+                "type": "string",
+                "description": "Server-sent-events endpoint URL."
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Static HTTP headers sent with every request to the server."
+              },
+              "headersHelper": {
+                "type": "string",
+                "description": "Path to an executable whose stdout supplies headers dynamically; used instead of, or in addition to, static headers when values must be refreshed."
+              },
+              "oauth": {
+                "$ref": "#/$defs/mcpOAuth"
+              },
+              "request_timeout_ms": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Internal CCR backend wire hint; folded into `timeout` when the config is parsed. Not intended to be set by hand."
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Tool name as exposed by the server."
+                    },
+                    "permission_policy": {
+                      "type": "string",
+                      "enum": [
+                        "always_allow",
+                        "always_ask",
+                        "always_deny"
+                      ],
+                      "description": "Per-tool permission policy: \"always_allow\" runs without prompting, \"always_ask\" always prompts, \"always_deny\" blocks the tool outright."
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                },
+                "description": "Per-tool declarations and permission policies for this server."
+              },
+              "toolPermissions": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "allow",
+                    "ask",
+                    "blocked"
+                  ]
+                },
+                "description": "Per-tool permission overrides keyed by tool name: \"allow\" runs without prompting, \"ask\" prompts each time, \"blocked\" refuses the call."
+              },
+              "discoveryCache": {
+                "type": "boolean",
+                "description": "When true the server tool list may be cached between runs instead of re-discovered on every connect."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "type",
+              "url"
+            ],
+            "description": "SSE MCP server."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sse-ide",
+                "description": "Transport discriminator."
+              },
+              "url": {
+                "type": "string",
+                "description": "SSE endpoint exposed by the IDE extension."
+              },
+              "ideName": {
+                "type": "string",
+                "description": "Identifier of the IDE that published this server (for example \"vscode\")."
+              },
+              "ideRunningInWindows": {
+                "type": "boolean",
+                "description": "True when the IDE runs on Windows while Claude Code runs under WSL, so paths are translated across the boundary."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "ideName"
+            ],
+            "description": "IDE-published SSE MCP server; written automatically when an IDE connects rather than configured by hand."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ws-ide",
+                "description": "Transport discriminator."
+              },
+              "url": {
+                "type": "string",
+                "description": "WebSocket endpoint exposed by the IDE extension."
+              },
+              "ideName": {
+                "type": "string",
+                "description": "Identifier of the IDE that published this server."
+              },
+              "authToken": {
+                "type": "string",
+                "description": "Shared secret the IDE requires on the WebSocket handshake."
+              },
+              "ideRunningInWindows": {
+                "type": "boolean",
+                "description": "True when the IDE runs on Windows while Claude Code runs under WSL."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "ideName"
+            ],
+            "description": "IDE-published WebSocket MCP server."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "http",
+                  "streamable-http"
+                ],
+                "description": "Transport discriminator. \"streamable-http\" is accepted as an alias and normalized to \"http\" at parse time."
+              },
+              "url": {
+                "type": "string",
+                "description": "HTTP endpoint URL."
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Static HTTP headers sent with every request to the server."
+              },
+              "headersHelper": {
+                "type": "string",
+                "description": "Path to an executable whose stdout supplies headers dynamically; used instead of, or in addition to, static headers when values must be refreshed."
+              },
+              "oauth": {
+                "$ref": "#/$defs/mcpOAuth"
+              },
+              "request_timeout_ms": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Internal CCR backend wire hint; folded into `timeout` when the config is parsed. Not intended to be set by hand."
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Tool name as exposed by the server."
+                    },
+                    "permission_policy": {
+                      "type": "string",
+                      "enum": [
+                        "always_allow",
+                        "always_ask",
+                        "always_deny"
+                      ],
+                      "description": "Per-tool permission policy: \"always_allow\" runs without prompting, \"always_ask\" always prompts, \"always_deny\" blocks the tool outright."
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                },
+                "description": "Per-tool declarations and permission policies for this server."
+              },
+              "toolPermissions": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "allow",
+                    "ask",
+                    "blocked"
+                  ]
+                },
+                "description": "Per-tool permission overrides keyed by tool name: \"allow\" runs without prompting, \"ask\" prompts each time, \"blocked\" refuses the call."
+              },
+              "discoveryCache": {
+                "type": "boolean",
+                "description": "When true the server tool list may be cached between runs instead of re-discovered on every connect."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "type",
+              "url"
+            ],
+            "description": "HTTP (streamable HTTP) MCP server."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ws",
+                "description": "Transport discriminator."
+              },
+              "url": {
+                "type": "string",
+                "description": "WebSocket URL."
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Static headers sent on the WebSocket handshake."
+              },
+              "headersHelper": {
+                "type": "string",
+                "description": "Path to an executable whose stdout supplies handshake headers."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "type",
+              "url"
+            ],
+            "description": "WebSocket MCP server."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sdk",
+                "description": "Transport discriminator."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the in-process server registered by the embedding SDK application."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              }
+            },
+            "required": [
+              "type",
+              "name"
+            ],
+            "description": "In-process SDK MCP server; has no URL or command because it runs inside the host process."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "claudeai-proxy",
+                "description": "Transport discriminator."
+              },
+              "url": {
+                "type": "string",
+                "description": "Proxy endpoint URL."
+              },
+              "id": {
+                "type": "string",
+                "description": "claude.ai connector identifier."
+              },
+              "displayName": {
+                "type": "string",
+                "description": "Human-readable connector name shown in the UI."
+              },
+              "iconUrl": {
+                "type": "string",
+                "description": "Icon URL shown next to the connector."
+              },
+              "stateless": {
+                "type": "boolean",
+                "description": "True when the connector holds no per-session state, allowing the connection to be re-established freely."
+              },
+              "cachedInitResponse": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": true,
+                "description": "Cached MCP initialize response so the connector can be presented before it is contacted."
+              },
+              "eligible": {
+                "type": [
+                  "boolean",
+                  "null"
+                ],
+                "description": "Whether the account may use this connector; false pairs with ineligibleReason."
+              },
+              "ineligibleReason": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Server-supplied explanation shown when eligible is false."
+              },
+              "toolPermissions": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "allow",
+                    "ask",
+                    "blocked"
+                  ]
+                },
+                "description": "Per-tool permission overrides keyed by tool name: \"allow\" runs without prompting, \"ask\" prompts each time, \"blocked\" refuses the call."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
+              },
+              "alwaysLoad": {
+                "type": "boolean",
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "id"
+            ],
+            "description": "claude.ai cloud connector proxied through Anthropic; auto-fetched unless disableClaudeAiConnectors is set in settings."
+          }
+        ]
+      },
+      "description": "User-scope MCP server definitions keyed by server name. The value shape is chosen by the \"type\" discriminator, which may be omitted only for stdio. Absent is read as an empty object."
+    },
+    "memoryUsageCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Lifetime count of memory-feature invocations, used to gate memory-related hints once the user is familiar with the feature. DEFAULT_GLOBAL_CONFIG writes 0 when the config file is created."
+    },
+    "messageIdleNotifThresholdMs": {
+      "type": "integer",
+      "default": 60000,
+      "description": "Idle time in milliseconds with no assistant output before an idle notification fires. Default 60000 (one minute); a larger value delays notifications, and the key is settings-syncable."
+    },
+    "metricsStatusCache": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "timestamp": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Cached result of the metrics-enabled check: enabled is the last known answer and timestamp is the Unix-ms time it was determined, used to decide when to re-check. Not written by default; the key only appears once there is something to record."
+    },
+    "migrationVersion": {
+      "type": "number",
+      "description": "Monotonic schema version of this config file. Migrations whose version exceeds this number are applied on load, after which it is advanced; lowering it re-runs migrations. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "modelAccessCache": {
+      "type": "array",
+      "description": "Server-reported list of models this account may use, cached from the bootstrap client-data response so the model picker can render without a network round trip. Rewritten whenever the bootstrap payload differs. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "numStartups": {
+      "type": "integer",
+      "default": 0,
+      "description": "Lifetime count of Claude Code launches, incremented once per start and never reset. Many first-run hints, tips and upsells are gated on thresholds against this counter (for example \"> 10 startups\"), so editing it changes which onboarding surfaces appear. DEFAULT_GLOBAL_CONFIG writes 0 when the config file is created."
+    },
+    "oauthAccount": {
+      "type": "object",
+      "properties": {
+        "accountUuid": {
+          "type": "string",
+          "description": "Server-side unique id for the account; the join key for per-account caches such as cachedUsageUtilization."
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "Email address of the signed-in account, shown in /status and used for account-switch detection."
+        },
+        "organizationUuid": {
+          "type": "string",
+          "description": "Organization the account belongs to; null or absent for personal accounts. Used to scope org policy and cache slots."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Human-readable account name shown in the UI."
+        },
+        "hasExtraUsageEnabled": {
+          "type": "boolean",
+          "description": "Whether the account may purchase usage beyond its plan limit. False means extra-usage entry points are hidden; cachedExtraUsageDisabledReason carries the explanation."
+        },
+        "billingType": {
+          "type": "string",
+          "description": "Billing arrangement for the account (for example subscription versus API credits); selects which cost and limit surfaces apply."
+        },
+        "accountCreatedAt": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of account creation, used for tenure-based gating."
+        },
+        "subscriptionCreatedAt": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of when the current subscription started."
+        },
+        "organizationRole": {
+          "type": "string",
+          "description": "The user's role in the organization (for example admin or member); gates admin-only affordances."
+        },
+        "workspaceRole": {
+          "type": "string",
+          "description": "The user's role in the active workspace, applied on top of organizationRole."
+        },
+        "organizationName": {
+          "type": "string",
+          "description": "Display name of the organization, shown alongside the account."
+        }
+      },
+      "description": "Identity and entitlement snapshot for the signed-in OAuth account, refreshed from the server on bootstrap. Drives plan-specific behavior (model access, extra usage, org policy); clearing it forces re-authentication. Not written by default; the key only appears once there is something to record."
+    },
+    "officialMarketplaceAutoInstallAttempted": {
+      "type": "boolean",
+      "description": "Set true after the first auto-install attempt regardless of outcome, so the attempt is not repeated blindly; retries are governed by the fail reason and retry count. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "officialMarketplaceAutoInstallFailReason": {
+      "type": "string",
+      "enum": [
+        "policy_blocked",
+        "gcs_unavailable",
+        "git_unavailable",
+        "unknown"
+      ],
+      "description": "Why the official plugin marketplace auto-install last failed, which decides whether it will be retried. \"policy_blocked\" (set when the disabling env var/policy is present) is terminal and permanently stops retries; \"gcs_unavailable\", \"git_unavailable\" and \"unknown\" are transient and allow another attempt until officialMarketplaceAutoInstallRetryCount hits the max. Not written by default; absent means unset."
+    },
+    "officialMarketplaceAutoInstallLastAttemptTime": {
+      "type": "number",
+      "description": "Unix ms of the last official-marketplace auto-install attempt. Not written by default."
+    },
+    "officialMarketplaceAutoInstallNextRetryTime": {
+      "type": "number",
+      "description": "Earliest Unix ms at which the next auto-install retry is allowed, set by exponential backoff and capped by the max delay. A retry before this time is skipped. Not written by default."
+    },
+    "officialMarketplaceAutoInstallRetryCount": {
+      "type": "integer",
+      "description": "How many auto-install attempts have been made. Once it reaches the built-in MAX_ATTEMPTS ceiling the marketplace is never auto-installed again, regardless of failure reason. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "officialMarketplaceAutoInstalled": {
+      "type": "boolean",
+      "description": "True once the official plugin marketplace has been installed successfully; true stops all further auto-install work. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "optionAsMetaKeyInstalled": {
+      "type": "boolean",
+      "description": "Whether the \"Option acts as Meta key\" preference has been written into Apple Terminal — the Apple Terminal counterpart to shiftEnterKeyBindingInstalled. Not written by default; absent is falsy."
+    },
+    "opus1mMergeNoticeSeenCount": {
+      "type": "integer",
+      "description": "How many times the Opus 1M context merge notice has been shown; capped. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "opus47LaunchSeenCount": {
+      "type": "integer",
+      "description": "How many times the Opus 4.7 launch notice has been displayed; incremented per show and compared against a cap so the notice stops repeating. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "opusProMigrationComplete": {
+      "type": "boolean",
+      "description": "True once the Opus Pro model migration has run for this user; prevents the migration from executing again. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "opusProMigrationTimestamp": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds recording when the Opus Pro migration ran, kept for diagnostics and for ordering against later migrations. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "orgModelDefaultCache": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "description": "Cached organization-level default model policy (and the org UUID it applies to) from bootstrap; null when the account has no org default. Compared against fresh bootstrap data to decide whether to persist an update. Absent is read as null, meaning no known org default."
+    },
+    "passesEligibilityCache": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "referrer_reward": {},
+          "remaining_passes": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Cached passes eligibility per key, including remaining_passes (how many passes are left) and any referrer_reward payload, so the passes UI can render offline. Not written by default; the key only appears once there is something to record."
+    },
+    "passesLastSeenRemaining": {
+      "type": "number",
+      "description": "The remaining-passes count last shown to the user. A change against the freshly fetched value is what triggers the \"your passes changed\" treatment. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "passesUpsellSeenCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "How many times the passes upsell has been shown; incremented per display and capped. No entry is written at config creation; code reads it as 0 when absent."
+    },
+    "penguinModeOrgEnabled": {
+      "type": "boolean",
+      "description": "Server-reported flag indicating the organization has enabled \"penguin mode\"; mirrored locally so the capability is known before the next policy fetch. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "permissionExplainerEnabled": {
+      "type": "boolean",
+      "description": "When true the permission prompt shows the expanded explanation of what a tool call will do and why approval is required. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "pluginSuggestionDiscoverShownCounts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "description": "How many times each plugin has been surfaced in the discovery suggestion surface, keyed by plugin id. Compared against a per-plugin cap so a suggestion stops repeating. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "pluginSuggestionShownCounts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "description": "How many times each plugin suggestion has been shown, keyed by plugin id; reads default to 0 when the key is absent. Used to cap repeat suggestions. Not written by default; the key only appears once there is something to record."
+    },
+    "pluginSurveyState": {
+      "type": "object",
+      "properties": {
+        "pending": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "The survey queued for display, if any."
+        }
+      },
+      "additionalProperties": true,
+      "description": "State of the plugin feedback survey, including any pending survey awaiting display. Not written by default; the key only appears once there is something to record."
+    },
+    "pluginUsage": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "usageCount": {
+            "type": "integer",
+            "description": "Lifetime invocation count since install; never reset or windowed."
+          },
+          "lastUsedAt": {
+            "type": "number",
+            "description": "Unix ms of last use. Seeded to install/enable time even with zero usage, so it alone is not proof of use."
+          }
+        },
+        "additionalProperties": true
+      },
+      "description": "Per-plugin usage tracking keyed by \"<name>@<marketplace>\". usageCount is a lifetime total that never resets; lastUsedAt is seeded on install/enable and refreshed on re-enable, so treat lastUsedAt as evidence of real use only when usageCount is greater than zero. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "pluginUsageLspGraceAppliedIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Plugin ids that have already been granted the one-time LSP usage grace period, stored as a set so the grace is not applied twice. Not written by default; the key only appears once there is something to record."
+    },
+    "powerupsUnlocked": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Identifiers of powerups the user has unlocked. Membership is additive and never expires. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "prStatusFooterEnabled": {
+      "type": "boolean",
+      "description": "When true (default) the footer shows CI/review status for the pull request associated with the current branch. No entry is written at config creation; code reads it as true when absent.",
+      "default": true
+    },
+    "preferTmuxOverIterm2": {
+      "type": "boolean",
+      "description": "When true tmux is chosen over native iTerm2 splits for multi-pane teammate layouts even on iTerm2. A tie-breaker consulted when teammateMode is \"auto\". Not written by default; an absent key is falsy and therefore behaves as false."
     },
     "preferredNotifChannel": {
       "type": "string",
@@ -66,1066 +1488,11 @@
         "notifications_disabled"
       ],
       "default": "auto",
-      "description": "Preferred notification channel (NOTIFICATION_CHANNELS / ay_ at line 161563)"
-    },
-    "verbose": {
-      "type": "boolean",
-      "default": false,
-      "description": "Show detailed debug output"
-    },
-    "editorMode": {
-      "type": "string",
-      "enum": [
-        "normal",
-        "vim"
-      ],
-      "default": "normal",
-      "description": "Key binding mode (EDITOR_MODES / sy_ at line 161564; \"emacs\" is normalized to \"normal\")"
-    },
-    "autoCompactEnabled": {
-      "type": "boolean",
-      "default": true,
-      "description": "Auto-compact when context is full"
-    },
-    "autoScrollEnabled": {
-      "type": "boolean",
-      "default": true,
-      "description": "Auto-scroll the transcript to follow new output. Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "showTurnDuration": {
-      "type": "boolean",
-      "default": true,
-      "description": "Show turn duration message after responses (e.g., \"Cooked for 1m 6s\")"
-    },
-    "showMessageTimestamps": {
-      "type": "boolean",
-      "default": false,
-      "description": "Show timestamps on each message in the transcript. Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "externalEditorContext": {
-      "type": "boolean",
-      "default": false,
-      "description": "Show the last response in an external editor. Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "hasSeenTasksHint": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether the tasks hint has been shown"
-    },
-    "hasUsedStash": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether the user has used the stash feature"
-    },
-    "hasUsedBackgroundTask": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether the user has used background tasks"
-    },
-    "hasUsedBackslashReturn": {
-      "type": "boolean",
-      "description": "Whether the user has used backslash-return input (set on first use at line 205803)"
-    },
-    "queuedCommandUpHintCount": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times the queued command up-arrow hint has been shown"
-    },
-    "diffTool": {
-      "type": "string",
-      "enum": [
-        "auto",
-        "terminal"
-      ],
-      "default": "auto",
-      "description": "Diff tool to use for displaying changes"
-    },
-    "customApiKeyResponses": {
-      "type": "object",
-      "properties": {
-        "approved": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "List of approved custom API key hashes"
-        },
-        "rejected": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "List of rejected custom API key hashes"
-        }
-      },
-      "additionalProperties": false,
-      "default": {
-        "approved": [],
-        "rejected": []
-      },
-      "description": "Custom API key approval/rejection state"
-    },
-    "env": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      },
-      "default": {},
-      "description": "Environment variables to set for Claude Code sessions"
-    },
-    "tipsHistory": {
-      "type": "object",
-      "additionalProperties": true,
-      "default": {},
-      "description": "History of tips that have been shown"
-    },
-    "memoryUsageCount": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times memory has been used"
-    },
-    "promptQueueUseCount": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times prompt queue has been used"
-    },
-    "btwUseCount": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times BTW (by-the-way) suggestions have been used"
-    },
-    "todoFeatureEnabled": {
-      "type": "boolean",
-      "default": true,
-      "description": "Enable todo/task tracking"
-    },
-    "showExpandedTodos": {
-      "type": "boolean",
-      "default": false,
-      "description": "Show expanded todo list view"
-    },
-    "briefTranscript": {
-      "type": "boolean",
-      "default": false,
-      "description": "Render the transcript in brief mode (compact, less verbose). Toggled by the default-view chat/transcript setting and by focus-mode."
-    },
-    "messageIdleNotifThresholdMs": {
-      "type": "integer",
-      "default": 60000,
-      "description": "Milliseconds of idle time before showing a notification"
-    },
-    "autoConnectIde": {
-      "type": "boolean",
-      "default": false,
-      "description": "Auto-connect to IDE (external terminal)"
-    },
-    "autoInstallIdeExtension": {
-      "type": "boolean",
-      "default": true,
-      "description": "Auto-install IDE extension when connecting"
-    },
-    "hasIdeAutoConnectDialogBeenShown": {
-      "type": "boolean",
-      "description": "Whether the IDE auto-connect dialog has been shown (set when the user dismisses/accepts the prompt at line 515518)"
-    },
-    "hasIdeOnboardingBeenShown": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "boolean"
-      },
-      "description": "Map of IDE names to whether the per-IDE onboarding has been shown (line 278229)"
-    },
-    "fileCheckpointingEnabled": {
-      "type": "boolean",
-      "default": true,
-      "description": "Enable file checkpointing for code rewind"
-    },
-    "terminalProgressBarEnabled": {
-      "type": "boolean",
-      "default": true,
-      "description": "Enable terminal progress bar display (OSC 9;4)"
-    },
-    "showStatusInTerminalTab": {
-      "type": "boolean",
-      "description": "Show status in terminal tab title (gated behind the tengu_terminal_sidebar Statsig gate)"
-    },
-    "cachedStatsigGates": {
-      "type": "object",
-      "additionalProperties": true,
-      "default": {},
-      "description": "Cached Statsig feature gate values"
-    },
-    "cachedDynamicConfigs": {
-      "type": "object",
-      "additionalProperties": true,
-      "default": {},
-      "description": "Cached dynamic configuration values"
-    },
-    "cachedGrowthBookFeatures": {
-      "type": "object",
-      "additionalProperties": true,
-      "default": {},
-      "description": "Cached GrowthBook feature flag values"
-    },
-    "respectGitignore": {
-      "type": "boolean",
-      "default": true,
-      "description": "Whether file picker should respect .gitignore files"
-    },
-    "copyFullResponse": {
-      "type": "boolean",
-      "default": false,
-      "description": "Always copy full response (skip /copy picker)"
-    },
-    "unpinOpus47LaunchEffort": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether the Opus 4.7 launch-effort pin has been released for this user (flipped after explicit opt-in at line 219349)"
-    },
-    "unpinOpus48LaunchEffort": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether the Opus 4.8 launch-effort pin has been released for this user (DEFAULT_GLOBAL_CONFIG entry at line 174027; flipped after explicit opt-in around line 231801)"
-    },
-    "opus47LaunchSeenCount": {
-      "type": "integer",
-      "description": "Number of times the Opus 4.7 launch notice has been shown (line 542711)"
-    },
-    "copyOnSelect": {
-      "type": "boolean",
-      "description": "Copy text on selection (default true on applicable platforms)"
-    },
-    "apiKeyHelper": {
-      "type": "string",
-      "description": "Path to a script that outputs authentication values"
-    },
-    "shiftEnterKeyBindingInstalled": {
-      "type": "boolean",
-      "description": "Whether Shift+Enter key binding has been installed (line 205779)"
-    },
-    "taskCompleteNotifEnabled": {
-      "type": "boolean",
-      "description": "Enable notification when a task completes"
-    },
-    "inputNeededNotifEnabled": {
-      "type": "boolean",
-      "description": "Enable notification when input is needed"
-    },
-    "agentPushNotifEnabled": {
-      "type": "boolean",
-      "description": "Enable push notifications from agents"
-    },
-    "claudeInChromeDefaultEnabled": {
-      "type": "boolean",
-      "description": "Enable Claude-in-Chrome integration by default"
-    },
-    "hasCompletedClaudeInChromeOnboarding": {
-      "type": "boolean",
-      "description": "Whether Claude-in-Chrome onboarding has been completed"
-    },
-    "lspRecommendationDisabled": {
-      "type": "boolean",
-      "description": "Disable LSP recommendations"
-    },
-    "lspRecommendationNeverPlugins": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "List of LSP plugin names to never recommend"
-    },
-    "lspRecommendationIgnoredCount": {
-      "type": "integer",
-      "description": "Number of times LSP recommendations have been dismissed"
-    },
-    "permissionExplainerEnabled": {
-      "type": "boolean",
-      "description": "Enable permission explainer UI"
-    },
-    "prStatusFooterEnabled": {
-      "type": "boolean",
-      "description": "Enable PR status footer display (default true at line 630959)"
-    },
-    "remoteControlAtStartup": {
-      "type": "boolean",
-      "description": "Enable Remote Control for all sessions"
-    },
-    "remoteDialogSeen": {
-      "type": "boolean",
-      "description": "Whether the remote control dialog has been seen"
-    },
-    "autoAddRemoteControlDaemonWorker": {
-      "type": "boolean",
-      "description": "Whether to automatically add a remote-control daemon worker. Synced via GLOBAL_CONFIG_KEYS (type inferred; no DEFAULT_GLOBAL_CONFIG entry)."
-    },
-    "loopAutoEnabled": {
-      "type": "boolean",
-      "description": "Whether the /loop auto mode has been enabled. Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "hasCompletedOnboarding": {
-      "type": "boolean",
-      "description": "Whether the user has completed onboarding (paired with lastOnboardingVersion at line 659003)"
-    },
-    "lastOnboardingVersion": {
-      "type": "string",
-      "description": "VERSION string from the build that last completed onboarding (e.g. \"2.1.113\"; line 659006)"
-    },
-    "userID": {
-      "type": "string",
-      "description": "Locally generated stable user identifier persisted for telemetry and per-user runtime state."
-    },
-    "anonymousId": {
-      "type": "string",
-      "description": "Locally generated anonymous analytics identifier (for example `claudecode.v1.<uuid>`)."
-    },
-    "oauthAccount": {
-      "type": "object",
-      "properties": {
-        "accountUuid": {
-          "type": "string"
-        },
-        "emailAddress": {
-          "type": "string"
-        },
-        "organizationUuid": {
-          "type": "string"
-        },
-        "displayName": {
-          "type": "string"
-        },
-        "hasExtraUsageEnabled": {
-          "type": "boolean"
-        },
-        "billingType": {
-          "type": "string"
-        },
-        "accountCreatedAt": {
-          "type": "string",
-          "description": "ISO 8601 date string"
-        },
-        "subscriptionCreatedAt": {
-          "type": "string",
-          "description": "ISO 8601 date string"
-        },
-        "organizationRole": {
-          "type": "string"
-        },
-        "workspaceRole": {
-          "type": "string"
-        },
-        "organizationName": {
-          "type": "string"
-        }
-      },
-      "description": "OAuth account information"
+      "description": "Transport used for desktop/terminal notifications. \"auto\" probes the host terminal and picks the best channel; \"iterm2\", \"kitty\" and \"ghostty\" use those terminals' native notification escape sequences; \"terminal_bell\" emits BEL only; \"iterm2_with_bell\" combines the iTerm2 notification with a bell; \"notifications_disabled\" suppresses all of them. DEFAULT_GLOBAL_CONFIG writes \"auto\" when the config file is created."
     },
     "primaryApiKey": {
       "type": "string",
-      "description": "Primary API key for authentication"
-    },
-    "mcpServers": {
-      "type": "object",
-      "additionalProperties": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "stdio"
-              },
-              "command": {
-                "type": "string",
-                "minLength": 1,
-                "description": "Command to run"
-              },
-              "args": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "default": [],
-                "description": "Command arguments"
-              },
-              "env": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Environment variables"
-              }
-            },
-            "required": [
-              "command"
-            ],
-            "description": "Stdio MCP server configuration (type field is optional for stdio)"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "sse"
-              },
-              "url": {
-                "type": "string",
-                "description": "Server URL"
-              },
-              "headers": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "HTTP headers"
-              },
-              "headersHelper": {
-                "type": "string",
-                "description": "Path to a script that outputs headers"
-              },
-              "oauth": {
-                "$ref": "#/$defs/mcpOAuth"
-              }
-            },
-            "required": [
-              "type",
-              "url"
-            ],
-            "description": "SSE MCP server configuration"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "sse-ide"
-              },
-              "url": {
-                "type": "string",
-                "description": "Server URL"
-              },
-              "ideName": {
-                "type": "string",
-                "description": "IDE name"
-              },
-              "ideRunningInWindows": {
-                "type": "boolean",
-                "description": "Whether the IDE is running on Windows"
-              }
-            },
-            "required": [
-              "type",
-              "url",
-              "ideName"
-            ],
-            "description": "IDE-backed SSE MCP server configuration"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "ws-ide"
-              },
-              "url": {
-                "type": "string",
-                "description": "WebSocket URL"
-              },
-              "ideName": {
-                "type": "string",
-                "description": "IDE name"
-              },
-              "authToken": {
-                "type": "string",
-                "description": "Optional IDE auth token"
-              },
-              "ideRunningInWindows": {
-                "type": "boolean",
-                "description": "Whether the IDE is running on Windows"
-              }
-            },
-            "required": [
-              "type",
-              "url",
-              "ideName"
-            ],
-            "description": "IDE-backed WebSocket MCP server configuration"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "http"
-              },
-              "url": {
-                "type": "string",
-                "description": "Server URL"
-              },
-              "headers": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "HTTP headers"
-              },
-              "headersHelper": {
-                "type": "string",
-                "description": "Path to a script that outputs headers"
-              },
-              "oauth": {
-                "$ref": "#/$defs/mcpOAuth"
-              }
-            },
-            "required": [
-              "type",
-              "url"
-            ],
-            "description": "HTTP MCP server configuration"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "ws"
-              },
-              "url": {
-                "type": "string",
-                "description": "WebSocket URL"
-              },
-              "headers": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "HTTP headers"
-              },
-              "headersHelper": {
-                "type": "string",
-                "description": "Path to a script that outputs headers"
-              }
-            },
-            "required": [
-              "type",
-              "url"
-            ],
-            "description": "WebSocket MCP server configuration"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "sdk"
-              },
-              "name": {
-                "type": "string",
-                "description": "SDK server name"
-              }
-            },
-            "required": [
-              "type",
-              "name"
-            ],
-            "description": "In-process SDK MCP server configuration"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "claudeai-proxy"
-              },
-              "url": {
-                "type": "string",
-                "description": "Proxy URL"
-              },
-              "id": {
-                "type": "string",
-                "description": "Claude.ai proxy server identifier"
-              }
-            },
-            "required": [
-              "type",
-              "url",
-              "id"
-            ],
-            "description": "Claude.ai proxy MCP server configuration"
-          }
-        ]
-      },
-      "description": "MCP server configurations keyed by server name (transport union from bL3 at line 61299)"
-    },
-    "claudeAiMcpEverConnected": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "List of Claude.ai MCP servers that have been connected"
-    },
-    "teammateMode": {
-      "type": "string",
-      "enum": [
-        "auto",
-        "tmux",
-        "in-process"
-      ],
-      "description": "How to spawn teammates: \"tmux\" for traditional tmux, \"in-process\" for same process, \"auto\" to choose automatically (TEAMMATE_MODES / arq at line 161565)"
-    },
-    "teammateDefaultModel": {
-      "type": "string",
-      "description": "Default model override for spawned teammates"
-    },
-    "bypassPermissionsModeAccepted": {
-      "type": "boolean",
-      "description": "Whether bypass permissions mode has been accepted"
-    },
-    "penguinModeOrgEnabled": {
-      "type": "boolean",
-      "description": "Whether penguin mode is enabled for the organization"
-    },
-    "preferTmuxOverIterm2": {
-      "type": "boolean",
-      "description": "Prefer tmux over iTerm2 for terminal management"
-    },
-    "iterm2It2SetupComplete": {
-      "type": "boolean",
-      "description": "Whether iTerm2 IT2 setup has been completed (line 389185)"
-    },
-    "iterm2SetupInProgress": {
-      "type": "boolean",
-      "description": "Whether iTerm2 setup is currently in progress (line 673302)"
-    },
-    "appleTerminalSetupInProgress": {
-      "type": "boolean",
-      "description": "Whether Apple Terminal setup is currently in progress (line 205554)"
-    },
-    "appleTerminalBackupPath": {
-      "type": "string",
-      "description": "Filesystem path of the Apple Terminal settings backup created during setup (line 205555)"
-    },
-    "showSpinnerTree": {
-      "type": "boolean",
-      "description": "Show spinner tree view for teammates"
-    },
-    "deepLinkTerminal": {
-      "type": "string",
-      "description": "Terminal app name for deep-link protocol handler"
-    },
-    "companion": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 14,
-          "description": "Companion pet name"
-        },
-        "personality": {
-          "type": "string",
-          "description": "AI-generated personality description"
-        },
-        "hatchedAt": {
-          "type": "number",
-          "description": "Unix timestamp (ms) when the companion was hatched"
-        }
-      },
-      "description": "Companion pet state (buddy feature)"
-    },
-    "companionMuted": {
-      "type": "boolean",
-      "description": "Whether the companion pet is muted"
-    },
-    "powerupsUnlocked": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "List of unlocked powerup IDs"
-    },
-    "hasSeenUltraplanTerms": {
-      "type": "boolean",
-      "description": "Whether the user has seen and accepted ultraplan terms"
-    },
-    "hasSeenUltrareviewTerms": {
-      "type": "boolean",
-      "description": "Whether the user has seen and accepted ultrareview terms"
-    },
-    "favoritePlugins": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "List of plugin IDs the user has favorited in the plugin manager"
-    },
-    "officialMarketplaceAutoInstallAttempted": {
-      "type": "boolean",
-      "description": "Whether the official marketplace auto-install has been attempted (line 644011)"
-    },
-    "officialMarketplaceAutoInstalled": {
-      "type": "boolean",
-      "description": "Whether the official marketplace was successfully auto-installed (line 644014)"
-    },
-    "officialMarketplaceAutoInstallFailReason": {
-      "type": "string",
-      "enum": [
-        "policy_blocked",
-        "gcs_unavailable",
-        "git_unavailable",
-        "unknown",
-        "already_attempted"
-      ],
-      "description": "Reason the official marketplace auto-install failed (line 644017)"
-    },
-    "officialMarketplaceAutoInstallRetryCount": {
-      "type": "integer",
-      "description": "Number of times the official marketplace auto-install has been retried (line 644018)"
-    },
-    "changelogLastFetched": {
-      "type": "number",
-      "description": "Unix timestamp (ms) of the last changelog fetch (line 538544)"
-    },
-    "resumeReturnDismissed": {
-      "type": "boolean",
-      "description": "Whether the resume-return prompt has been dismissed"
-    },
-    "firstStartTime": {
-      "type": "number",
-      "description": "Unix timestamp of the first startup"
-    },
-    "claudeCodeFirstTokenDate": {
-      "type": "string",
-      "description": "Date string of when the first token was used"
-    },
-    "startupPrefetchedAt": {
-      "type": "number",
-      "description": "Unix timestamp of the last startup prefetch"
-    },
-    "lastReleaseNotesSeen": {
-      "type": "string",
-      "description": "VERSION string of the last release notes seen by the user (e.g. \"2.1.113\"; line 544021)"
-    },
-    "lastShownEmergencyTip": {
-      "type": "string",
-      "description": "ID of the last shown emergency tip"
-    },
-    "transcriptShareDismissed": {
-      "type": "boolean",
-      "description": "Whether the transcript share prompt has been dismissed"
-    },
-    "idleReturnDismissed": {
-      "type": "boolean",
-      "description": "Whether the idle-return prompt has been dismissed"
-    },
-    "hasAcknowledgedCostThreshold": {
-      "type": "boolean",
-      "description": "Whether the user has acknowledged the cost threshold"
-    },
-    "hasResetAutoModeOptInForDefaultOffer": {
-      "type": "boolean",
-      "description": "Whether auto mode opt-in has been reset for the default offer"
-    },
-    "hasVisitedPasses": {
-      "type": "boolean",
-      "description": "Whether the user has visited the passes page"
-    },
-    "hasVisitedExtraUsage": {
-      "type": "boolean",
-      "description": "Whether the user has visited the extra usage page"
-    },
-    "opusProMigrationComplete": {
-      "type": "boolean",
-      "description": "Whether Opus Pro migration has been completed (line 672195)"
-    },
-    "opusProMigrationTimestamp": {
-      "type": "number",
-      "description": "Unix timestamp (ms) of when Opus Pro migration occurred (line 672207)"
-    },
-    "legacyOpusMigrationTimestamp": {
-      "type": "number",
-      "description": "Unix timestamp (ms) of the legacy Opus migration (line 672043)"
-    },
-    "sonnet1m45MigrationComplete": {
-      "type": "boolean",
-      "description": "Whether Sonnet 1M 4.5 migration has been completed (line 672112)"
-    },
-    "sonnet45To46MigrationTimestamp": {
-      "type": "number",
-      "description": "Unix timestamp of when Sonnet 4.5 to 4.6 migration occurred (line 672138)"
-    },
-    "migrationVersion": {
-      "type": "number",
-      "description": "Config migration version number (line 682849)"
-    },
-    "feedbackSurveyState": {
-      "type": "object",
-      "properties": {
-        "lastShownTime": {
-          "type": "number"
-        }
-      },
-      "description": "State of the feedback survey (line 642202)"
-    },
-    "skillUsage": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Per-skill usage tracking keyed by skill name (line 280942)"
-    },
-    "githubRepoPaths": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "description": "GitHub repository paths keyed by repo identifier (line 656035)"
-    },
-    "cachedChromeExtensionInstalled": {
-      "type": "boolean",
-      "description": "Whether the Chrome extension is detected as installed (line 573260)"
-    },
-    "cachedExtraUsageDisabledReason": {
-      "type": "string",
-      "description": "Cached reason for extra usage being disabled (line 219885)"
-    },
-    "clientDataCache": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "additionalProperties": true
-        },
-        "coral_reef_sonnet": {}
-      },
-      "additionalProperties": true,
-      "description": "Client data cache populated alongside additionalModelOptionsCache during bootstrap (line 655387)"
-    },
-    "metricsStatusCache": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "timestamp": {
-          "type": "number"
-        }
-      },
-      "additionalProperties": true,
-      "description": "Cached metrics status (line 323389)"
-    },
-    "groveConfigCache": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Cached Grove configuration keyed by identifier (line 312183)"
-    },
-    "overageCreditGrantCache": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Cached overage credit grant information keyed by identifier (line 394386)"
-    },
-    "passesEligibilityCache": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "referrer_reward": {},
-          "remaining_passes": {
-            "type": "number"
-          }
-        }
-      },
-      "description": "Cached passes eligibility information (line 542135)"
-    },
-    "passesLastSeenRemaining": {
-      "type": "number",
-      "description": "Last seen remaining passes count"
-    },
-    "passesUpsellSeenCount": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times the passes upsell has been shown (line 542653)"
-    },
-    "additionalModelOptionsCache": {
-      "type": "array",
-      "description": "Cached additional model options from server"
-    },
-    "additionalModelCostsCache": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Cached per-model cost metadata keyed by model id, populated alongside clientDataCache/additionalModelOptionsCache during bootstrap."
-    },
-    "bedrockDeclinedUpgrades": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      },
-      "description": "Bedrock upgrade prompts the user has declined, keyed by tier (line 659370)."
-    },
-    "vertexDeclinedUpgrades": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      },
-      "description": "Vertex upgrade prompts the user has declined, keyed by tier (line 659531)."
-    },
-    "desktopUpsellSeenCount": {
-      "type": "integer",
-      "description": "Number of times the desktop upsell has been shown"
-    },
-    "fullscreenUpsellSeenCount": {
-      "type": "integer",
-      "default": 0,
-      "description": "Number of times the fullscreen upsell has been shown (line 542513)."
-    },
-    "githubActionSetupCount": {
-      "type": "integer",
-      "description": "Number of times GitHub Action setup has been prompted (line 519209)"
-    },
-    "ideHintShownCount": {
-      "type": "integer",
-      "description": "Number of times IDE hint has been shown (line 649161)"
-    },
-    "slackAppInstallCount": {
-      "type": "integer",
-      "description": "Number of times Slack app install has been prompted (line 519983)"
-    },
-    "subscriptionNoticeCount": {
-      "type": "integer",
-      "description": "Number of times subscription notice has been shown"
-    },
-    "voiceNoticeSeenCount": {
-      "type": "integer",
-      "description": "Number of times voice notice has been shown"
-    },
-    "voiceFooterHintSeenCount": {
-      "type": "integer",
-      "description": "Number of times voice footer hint has been shown"
-    },
-    "voiceLangHintShownCount": {
-      "type": "integer",
-      "description": "Number of times the voice language hint has been shown (line 578950)"
-    },
-    "voiceLangHintLastLanguage": {
-      "type": "string",
-      "description": "Language code of the last voice input that triggered the language hint (line 578951)"
-    },
-    "opus1mMergeNoticeSeenCount": {
-      "type": "integer",
-      "description": "Number of times Opus 1M merge notice has been shown"
-    },
-    "autoPermissionsNotificationCount": {
-      "type": "integer",
-      "description": "Number of times auto permissions notification has been shown"
-    },
-    "bridgeOauthDeadExpiresAt": {
-      "type": "number",
-      "description": "Expiry timestamp of the last OAuth token that the Chrome bridge marked as dead (line 607526)"
-    },
-    "bridgeOauthDeadFailCount": {
-      "type": "integer",
-      "description": "Number of consecutive failures observed for the dead OAuth token; gates cross-process backoff (line 607527)"
-    },
-    "claudeCodeHints": {
-      "type": "object",
-      "properties": {
-        "plugin": {},
-        "disabled": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": true,
-      "description": "Hint state for various UI hints"
-    },
-    "leftArrowOpensAgents": {
-      "type": "boolean",
-      "default": true,
-      "description": "Whether the left-arrow key opens the agents view (line 542519). Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "defaultToAgentsView": {
-      "type": "boolean",
-      "default": false,
-      "description": "Open the agents view by default at startup (line 542500). Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "autoUploadSessions": {
-      "type": "boolean",
-      "description": "Mirror local sessions to claude.ai as view-only (no remote control) (line 68104). Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "agentLastUsed": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "number"
-      },
-      "description": "Map of agent identifier to last-used Unix timestamp (line 717566)"
-    },
-    "autoModeOptInDismissed": {
-      "type": "boolean",
-      "description": "Whether the auto-mode opt-in prompt has been dismissed (line 681851)"
-    },
-    "cachedExperimentFeatures": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Cached experiment feature flags persisted alongside cachedGrowthBookFeatures (line 170196)"
-    },
-    "closedIssuesAcknowledged": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "List of issue IDs the user has acknowledged as closed (line 687038)"
-    },
-    "daemonInstallPromptDismissed": {
-      "type": "boolean",
-      "description": "Whether the daemon install prompt has been dismissed (line 640976)"
-    },
-    "fleetViewGroupMode": {
-      "type": "string",
-      "description": "Grouping mode for the FleetView UI (default \"state\"; line 718618)"
-    },
-    "fullscreenDownsellSeenCount": {
-      "type": "integer",
-      "description": "Number of times the fullscreen downsell has been shown (line 584747)"
-    },
-    "hasUsedAgentsFleet": {
-      "type": "boolean",
-      "description": "Whether the user has used the agents fleet feature (line 541333)"
-    },
-    "hasUsedRemoteControl": {
-      "type": "boolean",
-      "description": "Whether the user has used remote control (line 625282)"
-    },
-    "pushNotifUpsellSeenCount": {
-      "type": "integer",
-      "description": "Number of times the push notification upsell has been shown (line 625288)"
-    },
-    "remoteControlUpsellSeenCount": {
-      "type": "integer",
-      "description": "Number of times the remote control upsell has been shown (line 625271)"
-    },
-    "routineFiredWatermark": {
-      "description": "Watermark of the last fired scheduled routine to avoid duplicate triggers (line 727813)"
-    },
-    "seenNotifications": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Map of notification id to acknowledgement metadata (line 726183)"
-    },
-    "chromeExtension": {
-      "type": "object",
-      "properties": {
-        "pairedDeviceId": {
-          "type": "string"
-        },
-        "pairedDeviceName": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": true,
-      "description": "Chrome extension configuration (line 596617)"
+      "description": "The API key Claude Code authenticates with when not using OAuth. Present only for direct-API-key setups; treat as a secret. Not written by default; absent means unset."
     },
     "projects": {
       "type": "object",
@@ -1138,7 +1505,7 @@
               "type": "string"
             },
             "default": [],
-            "description": "Tool whitelist for this project"
+            "description": "Tool permission rules pre-approved for this project, so matching tool calls run without prompting. One of the three PROJECT_CONFIG_KEYS writable through settings sync."
           },
           "mcpContextUris": {
             "type": "array",
@@ -1146,13 +1513,13 @@
               "type": "string"
             },
             "default": [],
-            "description": "MCP context URIs for this project"
+            "description": "MCP resource URIs automatically attached as context in this project."
           },
           "mcpServers": {
             "type": "object",
             "additionalProperties": true,
             "default": {},
-            "description": "Per-project MCP server configurations"
+            "description": "Project-scope MCP server definitions, same value shape as the top-level mcpServers map. These are merged with user-scope servers for this project only."
           },
           "enabledMcpjsonServers": {
             "type": "array",
@@ -1160,7 +1527,7 @@
               "type": "string"
             },
             "default": [],
-            "description": "List of approved MCP servers from .mcp.json"
+            "description": "Names of servers from the project .mcp.json the user has approved. Approval is per-server, so a new server added to .mcp.json still prompts."
           },
           "disabledMcpjsonServers": {
             "type": "array",
@@ -1168,55 +1535,441 @@
               "type": "string"
             },
             "default": [],
-            "description": "List of rejected MCP servers from .mcp.json"
+            "description": "Names of servers from the project .mcp.json the user has rejected; these stay disabled without re-prompting."
           },
           "enableAllProjectMcpServers": {
             "type": "boolean",
-            "description": "Whether to automatically approve all MCP servers in the project"
+            "description": "When true every server in the project .mcp.json is approved automatically, including ones added later, bypassing the per-server prompt."
           },
           "enabledMcpServers": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "List of individually approved MCP servers (non-.mcp.json)"
+            "description": "Individually approved MCP servers that did not come from .mcp.json."
           },
           "disabledMcpServers": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "List of individually rejected MCP servers (non-.mcp.json)"
+            "description": "Individually rejected MCP servers that did not come from .mcp.json."
           },
           "hasTrustDialogAccepted": {
             "type": "boolean",
             "default": false,
-            "description": "Whether the trust dialog has been accepted for this project"
+            "description": "Whether the user confirmed they trust this directory. Trust is resolved up the directory tree, so a parent path being trusted covers its children rather than requiring an exact match. While untrusted, Claude Code runs restricted and re-prompts on entry — this is the flag gating execution of project-supplied code."
           },
           "projectOnboardingSeenCount": {
             "type": "integer",
             "default": 0,
-            "description": "Number of times project onboarding has been shown"
+            "description": "How many times project onboarding has been shown. Once it reaches 4 onboarding stops being offered even if hasCompletedProjectOnboarding is still false."
           },
           "hasClaudeMdExternalIncludesApproved": {
             "type": "boolean",
             "default": false,
-            "description": "Whether external includes in CLAUDE.md have been approved"
+            "description": "Whether @-includes in CLAUDE.md that resolve outside the project directory have been approved. False means external includes are skipped rather than read."
           },
           "hasClaudeMdExternalIncludesWarningShown": {
             "type": "boolean",
             "default": false,
-            "description": "Whether the external includes warning has been shown"
+            "description": "Whether the warning about external CLAUDE.md includes has already been displayed, so it is shown only once per project."
           },
           "hasCompletedProjectOnboarding": {
             "type": "boolean",
-            "description": "Whether project-specific onboarding has been completed"
+            "description": "Set true when project onboarding finishes. Onboarding is also considered done once projectOnboardingSeenCount reaches 4, or when IS_DEMO is set."
+          },
+          "exampleFiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Cached representative source files used to build example prompt suggestions. Discarded and regenerated in the background once its age (per exampleFilesGeneratedAt) exceeds the refresh window. Not written by default."
+          },
+          "exampleFilesGeneratedAt": {
+            "type": "number",
+            "description": "Unix ms when exampleFiles was last generated; drives the staleness check. Not written by default."
+          },
+          "lastCost": {
+            "type": "number",
+            "description": "Total API cost in USD of the most recent session in this project. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastAPIDuration": {
+            "type": "number",
+            "description": "Total API call time in milliseconds of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastAPIDurationWithoutRetries": {
+            "type": "number",
+            "description": "API call time in milliseconds excluding time spent on retried requests. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastToolDuration": {
+            "type": "number",
+            "description": "Total tool-execution time in milliseconds of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastDuration": {
+            "type": "number",
+            "description": "Wall-clock duration in milliseconds of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastStartTime": {
+            "type": "number",
+            "description": "Unix ms start timestamp of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastLinesAdded": {
+            "type": "number",
+            "description": "Lines added during the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastLinesRemoved": {
+            "type": "number",
+            "description": "Lines removed during the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalInputTokens": {
+            "type": "number",
+            "description": "Total input tokens consumed in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalOutputTokens": {
+            "type": "number",
+            "description": "Total output tokens produced in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalCacheCreationInputTokens": {
+            "type": "number",
+            "description": "Prompt-cache-creation input tokens in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalCacheReadInputTokens": {
+            "type": "number",
+            "description": "Prompt-cache-read input tokens in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalWebSearchRequests": {
+            "type": "number",
+            "description": "WebSearch invocations in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastFpsAverage": {
+            "type": "number",
+            "description": "Average renderer frame rate during the most recent session, when measured. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastFpsLow1Pct": {
+            "type": "number",
+            "description": "1st-percentile-low (worst-case) renderer frame rate of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastGracefulShutdown": {
+            "type": "boolean",
+            "description": "Whether the most recent session exited cleanly rather than crashing or being killed. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastVersionBase": {
+            "type": "string",
+            "description": "CLI version string of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastModelUsage": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "inputTokens": {
+                  "type": "number"
+                },
+                "outputTokens": {
+                  "type": "number"
+                },
+                "cacheReadInputTokens": {
+                  "type": "number"
+                },
+                "cacheCreationInputTokens": {
+                  "type": "number"
+                },
+                "webSearchRequests": {
+                  "type": "number"
+                },
+                "costUSD": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": true
+            },
+            "description": "Per-model usage breakdown of the most recent session, one entry per model used. Part of the resume-summary bundle. Not written by default."
+          },
+          "lastSessionId": {
+            "type": "string",
+            "description": "Session id (UUID) the surrounding `last*` statistics belong to. The resume summary is suppressed unless this matches the session being resumed, so the stats are never shown against the wrong session. Not written by default."
+          },
+          "history": {
+            "type": "array",
+            "deprecated": true,
+            "description": "Legacy per-project input history. Actively stripped from every project entry whenever the global config is loaded and merged from disk, and never written by current code — it disappears on the next config round-trip."
           }
         },
         "additionalProperties": true,
         "description": "Per-project configuration keyed by sanitized project path (defaults from pkH at line 162401)"
       },
-      "description": "Per-project configuration stored inside ~/.claude.json, keyed by sanitized project path."
+      "description": "Per-project state keyed by the canonicalized absolute project path. Only allowedTools, hasTrustDialogAccepted and hasCompletedProjectOnboarding are in PROJECT_CONFIG_KEYS (writable through the settings sync path); the rest is runtime state, including a resume-summary bundle of `last*` session statistics. No entry is written at config creation; code reads it as {} when absent."
+    },
+    "promptQueueUseCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "Lifetime count of prompt-queue uses; gates the prompt-queue discovery hint. DEFAULT_GLOBAL_CONFIG writes 0 when the config file is created."
+    },
+    "pushNotifUpsellSeenCount": {
+      "type": "integer",
+      "description": "How many times the push-notification upsell has been shown; capped. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "queuedCommandUpHintCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "How many times the \"press up to edit a queued command\" hint has been shown. Incremented per display and compared against a cap so the hint eventually stops. DEFAULT_GLOBAL_CONFIG writes 0 when the config file is created."
+    },
+    "rcLongTurnNudgeSeenCount": {
+      "type": "integer",
+      "description": "Impressions of the \"long turn — consider Remote Control\" nudge. Paired with rcLongTurnNudgeSeenKey: the count only accumulates while the impression key is unchanged, and resets to 1 when the key changes. Not written by default."
+    },
+    "rcLongTurnNudgeSeenKey": {
+      "type": "string",
+      "description": "Impression key (context identifier) the long-turn nudge was last shown for; a different key resets rcLongTurnNudgeSeenCount. Not written by default."
+    },
+    "rcPermissionNudgeSeenCount": {
+      "type": "integer",
+      "default": 0,
+      "description": "How many times the Remote Control permission nudge has been shown; incremented on each display and compared against a cap, so the nudge stops once the limit is reached. No entry is written at config creation; code reads it as 0 when absent."
+    },
+    "remoteControlAtStartup": {
+      "type": "boolean",
+      "description": "When true every new session enables Remote Control automatically, making it controllable from claude.ai/code without an explicit flag. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "remoteControlReadyPushCount": {
+      "type": "integer",
+      "description": "Impressions of the \"Remote Control is ready\" push notification, using the same key-gated counter pattern as rcLongTurnNudgeSeenCount. Not written by default."
+    },
+    "remoteControlReadyPushKey": {
+      "type": "string",
+      "description": "Impression key paired with remoteControlReadyPushCount; a change resets the count. Not written by default."
+    },
+    "remoteControlSurfacesSeen": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Identifiers of Remote Control entry-point surfaces the user has already seen. Membership suppresses the first-time treatment for that surface. No entry is written at config creation; code reads it as [] when absent.",
+      "default": []
+    },
+    "remoteControlUpsellSeenCount": {
+      "type": "integer",
+      "description": "How many times the Remote Control upsell has been shown; capped. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "remoteDialogSeen": {
+      "type": "boolean",
+      "description": "One-way flag set once the Remote Control explainer dialog has been shown, so it is offered only once. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "replBridgeEnabled": {
+      "type": "boolean",
+      "deprecated": true,
+      "description": "Legacy pre-rename equivalent of remoteControlAtStartup. A one-time migration copies its value into remoteControlAtStartup and then deletes this key, so it should not appear in a current config."
+    },
+    "replBridgeOutboundOnly": {
+      "type": "boolean",
+      "deprecated": true,
+      "description": "Legacy flag marking an outbound-only REPL bridge mode, retired alongside replBridgeEnabled."
+    },
+    "replBridgePlaceholders": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Saved REPL bridge placeholder entries keyed by placeholder name. The list is trimmed to a fixed maximum on write, so the oldest entries beyond the cap are dropped. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "replBridgeSessionGroupingId": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Legacy REPL-bridge session-grouping identifier, cleared whenever replBridgeEnabled was toggled off."
+    },
+    "respectGitignore": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) the file picker and file suggestions hide paths excluded by .gitignore; false lists ignored files too."
+    },
+    "resumeReturnDismissed": {
+      "type": "boolean",
+      "description": "True once the user dismisses the \"resume your previous session\" prompt; true suppresses it permanently. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "routineFiredWatermark": {
+      "type": [
+        "number",
+        "string"
+      ],
+      "description": "High-water mark of the last fired scheduled routine, so routines that already ran are not re-triggered after a restart. Not written by default; absent means no routine has fired yet."
+    },
+    "seenNotifications": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "description": "Impression count per notification id, shared by several announcement and notice systems. Some account-reset flows delete an id's entry outright rather than zeroing it. Not written by default."
+    },
+    "shiftEnterKeyBindingInstalled": {
+      "type": "boolean",
+      "description": "One-way flag recording that the terminal-specific Shift+Enter keybinding has been written to the terminal's config, so setup is not attempted again. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "showExpandedTodos": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true the todo list renders fully expanded; default false renders it collapsed to the active item."
+    },
+    "showMessageTimestamps": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true each transcript message is prefixed with its timestamp; default false. Synced via GLOBAL_CONFIG_KEYS."
+    },
+    "showSpinnerTree": {
+      "type": "boolean",
+      "description": "When true teammate activity renders as a nested spinner tree rather than a flat list. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "showStatusInTerminalTab": {
+      "type": "boolean",
+      "description": "When true the terminal tab/window title is rewritten with the current session status. Only offered when the corresponding feature gate is enabled for the user. No entry is written at config creation; code reads it as false when absent.",
+      "default": false
+    },
+    "showTurnDuration": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) a wall-clock duration line is appended after each assistant turn (for example \"Cooked for 1m 6s\")."
+    },
+    "skillUsage": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-skill usage tracking keyed by skill name, each entry holding a lifetime usageCount and a lastUsedAt Unix-ms timestamp. Unlike pluginUsage these are written only on real dispatch, so lastUsedAt is trustworthy. Skills under a directory may be recorded under either \"<dir>:<name>\" or the bare \"<name>\". No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "slackAppInstallCount": {
+      "type": "integer",
+      "description": "How many times the Slack app install prompt has been offered; compared against a cap. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "sonnet1m45MigrationComplete": {
+      "type": "boolean",
+      "description": "True once the Sonnet 1M (4.5) migration has run; prevents re-running it. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "sonnet45To46MigrationTimestamp": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds recording when the Sonnet 4.5 to 4.6 migration ran. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "startupPrefetchedAt": {
+      "type": "number",
+      "description": "Unix timestamp of the last startup prefetch, used to throttle prefetching to at most once per interval. Absent is read as 0, which makes the next prefetch run immediately. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "subscriptionNoticeCount": {
+      "type": "integer",
+      "description": "How many times the subscription notice has been shown; compared against a cap so it stops repeating. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "taskCompleteNotifEnabled": {
+      "type": "boolean",
+      "description": "When true a notification fires each time a task finishes, using the transport chosen by preferredNotifChannel. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "teamOnboardingLastUsedAt": {
+      "type": "number",
+      "description": "Unix timestamp in milliseconds of the last team-onboarding interaction, used to decide whether onboarding should be re-offered. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "teammateDefaultModel": {
+      "type": "string",
+      "description": "Model id used for spawned teammates when the teammate does not specify one. Unset means teammates inherit the session model. Absent (read as null) means teammates inherit the session model. Not written by default; absent means unset."
+    },
+    "terminalProgressBarEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) Claude Code emits OSC 9;4 progress sequences so supporting terminals show a native progress indicator in the tab or dock."
+    },
+    "theme": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "dark",
+        "light",
+        "light-daltonized",
+        "dark-daltonized",
+        "light-ansi",
+        "dark-ansi"
+      ],
+      "default": "dark",
+      "description": "Color theme. \"dark\"/\"light\" are the standard palettes; the \"-daltonized\" variants swap the red/green diff colors for color-vision-deficiency safety; the \"-ansi\" variants restrict output to the terminal's own 16-color ANSI palette instead of truecolor; \"auto\" follows the terminal's reported background. DEFAULT_GLOBAL_CONFIG writes \"dark\" when the config file is created."
+    },
+    "tipLifetimeShownCounts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "description": "Lifetime display count per tip id, incremented at the same time tipsHistory records the tip; reads default to 0. Unlike tipsHistory (which records the last shown value) this never decreases, so it is what caps a tip permanently. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "tipsHistory": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {},
+      "description": "Per-tip record of the numStartups value at which each tip was last shown, keyed by tip id. Used to space repeat impressions across launches; the lifetime cap lives separately in tipLifetimeShownCounts. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created."
+    },
+    "todoFeatureEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "When true (default) the todo/task tracker is available and the model is given the todo tool; false removes the feature and its UI."
+    },
+    "transcriptShareDismissed": {
+      "type": "boolean",
+      "description": "True once the transcript-sharing prompt has been dismissed; suppresses it permanently. Not written by default; an absent key is falsy and therefore behaves as false."
+    },
+    "unpinFable5LaunchEffort": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the Fable 5 launch-effort pin has been released for this user. False keeps the launch-default reasoning effort pinned; it flips to true only after an explicit opt-in. Companion to unpinOpus47LaunchEffort and unpinOpus48LaunchEffort."
+    },
+    "unpinOpus47LaunchEffort": {
+      "type": "boolean",
+      "default": false,
+      "description": "False keeps this user pinned to the reasoning-effort default that shipped with the Opus 4.7 launch; it flips to true only after an explicit opt-in, after which the current default applies."
+    },
+    "unpinOpus48LaunchEffort": {
+      "type": "boolean",
+      "default": false,
+      "description": "False keeps this user pinned to the reasoning-effort default that shipped with the Opus 4.8 launch; flips to true only after an explicit opt-in."
+    },
+    "userID": {
+      "type": "string",
+      "description": "Locally generated stable user identifier used for telemetry and per-user runtime state. Distinct from machineID (per host) and from oauthAccount.accountUuid (server identity). Not written by default; absent means unset."
+    },
+    "verbose": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true the transcript renders full, untruncated tool input/output instead of the collapsed summaries. Purely a display setting; it does not change what is sent to the model. DEFAULT_GLOBAL_CONFIG writes false when the config file is created."
+    },
+    "vertexDeclinedUpgrades": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Vertex model-upgrade offers the user declined, keyed by tier with the declined target as the value; a recorded entry suppresses that upgrade prompt. No entry is written at config creation; code reads it as {} when absent.",
+      "default": {}
+    },
+    "voiceFooterHintSeenCount": {
+      "type": "integer",
+      "description": "How many times the voice footer hint has been shown; capped. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "voiceLangHintLastLanguage": {
+      "type": "string",
+      "description": "Language code of the voice input that last triggered the language hint, so the hint is not repeated for the same language. Not written by default; absent means unset."
+    },
+    "voiceLangHintShownCount": {
+      "type": "integer",
+      "description": "How many times the voice language hint has been shown; capped, and paired with voiceLangHintLastLanguage. No entry is written at config creation; code reads it as 0 when absent.",
+      "default": 0
+    },
+    "voiceNoticeSeenCount": {
+      "type": "integer",
+      "description": "How many times the voice-input notice has been shown; capped. Not written by default; absent means the counter/timestamp has never been recorded."
+    },
+    "workflowSizeGuideline": {
+      "type": "string",
+      "enum": [
+        "unrestricted",
+        "small",
+        "medium",
+        "large"
+      ],
+      "description": "Advisory ceiling on how many agents a Claude-authored dynamic workflow should spawn: \"small\" targets fewer than 5, \"medium\" (the effective default) fewer than 15, \"large\" fewer than 50, and \"unrestricted\" sends no guidance at all. A value in any settings file overrides this key and hides the matching /config row. Advisory only, never enforced. Not written by default; absent means unset."
     }
   },
   "$defs": {
@@ -1224,23 +1977,31 @@
       "type": "object",
       "properties": {
         "clientId": {
-          "type": "string"
+          "type": "string",
+          "description": "Pre-registered OAuth client id; when absent dynamic client registration is attempted."
         },
         "callbackPort": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "description": "Fixed local port for the OAuth redirect listener. Positive integer; absent picks an ephemeral port."
         },
         "authServerMetadataUrl": {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://"
+          "pattern": "^https://",
+          "description": "Authorization-server metadata document URL. Must start with https://."
         },
         "scopes": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "description": "Space-delimited OAuth scopes requested at authorization time."
+        },
+        "xaa": {
+          "type": "boolean",
+          "description": "Enables the XAA (cross-account authorization) OAuth flow for this server."
         }
       },
-      "description": "OAuth configuration for MCP server connections (Gp8 at line 61306)"
+      "description": "OAuth configuration for an MCP server connection. All fields are optional; omitting the block entirely means no OAuth is attempted."
     }
   }
 }
