@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Claude Code Global User Configuration (~/.claude.json)",
   "description": "Persisted global user config/state for the Claude Code CLI. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json. This schema models the persisted global file (auth state, UI preferences, caches, usage counters, identifiers and nested per-project state) and intentionally excludes the separately merged settings.json / managed-policy configuration, which has its own schema inside the bundle.",
-  "$comment": "Reverse-engineered from cli.unpack.js at tag 2.1.220 (a Bun-compiled bundle; package.json bin is bin/claude.exe). Anchors used: the config getter Rt() (line 677762); DEFAULT_GLOBAL_CONFIG factory yDe() (line ~677152) aliased to Koe (line 678797); GLOBAL_CONFIG_KEYS n3o (line 678798, 47 keys); DEFAULT_PROJECT_CONFIG JKe (line 678786); PROJECT_CONFIG_KEYS dcp (line 678799); NOTIFICATION_CHANNELS Toe and EDITOR_MODES z5n (lines 78194-78195); TEAMMATE_MODES sql (line 78196); theme enum XHi (line 78197); the MCP transport zod schemas (lines 78560-78680). Verified against an independent second pass over the getter/mutator machinery (Rt/hr for global, Rd/Yv/Vcr for per-project). Delta 2.1.154 -> 2.1.220: 33 keys added (including pluginUsage, clientDataCacheSlots, modelAccessCache, orgModelDefaultCache, cachedUsageUtilization, autoCompactWindowsCache, the fotw* family, workflowSizeGuideline, diffSidebarOpen, machineID and unpinFable5LaunchEffort); 10 keys removed and verified absent from the bundle (cachedStatsigGates, loopAutoEnabled, anonymousId, companionMuted, idleReturnDismissed, hasVisitedExtraUsage, overageCreditGrantCache, desktopUpsellSeenCount, ideHintShownCount, autoPermissionsNotificationCount); TEAMMATE_MODES gained \"iterm2\"; the MCP server union gained the shared timeout/alwaysLoad/role/tools/toolPermissions/discoveryCache fields and the \"streamable-http\" alias for http. \"default\" carries the literal DEFAULT_GLOBAL_CONFIG value where the key is seeded at file creation, otherwise the code-level ?? fallback used when the key is absent; each description states which of the two applies. teammateMode was REMOVED from this schema: it is read via the settings accessor (Hc) from settings.json and is never read through Rt() or written through hr(), so it is not a ~/.claude.json key. The theme enum includes \"auto\" (W3r = [\"auto\", ...XHi]). firstStartTime is an ISO 8601 string, and lastReleaseNotesSeen / lastOnboardingVersion are full build-metadata objects compared on their VERSION field, not bare version strings. The per-project object carries a resume-summary bundle of last* session statistics (cost, durations, token totals, fps, model usage) written by Yv(dZu(...)); the legacy per-project history array is stripped on every config load. Minified symbol names and line numbers shift every release and are version-specific evidence pointers, not stable anchors.",
+  "$comment": "Reverse-engineered from cli.unpack.js at tag 2.1.221 (a Bun-compiled bundle; package.json bin is bin/claude.exe). Anchors at this tag: the global config getter Ht() (line 741565); the global config mutator vr() (line 741309), which takes an updater function and merges per-project state via jCn; DEFAULT_GLOBAL_CONFIG factory QHe() (line 740965, 38 seeded keys) aliased to yae (line 742598); GLOBAL_CONFIG_KEYS AJo (line 742599, 48 keys); DEFAULT_PROJECT_CONFIG BZe (line 742588, 9 keys); PROJECT_CONFIG_KEYS r5p (line 742600 - allowedTools, hasTrustDialogAccepted, hasCompletedProjectOnboarding); the restricted-mode config CTt (line 742601), which is DEFAULT_GLOBAL_CONFIG with autoUpdates forced false and is returned by both getter and mutator when dha() holds. Delta 2.1.220 -> 2.1.221: NOTHING WAS REMOVED - all 197 previously documented top-level keys and all 35 per-project keys were re-checked with a word-boundary occurrence count against the bundle and every one still occurs. GLOBAL_CONFIG_KEYS is byte-identical to 2.1.220; the previous revision of this file recorded it as 47 keys, which was an off-by-one - it is 48. Added this release: the top-level key cachedExperimentData, and five oauthAccount fields (ccOnboardingFlags, claudeCodeTrialDurationDays, claudeCodeTrialEndsAt, profileFetchedAt, seatTier) written through the oauthAccount: {...m.oauthAccount, ...f} merge at line 188137. Verification method: every key read as Ht().KEY (120 distinct) and every key seeded by QHe() was confirmed present in this schema, and every schema key was confirmed present in the bundle. \"default\" carries the literal DEFAULT_GLOBAL_CONFIG value where the key is seeded at file creation, otherwise the code-level ?? fallback used when the key is absent; each description states which of the two applies. This schema models the persisted global file only and excludes the separately merged settings.json / managed-policy configuration. teammateMode remains excluded: it is read via the settings accessor from settings.json and never through Ht() or vr(), so it is not a ~/.claude.json key. Current builds prefer ~/.claude/.config.json and fall back to legacy ~/.claude.json; both use this shape. Minified symbol names and line numbers are regenerated on every release - the 2.1.220 names (Rt, hr, yDe, Koe, n3o, JKe, dcp) are all renamed here - so treat them as version-specific evidence pointers, not stable anchors. Corrections made this revision after validating a real ~/.claude.json against the schema (36 errors -> 3): projects.*.lastModelUsage was typed as an array but is an object map keyed by model id - the writer is a mapValues helper (ZE at line 5485 aliases Kvh at line 5472, which builds an object and assigns by key) applied at line 449116; cachedExtraUsageDisabledReason now accepts null, which is written explicitly when extra usage becomes available again (lines 287128, 298384, 298408); oauthAccount.workspaceRole and passesEligibilityCache.*.remaining_passes now accept null since both are copied straight from server payloads; and the claudeai-proxy MCP variant gained discoverSupport and cachedDiscoverResponse (lines 78891-78904). The 3 residual validation errors are NOT schema defects: lastReleaseNotesSeen and lastOnboardingVersion hold bare version strings in configs written by older releases but are full build-metadata objects at 2.1.221 (line 909454), and an mcpServers entry of the bare form {url} with no type is rejected by the bundle's own zod union (F2e, line 78906) exactly as it is here. Second correction pass, all items verified independently at this tag: SIX keys were removed because the runtime purges them so they can never persist in a settled file - `companion` (its discriminating inner field `hatchedAt` has zero occurrences bundle-wide; the bare word `companion` still matches a Kotlin keyword list and two skill docs, so a naive grep gives a false positive), `showSpinnerTree` (the `delete e.showSpinnerTree` at line 741397 is its only occurrence), and four keys destructured away by FCe() at lines 741423-741439 on every write (autoModeOptInDismissed, opus1mMergeNoticeSeenCount, opus47LaunchSeenCount, voiceNoticeSeenCount). The other four names FCe strips were already absent here. Do not confuse the stripped `pluginUsageLspGraceApplied` with the live `pluginUsageLspGraceAppliedIds` (written at 270969). ELEVEN per-project keys were added that an earlier derivation missed because they are reached through the per-project getter ip() (741974) and mutators uC() (741984) / Wyr() (742056) rather than through the global getter: the orgMemory* family (orgMemorySelection, orgMemorySelectionAccount, orgMemoryRead, orgMemoryWrites, orgMemoryWritesAccount), activeWorktreeSession (an OBJECT of worktree restore state, not a session-id string - inferring the type from the write-site parameter name gives the wrong answer; validating a real config is what caught it),  hasUsedRemoteSession, the team-artifact trio (seenTeamArtifactPaths, hasUnseenTeamArtifacts, loggedAuthoredArtifactPaths), and lastSessionMetrics. Also corrected: allowedTools accepts a legacy string that is parsed to an array on read (741979); workflowSizeGuideline gained its code-level default \"medium\"; hasAvailableSubscription is write-only at this tag; and the autoUpdaterStatus enum is wider than the three values the migrator recognizes. NOTE on per-project `history`: it is stripped by vJo() (741441) reached only via jCn() (741470), which runs on the global-config WRITE/merge paths (741325, 741340, 741357, 741371, 742133) - NOT on load, as earlier revisions of this comment stated. The load path pha() (741396) does not touch it. On tengu_*: these are GrowthBook feature-flag and telemetry-event names, NOT ~/.claude.json configuration fields — the bundle contains zero `Ht().tengu_*` reads and never writes one at top level. Of 1736 distinct tengu_ literals at 2.1.221, 1297 are telemetry event names passed to N(eventName, metadata), 312 are feature flags read via Xe(name, default) (now enumerated under cachedGrowthBookFeatures), and 131 are neither. A real ~/.claude.json may nonetheless show tengu_ keys at TOP level (24 were observed in one): those are stale residue written by older releases and are not read by this build, which is why they are not modelled as properties here.",
   "type": "object",
   "additionalProperties": true,
   "properties": {
@@ -81,10 +81,6 @@
       "additionalProperties": true,
       "description": "Recorded environment-setup state for auto mode, merged rather than replaced on write. Tracks what the auto-mode bootstrap has already provisioned so it is not redone every session; `undefined` means setup has not run. Not written by default; the key only appears once there is something to record."
     },
-    "autoModeOptInDismissed": {
-      "type": "boolean",
-      "description": "True once the auto-mode opt-in prompt has been dismissed; suppresses the prompt without opting in. Not written by default; an absent key is falsy and therefore behaves as false."
-    },
     "autoScrollEnabled": {
       "type": "boolean",
       "default": true,
@@ -100,7 +96,7 @@
         "no_permissions",
         "not_configured"
       ],
-      "description": "Legacy pre-installMethod updater state, retained only for migration. \"migrated\" means it has been converted to installMethod; \"no_permissions\" means the install directory was not writable; \"not_configured\" means it was never initialized. Any other value maps to \"unknown\" during migration. Not written by default; absent means unset."
+      "description": "Legacy pre-installMethod updater state, retained only for migration. \"migrated\" means it has been converted to installMethod; \"no_permissions\" means the install directory was not writable; \"not_configured\" means it was never initialized. Any other value maps to \"unknown\" during migration. Not written by default; absent means unset. Only \"migrated\", \"disabled\" and \"enabled\" are recognized by the migration switch at lines 741404-741414; any other value (including the other enum members retained here for historical configs) falls through to installMethod \"unknown\"."
     },
     "autoUpdates": {
       "type": "boolean",
@@ -158,7 +154,28 @@
       "type": "object",
       "additionalProperties": true,
       "default": {},
-      "description": "Locally cached dynamic (server-driven) configuration values, keyed by config name, so startup does not block on a fetch. Overwritten on each successful refresh. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created."
+      "description": "Locally cached dynamic (server-driven) configuration values, keyed by config name, so startup does not block on a fetch. Overwritten on each successful refresh. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created. Keys are dynamic-config names; note these use the hyphenated `tengu-` form (for example `tengu-top-of-feed-tip`) rather than the underscored flag naming."
+    },
+    "cachedExperimentData": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "experimentId": {
+            "type": "string",
+            "description": "Identifier of the GrowthBook experiment this feature key was resolved by."
+          },
+          "variationId": {
+            "type": "integer",
+            "description": "Index of the variation the account was bucketed into."
+          },
+          "value": {
+            "description": "The resolved variation value. On load it must still deep-equal the corresponding entry in cachedGrowthBookFeatures, otherwise the cached assignment is discarded."
+          }
+        },
+        "description": "One cached experiment assignment, keyed by feature name."
+      },
+      "description": "Cached GrowthBook experiment assignments, written in the same update as cachedGrowthBookFeatures, cachedExperimentFeatures and cachedGrowthBookFeaturesAt (line 192211). An entry is only reused when it is an object carrying a string experimentId and a numeric variationId AND its value still matches cachedGrowthBookFeatures for that key (line 191985); any mismatch drops the assignment so the experiment is re-bucketed. Absent until features have been fetched at least once. Keys are the same `tengu_`-prefixed flag names used by cachedGrowthBookFeatures."
     },
     "cachedExperimentFeatures": {
       "type": "array",
@@ -169,14 +186,1263 @@
       "default": []
     },
     "cachedExtraUsageDisabledReason": {
-      "type": "string",
-      "description": "Server-supplied reason string explaining why extra usage is unavailable, cached so the explanation can be shown without a fetch. Not written by default; absent means unset."
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Server-supplied reason string explaining why extra usage is unavailable, cached so the explanation can be shown without a fetch. Explicitly written as null when extra usage is available again (lines 287128, 298384, 298408), so null is a meaningful stored value distinct from the key being absent."
     },
     "cachedGrowthBookFeatures": {
       "type": "object",
+      "properties": {
+        "tengu_alder_compass": {
+          "$comment": "cli.unpack.js:1077972",
+          "default": false
+        },
+        "tengu_amber_anchor": {
+          "$comment": "cli.unpack.js:193309",
+          "default": false
+        },
+        "tengu_amber_creek": {
+          "$comment": "cli.unpack.js:202924",
+          "default": false
+        },
+        "tengu_amber_flint": {
+          "$comment": "cli.unpack.js:462845",
+          "default": true
+        },
+        "tengu_amber_kestrel": {
+          "$comment": "cli.unpack.js:562237",
+          "default": false
+        },
+        "tengu_amber_lark": {
+          "$comment": "cli.unpack.js:692810",
+          "default": false
+        },
+        "tengu_amber_lattice": {
+          "$comment": "cli.unpack.js:719771",
+          "default": {}
+        },
+        "tengu_amber_lynx": {
+          "$comment": "cli.unpack.js:874316",
+          "default": false
+        },
+        "tengu_amber_packet": {
+          "$comment": "cli.unpack.js:475516",
+          "default": false
+        },
+        "tengu_amber_prism": {
+          "$comment": "cli.unpack.js:733665",
+          "default": false
+        },
+        "tengu_amber_quill_moth": {
+          "$comment": "cli.unpack.js:541270",
+          "default": false
+        },
+        "tengu_amber_redwood2": {
+          "$comment": "cli.unpack.js:297281",
+          "default": ""
+        },
+        "tengu_amber_redwood3": {
+          "$comment": "cli.unpack.js:297281",
+          "default": ""
+        },
+        "tengu_amber_relay": {
+          "$comment": "cli.unpack.js:740818",
+          "default": false
+        },
+        "tengu_amber_rokovoko": {
+          "$comment": "cli.unpack.js:297643",
+          "default": 0.2
+        },
+        "tengu_amber_sentinel": {
+          "$comment": "cli.unpack.js:290805",
+          "default": false
+        },
+        "tengu_amber_sextant": {
+          "$comment": "cli.unpack.js:702869",
+          "default": true
+        },
+        "tengu_amber_wren": {
+          "$comment": "cli.unpack.js:393220",
+          "default": {}
+        },
+        "tengu_ant_yolo_equiv_strip_config": {
+          "$comment": "cli.unpack.js:731947",
+          "default": {}
+        },
+        "tengu_artifact_hljs_highlight": {
+          "$comment": "cli.unpack.js:519552",
+          "default": true
+        },
+        "tengu_artifact_mermaid_diagrams": {
+          "$comment": "cli.unpack.js:519694",
+          "default": true
+        },
+        "tengu_auto_mode_config": {
+          "$comment": "cli.unpack.js:143555; read with differing defaults: Symbol(\"no-cached-auto-mode-config\")  (via Rtu), Symbol(\"no-cached-auto-mode-config\")  (via yqp), {}"
+        },
+        "tengu_basalt_meadow": {
+          "$comment": "cli.unpack.js:1015598",
+          "default": false
+        },
+        "tengu_basalt_scarp": {
+          "$comment": "cli.unpack.js:480718",
+          "default": false
+        },
+        "tengu_basalt_spur": {
+          "$comment": "cli.unpack.js:480715",
+          "default": false
+        },
+        "tengu_bg_attach_stall_ms": {
+          "$comment": "cli.unpack.js:898994",
+          "default": 5000
+        },
+        "tengu_bg_attach_upgrade": {
+          "$comment": "cli.unpack.js:763098",
+          "default": true
+        },
+        "tengu_bg_binary_takeover": {
+          "$comment": "cli.unpack.js:900925",
+          "default": true
+        },
+        "tengu_bg_leftarrow_inprocess": {
+          "$comment": "cli.unpack.js:1069715",
+          "default": true
+        },
+        "tengu_bg_low_mem_mb": {
+          "$comment": "cli.unpack.js:763045",
+          "default": 1024
+        },
+        "tengu_bg_prewarm_burst_concurrency": {
+          "$comment": "cli.unpack.js:1147387",
+          "default": 3
+        },
+        "tengu_bg_prewarm_burst_delay_ms": {
+          "$comment": "cli.unpack.js:1147383",
+          "default": 15000
+        },
+        "tengu_bg_prewarm_per_sweep": {
+          "$comment": "cli.unpack.js:1147322",
+          "default": 3
+        },
+        "tengu_bg_retire_grace_bridged_min": {
+          "$comment": "cli.unpack.js:763095",
+          "default": 480
+        },
+        "tengu_bg_revival_guard": {
+          "$comment": "cli.unpack.js:764051",
+          "default": true
+        },
+        "tengu_bg_spare_enable": {
+          "$comment": "cli.unpack.js:1146936",
+          "default": true
+        },
+        "tengu_birch_kettle": {
+          "$comment": "cli.unpack.js:1058842",
+          "default": false
+        },
+        "tengu_birch_lantern": {
+          "$comment": "cli.unpack.js:910684",
+          "default": "off"
+        },
+        "tengu_bramble_lintel": {
+          "$comment": "cli.unpack.js:481070",
+          "default": null
+        },
+        "tengu_brass_sled": {
+          "$comment": "cli.unpack.js:606535",
+          "default": false
+        },
+        "tengu_brick_follow": {
+          "$comment": "cli.unpack.js:442087",
+          "default": false
+        },
+        "tengu_bridge_attestation_enforce": {
+          "$comment": "cli.unpack.js:463612",
+          "default": false
+        },
+        "tengu_bridge_attestation_enforce_config": {
+          "$comment": "cli.unpack.js:463618",
+          "default": {}
+        },
+        "tengu_bridge_poll_interval_config": {
+          "$comment": "cli.unpack.js:753154; default is non-literal: akr"
+        },
+        "tengu_bridge_repl_v2_cse_shim_enabled": {
+          "$comment": "cli.unpack.js:740765",
+          "default": true
+        },
+        "tengu_bridge_requires_action_details": {
+          "$comment": "cli.unpack.js:587379",
+          "default": false
+        },
+        "tengu_bridge_system_init": {
+          "$comment": "cli.unpack.js:983397",
+          "default": false
+        },
+        "tengu_bridge_vivid": {
+          "$comment": "cli.unpack.js:740824",
+          "default": false
+        },
+        "tengu_brindle_causeway": {
+          "$comment": "cli.unpack.js:299586",
+          "default": false
+        },
+        "tengu_byte_stream_idle_timeout_ms": {
+          "$comment": "cli.unpack.js:182759; default is non-literal: e != null ? V_h(K_h(e)) : {}  (via r)"
+        },
+        "tengu_c4e_slash_upsell": {
+          "$comment": "cli.unpack.js:695919",
+          "default": false
+        },
+        "tengu_canary": {
+          "$comment": "cli.unpack.js:747363",
+          "default": {}
+        },
+        "tengu_ccr_bridge": {
+          "$comment": "cli.unpack.js:740420",
+          "default": false
+        },
+        "tengu_ccr_bundle_max_bytes": {
+          "$comment": "cli.unpack.js:465696",
+          "default": null
+        },
+        "tengu_ccr_delta_rehydrate": {
+          "$comment": "cli.unpack.js:1108022",
+          "default": false
+        },
+        "tengu_ccr_subagent_skip_on_delta": {
+          "$comment": "cli.unpack.js:1108025",
+          "default": false
+        },
+        "tengu_ccr_v2_send_events_cli": {
+          "$comment": "cli.unpack.js:740768",
+          "default": false
+        },
+        "tengu_ccr_v2_session_crud_cli": {
+          "$comment": "cli.unpack.js:740771",
+          "default": false
+        },
+        "tengu_cedar_lantern": {
+          "$comment": "cli.unpack.js:703385",
+          "default": true
+        },
+        "tengu_cedar_lattice": {
+          "$comment": "cli.unpack.js:706380",
+          "default": false
+        },
+        "tengu_cedar_marsh": {
+          "$comment": "cli.unpack.js:773228",
+          "default": false
+        },
+        "tengu_cedar_plume": {
+          "$comment": "cli.unpack.js:1078333",
+          "default": false
+        },
+        "tengu_cedar_transom": {
+          "$comment": "cli.unpack.js:199313",
+          "default": false
+        },
+        "tengu_cfc_in_product_permissions": {
+          "$comment": "cli.unpack.js:335585",
+          "default": false
+        },
+        "tengu_chair_sermon": {
+          "$comment": "cli.unpack.js:735391",
+          "default": false
+        },
+        "tengu_chomp_inflection": {
+          "$comment": "cli.unpack.js:481997",
+          "default": false
+        },
+        "tengu_chrome_auto_enable": {
+          "$comment": "cli.unpack.js:877116",
+          "default": false
+        },
+        "tengu_chrome_install_upsell": {
+          "$comment": "cli.unpack.js:1031732",
+          "default": false
+        },
+        "tengu_cicada_nap_ms": {
+          "$comment": "cli.unpack.js:1096898",
+          "default": 0
+        },
+        "tengu_cinder_plover": {
+          "$comment": "cli.unpack.js:468754",
+          "default": ""
+        },
+        "tengu_cinder_wren": {
+          "$comment": "cli.unpack.js:468759",
+          "default": ""
+        },
+        "tengu_classifier_disabled_surfaces": {
+          "$comment": "cli.unpack.js:485943",
+          "default": ""
+        },
+        "tengu_classifier_summary_heuristic_emit": {
+          "$comment": "cli.unpack.js:485991",
+          "default": false
+        },
+        "tengu_classifier_summary_kill": {
+          "$comment": "cli.unpack.js:485955",
+          "default": false
+        },
+        "tengu_classifier_summary_llm_emit": {
+          "$comment": "cli.unpack.js:485988",
+          "default": false
+        },
+        "tengu_cloth_snorkel": {
+          "$comment": "cli.unpack.js:593694",
+          "default": false
+        },
+        "tengu_cobalt_harbor": {
+          "$comment": "cli.unpack.js:740812",
+          "default": false
+        },
+        "tengu_cobalt_harbor_notice": {
+          "$comment": "cli.unpack.js:442082",
+          "default": true
+        },
+        "tengu_cobalt_lantern": {
+          "$comment": "cli.unpack.js:461861",
+          "default": false
+        },
+        "tengu_cobalt_plinth": {
+          "$comment": "cli.unpack.js:199170",
+          "default": false
+        },
+        "tengu_cobalt_plinth_bracken": {
+          "$comment": "cli.unpack.js:541252",
+          "default": false
+        },
+        "tengu_cobalt_plinth_dataviz": {
+          "$comment": "cli.unpack.js:1029892",
+          "default": false
+        },
+        "tengu_cobalt_plinth_direct": {
+          "$comment": "cli.unpack.js:542249",
+          "default": true
+        },
+        "tengu_cobalt_plinth_fern": {
+          "$comment": "cli.unpack.js:541240",
+          "default": true
+        },
+        "tengu_cobalt_plinth_laurel": {
+          "$comment": "cli.unpack.js:541246",
+          "default": false
+        },
+        "tengu_cobalt_plinth_osier": {
+          "$comment": "cli.unpack.js:541249",
+          "default": false
+        },
+        "tengu_cobalt_plinth_putguard": {
+          "$comment": "cli.unpack.js:541264",
+          "default": true
+        },
+        "tengu_cobalt_plinth_reader_persist": {
+          "$comment": "cli.unpack.js:541258",
+          "default": false
+        },
+        "tengu_cobalt_plinth_sedge": {
+          "$comment": "cli.unpack.js:541255",
+          "default": false
+        },
+        "tengu_cobalt_ridge": {
+          "$comment": "cli.unpack.js:207694",
+          "default": false
+        },
+        "tengu_cobalt_thicket": {
+          "$comment": "cli.unpack.js:1096587",
+          "default": true
+        },
+        "tengu_cobalt_thistle": {
+          "$comment": "cli.unpack.js:143355",
+          "default": false
+        },
+        "tengu_cobalt_wren": {
+          "$comment": "cli.unpack.js:485981",
+          "default": false
+        },
+        "tengu_compact_cache_prefix": {
+          "$comment": "cli.unpack.js:619140",
+          "default": true
+        },
+        "tengu_coordinator_panel": {
+          "$comment": "cli.unpack.js:846919",
+          "default": true
+        },
+        "tengu_copper_lantern": {
+          "$comment": "cli.unpack.js:193312",
+          "default": false
+        },
+        "tengu_copper_thistle": {
+          "$comment": "cli.unpack.js:718152",
+          "default": false
+        },
+        "tengu_coral_beacon": {
+          "$comment": "cli.unpack.js:841640",
+          "default": false
+        },
+        "tengu_cowork_auto_mode_include_allowed_write_mcp": {
+          "$comment": "cli.unpack.js:709750",
+          "default": false
+        },
+        "tengu_cowork_chrome_automode_default": {
+          "$comment": "cli.unpack.js:732396",
+          "default": false
+        },
+        "tengu_crimson_vector": {
+          "$comment": "cli.unpack.js:393488",
+          "default": false
+        },
+        "tengu_daemon_refuse_stale_upgrade": {
+          "$comment": "cli.unpack.js:1148432",
+          "default": true
+        },
+        "tengu_defer_cap_ms": {
+          "$comment": "cli.unpack.js:1089434",
+          "default": 10000
+        },
+        "tengu_deferred_stub_tool": {
+          "$comment": "cli.unpack.js:704078",
+          "default": true
+        },
+        "tengu_desktop_upsell": {
+          "$comment": "cli.unpack.js:1077680; default is non-literal: B7T"
+        },
+        "tengu_destructive_command_warning": {
+          "$comment": "cli.unpack.js:1024263",
+          "default": false
+        },
+        "tengu_disable_bypass_permissions_mode": {
+          "$comment": "cli.unpack.js:143577",
+          "default": false
+        },
+        "tengu_disable_streaming_to_non_streaming_fallback": {
+          "$comment": "cli.unpack.js:707468",
+          "default": false
+        },
+        "tengu_drift_lantern": {
+          "$comment": "cli.unpack.js:1095694",
+          "default": false
+        },
+        "tengu_edit_minimalanchor_jrn": {
+          "$comment": "cli.unpack.js:451727",
+          "default": false
+        },
+        "tengu_ember_latch": {
+          "$comment": "cli.unpack.js:697330",
+          "default": false
+        },
+        "tengu_feedback_survey_config": {
+          "$comment": "cli.unpack.js:1110986; default is non-literal: yki"
+        },
+        "tengu_fgts": {
+          "$comment": "cli.unpack.js:703467",
+          "default": false
+        },
+        "tengu_fleet_past_sessions": {
+          "$comment": "cli.unpack.js:193300",
+          "default": false
+        },
+        "tengu_fleetview_pr_batch": {
+          "$comment": "cli.unpack.js:1064964",
+          "default": true
+        },
+        "tengu_fleetview_simple": {
+          "$comment": "cli.unpack.js:1064006",
+          "default": false
+        },
+        "tengu_flint_harbor_prompt": {
+          "$comment": "cli.unpack.js:699341",
+          "default": {}
+        },
+        "tengu_flint_harbor_share": {
+          "$comment": "cli.unpack.js:597913",
+          "default": false
+        },
+        "tengu_frame_publish_context": {
+          "$comment": "cli.unpack.js:541267",
+          "default": false
+        },
+        "tengu_gable_onyx_sluice": {
+          "$comment": "cli.unpack.js:199301",
+          "default": false
+        },
+        "tengu_gb_eval_authed_enable": {
+          "$comment": "cli.unpack.js:191942",
+          "default": false
+        },
+        "tengu_gb_refresh_interval_minutes": {
+          "$comment": "cli.unpack.js:192505",
+          "default": null
+        },
+        "tengu_gleaming_fair": {
+          "$comment": "cli.unpack.js:980956",
+          "default": false
+        },
+        "tengu_gorse_fathom": {
+          "$comment": "cli.unpack.js:198121",
+          "default": false
+        },
+        "tengu_gouda_loop": {
+          "$comment": "cli.unpack.js:989438",
+          "default": false
+        },
+        "tengu_gypsum_kite": {
+          "$comment": "cli.unpack.js:145393",
+          "default": false
+        },
+        "tengu_gzip_request_bodies": {
+          "$comment": "cli.unpack.js:182914",
+          "default": false
+        },
+        "tengu_harbor": {
+          "$comment": "cli.unpack.js:545510",
+          "default": false
+        },
+        "tengu_harbor_ledger": {
+          "$comment": "cli.unpack.js:545501",
+          "default": []
+        },
+        "tengu_harbor_moth": {
+          "$comment": "cli.unpack.js:698302",
+          "default": false
+        },
+        "tengu_harbor_permissions": {
+          "$comment": "cli.unpack.js:545709",
+          "default": false
+        },
+        "tengu_harbor_prism": {
+          "$comment": "cli.unpack.js:459146",
+          "default": false
+        },
+        "tengu_harbor_willow": {
+          "$comment": "cli.unpack.js:143662",
+          "default": false
+        },
+        "tengu_hawthorn_steeple": {
+          "$comment": "cli.unpack.js:271750",
+          "default": false
+        },
+        "tengu_haze_glass": {
+          "$comment": "cli.unpack.js:194734",
+          "default": false
+        },
+        "tengu_hazel_osprey": {
+          "$comment": "cli.unpack.js:704268",
+          "default": false
+        },
+        "tengu_hazel_osprey_floor": {
+          "$comment": "cli.unpack.js:704271",
+          "default": 75000
+        },
+        "tengu_hazel_quire": {
+          "$comment": "cli.unpack.js:193004",
+          "default": false
+        },
+        "tengu_heron_brook": {
+          "$comment": "cli.unpack.js:702850",
+          "default": ""
+        },
+        "tengu_hover_rest": {
+          "$comment": "cli.unpack.js:1102985",
+          "default": false
+        },
+        "tengu_ide_rc_auto_enable": {
+          "$comment": "cli.unpack.js:1119923",
+          "default": false
+        },
+        "tengu_idle_amber_finch": {
+          "$comment": "cli.unpack.js:144743",
+          "default": false
+        },
+        "tengu_immediate_model_command": {
+          "$comment": "cli.unpack.js:693294",
+          "default": false
+        },
+        "tengu_import": {
+          "$comment": "cli.unpack.js:636958",
+          "default": false
+        },
+        "tengu_jade_anvil_4": {
+          "$comment": "cli.unpack.js:956596",
+          "default": false
+        },
+        "tengu_juniper_bassoon": {
+          "$comment": "cli.unpack.js:919063",
+          "default": false
+        },
+        "tengu_juniper_relay": {
+          "$comment": "cli.unpack.js:570591",
+          "default": false
+        },
+        "tengu_juniper_relay_config": {
+          "$comment": "cli.unpack.js:570157",
+          "default": {}
+        },
+        "tengu_juniper_sundial": {
+          "$comment": "cli.unpack.js:714494",
+          "default": null
+        },
+        "tengu_kairos_brief": {
+          "$comment": "cli.unpack.js:486093",
+          "default": false
+        },
+        "tengu_kairos_brief_config": {
+          "$comment": "cli.unpack.js:698140; default is non-literal: F2p"
+        },
+        "tengu_kairos_brief_stop_hook_text": {
+          "$comment": "cli.unpack.js:486108",
+          "default": ""
+        },
+        "tengu_kairos_cron": {
+          "$comment": "cli.unpack.js:291923",
+          "default": true
+        },
+        "tengu_kairos_cron_config": {
+          "$comment": "cli.unpack.js:290676; default is non-literal: she"
+        },
+        "tengu_kairos_cron_durable": {
+          "$comment": "cli.unpack.js:291926",
+          "default": true
+        },
+        "tengu_kairos_input_needed_push": {
+          "$comment": "cli.unpack.js:290764",
+          "default": false
+        },
+        "tengu_kairos_loop_dynamic": {
+          "$comment": "cli.unpack.js:291176",
+          "default": false
+        },
+        "tengu_kairos_loop_keepalive": {
+          "$comment": "cli.unpack.js:291185",
+          "default": false
+        },
+        "tengu_kairos_loop_persistent": {
+          "$comment": "cli.unpack.js:290974",
+          "default": false
+        },
+        "tengu_kairos_loop_prompt": {
+          "$comment": "cli.unpack.js:291010",
+          "default": false
+        },
+        "tengu_kairos_push_notifications": {
+          "$comment": "cli.unpack.js:290761",
+          "default": false
+        },
+        "tengu_kairos_ready_nudge": {
+          "$comment": "cli.unpack.js:957290",
+          "default": null
+        },
+        "tengu_kestrel_arch": {
+          "$comment": "cli.unpack.js:1078413",
+          "default": "off"
+        },
+        "tengu_keybinding_customization_release": {
+          "$comment": "cli.unpack.js:332830",
+          "default": true
+        },
+        "tengu_lantern_prism": {
+          "$comment": "cli.unpack.js:278572",
+          "default": false
+        },
+        "tengu_lantern_spool": {
+          "$comment": "cli.unpack.js:706375",
+          "default": false
+        },
+        "tengu_lantern_wick": {
+          "$comment": "cli.unpack.js:487654",
+          "default": false
+        },
+        "tengu_lapis_anchor": {
+          "$comment": "cli.unpack.js:278412",
+          "default": "off"
+        },
+        "tengu_lapis_anchor_budget": {
+          "$comment": "cli.unpack.js:278428",
+          "default": 15000000
+        },
+        "tengu_lapis_anchor_user_turn": {
+          "$comment": "cli.unpack.js:278444",
+          "default": false
+        },
+        "tengu_larch_pavise": {
+          "$comment": "cli.unpack.js:199313",
+          "default": false
+        },
+        "tengu_left_arrow_editing_guard": {
+          "$comment": "cli.unpack.js:772928",
+          "default": true
+        },
+        "tengu_loggia_denkbild": {
+          "$comment": "cli.unpack.js:488033",
+          "default": false
+        },
+        "tengu_loop_noop_fold": {
+          "$comment": "cli.unpack.js:291179",
+          "default": false
+        },
+        "tengu_malformed_tool_use_clean_retry": {
+          "$comment": "cli.unpack.js:486926",
+          "default": false
+        },
+        "tengu_malort_pedway": {
+          "$comment": "cli.unpack.js:425862; default is non-literal: MPd"
+        },
+        "tengu_maple_pier": {
+          "$comment": "cli.unpack.js:1085404",
+          "default": false
+        },
+        "tengu_maple_rung": {
+          "$comment": "cli.unpack.js:1078374",
+          "default": false
+        },
+        "tengu_maple_sundial": {
+          "$comment": "cli.unpack.js:632991",
+          "default": false
+        },
+        "tengu_marlin_porch": {
+          "$comment": "cli.unpack.js:387248",
+          "default": false
+        },
+        "tengu_mcp_auto_background": {
+          "$comment": "cli.unpack.js:421963",
+          "default": true
+        },
+        "tengu_mcp_claudeai_eligibility_gate": {
+          "$comment": "cli.unpack.js:393995",
+          "default": false
+        },
+        "tengu_mcp_directory_bff": {
+          "$comment": "cli.unpack.js:185000",
+          "default": false
+        },
+        "tengu_mcp_directory_visibility": {
+          "$comment": "cli.unpack.js:184912",
+          "default": [
+            "commercial",
+            "gsuite",
+            "enterprise",
+            "health"
+          ]
+        },
+        "tengu_mcp_discovery_cache": {
+          "$comment": "cli.unpack.js:428188",
+          "default": true
+        },
+        "tengu_mcp_protocol_negotiation_claudeai": {
+          "$comment": "cli.unpack.js:428154",
+          "default": false
+        },
+        "tengu_mcp_protocol_negotiation_http": {
+          "$comment": "cli.unpack.js:428143",
+          "default": false
+        },
+        "tengu_mcp_protocol_negotiation_stdio": {
+          "$comment": "cli.unpack.js:428165",
+          "default": false
+        },
+        "tengu_mcp_proxy_needs_approval_retry": {
+          "$comment": "cli.unpack.js:429876",
+          "default": true
+        },
+        "tengu_mcp_server_policy_bypass_exempt": {
+          "$comment": "cli.unpack.js:710399",
+          "default": true
+        },
+        "tengu_mcp_singleton_unwrap": {
+          "$comment": "cli.unpack.js:429806",
+          "default": true
+        },
+        "tengu_mcp_skills": {
+          "$comment": "cli.unpack.js:357949",
+          "default": false
+        },
+        "tengu_mcp_startup_policy_seed": {
+          "$comment": "cli.unpack.js:1096968",
+          "default": true
+        },
+        "tengu_mcp_stateless_skip_init": {
+          "$comment": "cli.unpack.js:355133",
+          "default": true
+        },
+        "tengu_mcp_strip_trailing_xml_tags": {
+          "$comment": "cli.unpack.js:428980",
+          "default": false
+        },
+        "tengu_mcp_subagent_prompt": {
+          "$comment": "cli.unpack.js:393239",
+          "default": false
+        },
+        "tengu_media_byte_cap": {
+          "$comment": "cli.unpack.js:705158; default is non-literal: flr("
+        },
+        "tengu_mem_push_delete_mode": {
+          "$comment": "cli.unpack.js:611629",
+          "default": "corroborate"
+        },
+        "tengu_memory_bulk_inflate": {
+          "$comment": "cli.unpack.js:612599",
+          "default": true
+        },
+        "tengu_memory_store_resync_interval_minutes": {
+          "$comment": "cli.unpack.js:613207",
+          "default": 60
+        },
+        "tengu_memory_stream_list": {
+          "$comment": "cli.unpack.js:612309",
+          "default": true
+        },
+        "tengu_mill_orange": {
+          "$comment": "cli.unpack.js:192866",
+          "default": false
+        },
+        "tengu_mint_lanes": {
+          "$comment": "cli.unpack.js:991223",
+          "default": false
+        },
+        "tengu_mocha_barista": {
+          "$comment": "cli.unpack.js:1048654",
+          "default": false
+        },
+        "tengu_moss_anchor": {
+          "$comment": "cli.unpack.js:143662",
+          "default": false
+        },
+        "tengu_moth_copse": {
+          "$comment": "cli.unpack.js:192869",
+          "default": false
+        },
+        "tengu_nankeen_kestrel": {
+          "$comment": "cli.unpack.js:256430",
+          "default": false
+        },
+        "tengu_native_cursor": {
+          "$comment": "cli.unpack.js:387281",
+          "default": false
+        },
+        "tengu_neapolitan": {
+          "$comment": "cli.unpack.js:561649",
+          "default": false
+        },
+        "tengu_non_deferrable_builtins": {
+          "$comment": "cli.unpack.js:274387",
+          "default": null
+        },
+        "tengu_observer_agents_enabled": {
+          "$comment": "cli.unpack.js:460410",
+          "default": true
+        },
+        "tengu_observer_subagent_fanout": {
+          "$comment": "cli.unpack.js:460419",
+          "default": true
+        },
+        "tengu_ochre_finch": {
+          "$comment": "cli.unpack.js:198108",
+          "default": false
+        },
+        "tengu_ochre_gantry": {
+          "$comment": "cli.unpack.js:995674",
+          "default": {}
+        },
+        "tengu_ochre_hollow": {
+          "$comment": "cli.unpack.js:203098",
+          "default": false
+        },
+        "tengu_official_plugin_prompt_overrides": {
+          "$comment": "cli.unpack.js:394014",
+          "default": {}
+        },
+        "tengu_onyx_plover": {
+          "$comment": "cli.unpack.js:480694",
+          "default": null
+        },
+        "tengu_paper_halyard": {
+          "$comment": "cli.unpack.js:296185",
+          "default": false
+        },
+        "tengu_passport_quail": {
+          "$comment": "cli.unpack.js:192923",
+          "default": false
+        },
+        "tengu_pencil_farmer": {
+          "$comment": "cli.unpack.js:982537",
+          "default": false
+        },
+        "tengu_penguins_off": {
+          "$comment": "cli.unpack.js:132952",
+          "default": null
+        },
+        "tengu_pewter_brook": {
+          "$comment": "cli.unpack.js:202920",
+          "default": false
+        },
+        "tengu_pewter_canteen": {
+          "$comment": "cli.unpack.js:519335",
+          "default": false
+        },
+        "tengu_pewter_orchard": {
+          "$comment": "cli.unpack.js:448905",
+          "default": false
+        },
+        "tengu_pewter_owl_model": {
+          "$comment": "cli.unpack.js:486054",
+          "default": ""
+        },
+        "tengu_plugin_autoupdate_allow_credential_helper": {
+          "$comment": "cli.unpack.js:941049",
+          "default": false
+        },
+        "tengu_plugin_binary_assets": {
+          "$comment": "cli.unpack.js:350020",
+          "default": false
+        },
+        "tengu_plugin_official_mkt_git_fallback": {
+          "$comment": "cli.unpack.js:348872",
+          "default": true
+        },
+        "tengu_plum_vx3": {
+          "$comment": "cli.unpack.js:569543",
+          "default": false
+        },
+        "tengu_pr_footer_surface_suffix": {
+          "$comment": "cli.unpack.js:614665",
+          "default": false
+        },
+        "tengu_prompt_cache_diagnostics": {
+          "$comment": "cli.unpack.js:705038",
+          "default": false
+        },
+        "tengu_propose_skills": {
+          "$comment": "cli.unpack.js:576308",
+          "default": false
+        },
+        "tengu_ptc_enabled": {
+          "$comment": "cli.unpack.js:1118087",
+          "default": true
+        },
+        "tengu_quiet_harbor": {
+          "$comment": "cli.unpack.js:193315",
+          "default": false
+        },
+        "tengu_quiet_slate_wren": {
+          "$comment": "cli.unpack.js:144746",
+          "default": false
+        },
+        "tengu_rc_long_turn_nudge": {
+          "$comment": "cli.unpack.js:957161",
+          "default": null
+        },
+        "tengu_rc_permission_nudge": {
+          "$comment": "cli.unpack.js:957215; default is non-literal: pbi"
+        },
+        "tengu_reactive_compact_remote": {
+          "$comment": "cli.unpack.js:297294",
+          "default": false
+        },
+        "tengu_read_dedup_killswitch": {
+          "$comment": "cli.unpack.js:618581",
+          "default": false
+        },
+        "tengu_remote_backend": {
+          "$comment": "cli.unpack.js:1145483",
+          "default": false
+        },
+        "tengu_rename_full_session_fork": {
+          "$comment": "cli.unpack.js:689218",
+          "default": false
+        },
+        "tengu_repl_mcp_error_throw": {
+          "$comment": "cli.unpack.js:565109",
+          "default": true
+        },
+        "tengu_report_findings_tool": {
+          "$comment": "cli.unpack.js:1032178",
+          "default": false
+        },
+        "tengu_retire_chat_relay_artifact_backstop": {
+          "$comment": "cli.unpack.js:199131",
+          "default": false
+        },
+        "tengu_review_workflow_routing": {
+          "$comment": "cli.unpack.js:1032429",
+          "default": false
+        },
+        "tengu_rewind_first_message": {
+          "$comment": "cli.unpack.js:1117765",
+          "default": false
+        },
+        "tengu_saffron_anchor": {
+          "$comment": "cli.unpack.js:541243",
+          "default": false
+        },
+        "tengu_saffron_credits_only_tiers": {
+          "$comment": "cli.unpack.js:144816",
+          "default": [
+            "enterprise"
+          ]
+        },
+        "tengu_saffron_ladder": {
+          "$comment": "cli.unpack.js:144851",
+          "default": null
+        },
+        "tengu_saffron_lattice": {
+          "$comment": "cli.unpack.js:144766",
+          "default": {}
+        },
+        "tengu_saffron_picker_dim": {
+          "$comment": "cli.unpack.js:144845",
+          "default": false
+        },
+        "tengu_sage_compass2": {
+          "$comment": "cli.unpack.js:448902",
+          "default": {}
+        },
+        "tengu_satchel_banjo": {
+          "$comment": "cli.unpack.js:918438",
+          "default": false
+        },
+        "tengu_scratch": {
+          "$comment": "cli.unpack.js:730423",
+          "default": false
+        },
+        "tengu_sedge_lantern": {
+          "$comment": "cli.unpack.js:633388",
+          "default": true
+        },
+        "tengu_send_user_file": {
+          "$comment": "cli.unpack.js:576163",
+          "default": true
+        },
+        "tengu_sepia_cormorant": {
+          "$comment": "cli.unpack.js:192911",
+          "default": null
+        },
+        "tengu_sepia_moth": {
+          "$comment": "cli.unpack.js:475507",
+          "default": false
+        },
+        "tengu_shale_finch": {
+          "$comment": "cli.unpack.js:498483",
+          "default": false
+        },
+        "tengu_shining_fractals": {
+          "$comment": "cli.unpack.js:799177",
+          "default": false
+        },
+        "tengu_silent_harbor": {
+          "$comment": "cli.unpack.js:703042",
+          "default": false
+        },
+        "tengu_silk_hinge": {
+          "$comment": "cli.unpack.js:633605",
+          "default": false
+        },
+        "tengu_silk_ledger": {
+          "$comment": "cli.unpack.js:195186",
+          "default": false
+        },
+        "tengu_skills_dashboard_enabled": {
+          "$comment": "cli.unpack.js:942201",
+          "default": false
+        },
+        "tengu_slate_finch": {
+          "$comment": "cli.unpack.js:144547",
+          "default": false
+        },
+        "tengu_slate_harbor": {
+          "$comment": "cli.unpack.js:199971",
+          "default": false
+        },
+        "tengu_slate_harbor_experiment": {
+          "$comment": "cli.unpack.js:636994",
+          "default": false
+        },
+        "tengu_slate_harrier": {
+          "$comment": "cli.unpack.js:703274",
+          "default": "off"
+        },
+        "tengu_slate_lantern": {
+          "$comment": "cli.unpack.js:541261",
+          "default": false
+        },
+        "tengu_slate_prism": {
+          "$comment": "cli.unpack.js:1117428",
+          "default": true
+        },
+        "tengu_slate_quill": {
+          "$comment": "cli.unpack.js:577459",
+          "default": false
+        },
+        "tengu_slate_thimble": {
+          "$comment": "cli.unpack.js:192926",
+          "default": false
+        },
+        "tengu_soft_slate_nudge": {
+          "$comment": "cli.unpack.js:714473",
+          "default": "baseline"
+        },
+        "tengu_sorrel_trellis": {
+          "$comment": "cli.unpack.js:591671",
+          "default": false
+        },
+        "tengu_startup_announcements": {
+          "$comment": "cli.unpack.js:911961",
+          "default": []
+        },
+        "tengu_startup_notice": {
+          "$comment": "cli.unpack.js:1083659",
+          "default": ""
+        },
+        "tengu_stone_shell": {
+          "$comment": "cli.unpack.js:198409",
+          "default": false
+        },
+        "tengu_stream_watchdog_default_on": {
+          "$comment": "cli.unpack.js:182923",
+          "default": true
+        },
+        "tengu_structured_output_strict": {
+          "$comment": "cli.unpack.js:703461",
+          "default": false
+        },
+        "tengu_subagent_cache_evict": {
+          "$comment": "cli.unpack.js:705047",
+          "default": false
+        },
+        "tengu_surface_failed_mcp_servers": {
+          "$comment": "cli.unpack.js:274444",
+          "default": false
+        },
+        "tengu_surreal_dali": {
+          "$comment": "cli.unpack.js:574707",
+          "default": false
+        },
+        "tengu_tab_read_sep": {
+          "$comment": "cli.unpack.js:393232",
+          "default": false
+        },
+        "tengu_teal_corbel": {
+          "$comment": "cli.unpack.js:589812",
+          "default": false
+        },
+        "tengu_terminal_sidebar": {
+          "$comment": "cli.unpack.js:633555",
+          "default": false
+        },
+        "tengu_thinking_block_resumption": {
+          "$comment": "cli.unpack.js:487272",
+          "default": false
+        },
+        "tengu_thrifty_sonic": {
+          "$comment": "cli.unpack.js:143358",
+          "default": false
+        },
+        "tengu_tool_pear": {
+          "$comment": "cli.unpack.js:183688",
+          "default": false
+        },
+        "tengu_tool_search_unsupported_models": {
+          "$comment": "cli.unpack.js:274360",
+          "default": null
+        },
+        "tengu_trace_lantern": {
+          "$comment": "cli.unpack.js:205932",
+          "default": false
+        },
+        "tengu_transcript_local_gc": {
+          "$comment": "cli.unpack.js:1108028",
+          "default": false
+        },
+        "tengu_turtle_carbon": {
+          "$comment": "cli.unpack.js:144654",
+          "default": true
+        },
+        "tengu_tussock_oriole": {
+          "$comment": "cli.unpack.js:472835",
+          "default": false
+        },
+        "tengu_ultraplan_config": {
+          "$comment": "cli.unpack.js:691382",
+          "default": null
+        },
+        "tengu_ultraplan_prompt_identifier": {
+          "$comment": "cli.unpack.js:691575",
+          "default": "simple_plan"
+        },
+        "tengu_ultraplan_timeout_seconds": {
+          "$comment": "cli.unpack.js:691612",
+          "default": 5400
+        },
+        "tengu_umber_petrel": {
+          "$comment": "cli.unpack.js:192920",
+          "default": false
+        },
+        "tengu_vellum_ash": {
+          "$comment": "cli.unpack.js:569792",
+          "default": []
+        },
+        "tengu_vellum_siding": {
+          "$comment": "cli.unpack.js:442088",
+          "default": false
+        },
+        "tengu_velvet_cascade": {
+          "$comment": "cli.unpack.js:143341",
+          "default": null
+        },
+        "tengu_velvet_ibis": {
+          "$comment": "cli.unpack.js:334880",
+          "default": {}
+        },
+        "tengu_velvet_static": {
+          "$comment": "cli.unpack.js:695870",
+          "default": false
+        },
+        "tengu_velvet_tide": {
+          "$comment": "cli.unpack.js:143437",
+          "default": false
+        },
+        "tengu_verified_vs_assumed": {
+          "$comment": "cli.unpack.js:702935",
+          "default": false
+        },
+        "tengu_vscode_feedback_survey": {
+          "$comment": "cli.unpack.js:1110974",
+          "default": false
+        },
+        "tengu_vscode_onboarding": {
+          "$comment": "cli.unpack.js:442083",
+          "default": false
+        },
+        "tengu_vscode_review_upsell": {
+          "$comment": "cli.unpack.js:442081",
+          "default": false
+        },
+        "tengu_walnut_sconce": {
+          "$comment": "cli.unpack.js:199328",
+          "default": false
+        },
+        "tengu_walnut_spire": {
+          "$comment": "cli.unpack.js:278575",
+          "default": false
+        },
+        "tengu_watchdog_skip_nonstreaming_fallback": {
+          "$comment": "cli.unpack.js:707468",
+          "default": true
+        },
+        "tengu_workflows_enabled": {
+          "$comment": "cli.unpack.js:144121",
+          "default": true
+        },
+        "tengu_xterm_atlas_reset": {
+          "$comment": "cli.unpack.js:1015596",
+          "default": true
+        }
+      },
       "additionalProperties": true,
-      "default": {},
-      "description": "Locally cached GrowthBook feature-flag values keyed by flag name. Its freshness is tracked separately by cachedGrowthBookFeaturesAt; stale entries are refreshed in the background and reused until then. DEFAULT_GLOBAL_CONFIG writes {} when the config file is created."
+      "description": "Cached GrowthBook feature-flag values, written together with cachedExperimentFeatures, cachedExperimentData and cachedGrowthBookFeaturesAt (line 192213). Keys are flag names, overwhelmingly `tengu_`-prefixed; values are the server-resolved payloads and may be of any JSON type (in a real config: boolean, object, string, number, array or null). The properties listed here are the flags the 2.1.221 client actually reads via Xe(name, default), each annotated with that client-side fallback — they are documentation, not a constraint: the flag set is server-controlled and changes without a client release, so additionalProperties stays open and a config legitimately carries far more keys than are listed (449 in one observed config against 312 read by the client). No description metadata for flag names exists anywhere in the bundle, so each entry cites the call-site line instead."
     },
     "cachedGrowthBookFeaturesAt": {
       "type": "number",
@@ -306,26 +1572,6 @@
     "closedIssuesLastChecked": {
       "type": "number",
       "description": "Unix timestamp in milliseconds of the last check for closed GitHub issues the user had reported. Gates how often that check runs; pairs with closedIssuesAcknowledged, which records which results were already shown. Absent is read as 0, forcing a check on next launch. Not written by default; absent means the counter/timestamp has never been recorded."
-    },
-    "companion": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 14,
-          "description": "User-chosen companion name, 1-14 characters."
-        },
-        "personality": {
-          "type": "string",
-          "description": "AI-generated personality blurb that shapes the companion's idle messages."
-        },
-        "hatchedAt": {
-          "type": "number",
-          "description": "Unix timestamp in milliseconds when the companion hatched; drives age-based companion state."
-        }
-      },
-      "description": "State of the companion pet (buddy) feature: its user-chosen name, an AI-generated personality string, and the hatch time. Absent means no companion has been created. Not written by default; the key only appears once there is something to record."
     },
     "copyFullResponse": {
       "type": "boolean",
@@ -519,7 +1765,7 @@
     },
     "hasAvailableSubscription": {
       "type": "boolean",
-      "description": "Whether the account currently has an active Claude subscription. Refreshed from the server and forced to false on logout. Not written by default; absent is falsy."
+      "description": "Written to false during the logout reset (line 687651). That write is its ONLY occurrence in the bundle at this tag - there is no read site and no server-refresh write, so the key is effectively write-only here."
     },
     "hasCompletedClaudeInChromeOnboarding": {
       "type": "boolean",
@@ -1145,30 +2391,16 @@
           {
             "type": "object",
             "properties": {
-              "type": {
-                "type": "string",
-                "const": "claudeai-proxy",
-                "description": "Transport discriminator."
-              },
-              "url": {
-                "type": "string",
-                "description": "Proxy endpoint URL."
-              },
-              "id": {
-                "type": "string",
-                "description": "claude.ai connector identifier."
-              },
-              "displayName": {
-                "type": "string",
-                "description": "Human-readable connector name shown in the UI."
-              },
-              "iconUrl": {
-                "type": "string",
-                "description": "Icon URL shown next to the connector."
-              },
-              "stateless": {
+              "alwaysLoad": {
                 "type": "boolean",
-                "description": "True when the connector holds no per-session state, allowing the connection to be re-established freely."
+                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
+              },
+              "cachedDiscoverResponse": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "Cached response of the discovery call for this proxied server; nullable."
               },
               "cachedInitResponse": {
                 "type": [
@@ -1178,6 +2410,19 @@
                 "additionalProperties": true,
                 "description": "Cached MCP initialize response so the connector can be presented before it is contacted."
               },
+              "discoverSupport": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "legacy",
+                  "unknown"
+                ],
+                "description": "Whether the proxied server supports tool discovery. Parsed with a catch, so an unrecognised value is discarded rather than failing the config."
+              },
+              "displayName": {
+                "type": "string",
+                "description": "Human-readable connector name shown in the UI."
+              },
               "eligible": {
                 "type": [
                   "boolean",
@@ -1185,12 +2430,34 @@
                 ],
                 "description": "Whether the account may use this connector; false pairs with ineligibleReason."
               },
+              "iconUrl": {
+                "type": "string",
+                "description": "Icon URL shown next to the connector."
+              },
+              "id": {
+                "type": "string",
+                "description": "claude.ai connector identifier."
+              },
               "ineligibleReason": {
                 "type": [
                   "string",
                   "null"
                 ],
                 "description": "Server-supplied explanation shown when eligible is false."
+              },
+              "role": {
+                "type": "string",
+                "const": "comms",
+                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+              },
+              "stateless": {
+                "type": "boolean",
+                "description": "True when the connector holds no per-session state, allowing the connection to be re-established freely."
+              },
+              "timeout": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
               },
               "toolPermissions": {
                 "type": "object",
@@ -1204,19 +2471,14 @@
                 },
                 "description": "Per-tool permission overrides keyed by tool name: \"allow\" runs without prompting, \"ask\" prompts each time, \"blocked\" refuses the call."
               },
-              "timeout": {
-                "type": "integer",
-                "minimum": 1,
-                "description": "Connection timeout in milliseconds for this server. Positive integer; absent uses the built-in default."
-              },
-              "alwaysLoad": {
-                "type": "boolean",
-                "description": "When true this server is connected eagerly at startup instead of lazily on first tool use."
-              },
-              "role": {
+              "type": {
                 "type": "string",
-                "const": "comms",
-                "description": "Optional server role marker. Only \"comms\" is recognized; any other value is discarded during parsing."
+                "const": "claudeai-proxy",
+                "description": "Transport discriminator."
+              },
+              "url": {
+                "type": "string",
+                "description": "Proxy endpoint URL."
               }
             },
             "required": [
@@ -1270,49 +2532,81 @@
     "oauthAccount": {
       "type": "object",
       "properties": {
+        "accountCreatedAt": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of account creation, used for tenure-based gating."
+        },
         "accountUuid": {
           "type": "string",
           "description": "Server-side unique id for the account; the join key for per-account caches such as cachedUsageUtilization."
-        },
-        "emailAddress": {
-          "type": "string",
-          "description": "Email address of the signed-in account, shown in /status and used for account-switch detection."
-        },
-        "organizationUuid": {
-          "type": "string",
-          "description": "Organization the account belongs to; null or absent for personal accounts. Used to scope org policy and cache slots."
-        },
-        "displayName": {
-          "type": "string",
-          "description": "Human-readable account name shown in the UI."
-        },
-        "hasExtraUsageEnabled": {
-          "type": "boolean",
-          "description": "Whether the account may purchase usage beyond its plan limit. False means extra-usage entry points are hidden; cachedExtraUsageDisabledReason carries the explanation."
         },
         "billingType": {
           "type": "string",
           "description": "Billing arrangement for the account (for example subscription versus API credits); selects which cost and limit surfaces apply."
         },
-        "accountCreatedAt": {
-          "type": "string",
-          "description": "ISO 8601 timestamp of account creation, used for tenure-based gating."
+        "ccOnboardingFlags": {
+          "type": "object",
+          "description": "Claude Code onboarding flags supplied by the organization (`organization.cc_onboarding_flags`), defaulting to an empty object. Presence of this key is part of the completeness check that decides whether the cached profile is usable or must be refetched (lines 187855, 188012)."
         },
-        "subscriptionCreatedAt": {
+        "claudeCodeTrialDurationDays": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Total length in days of the organization's Claude Code trial (`organization.claude_code_trial_duration_days`); null when there is no trial (line 188014)."
+        },
+        "claudeCodeTrialEndsAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "When the organization's Claude Code trial expires (`organization.claude_code_trial_ends_at`); null when there is no trial (line 188013)."
+        },
+        "displayName": {
           "type": "string",
-          "description": "ISO 8601 timestamp of when the current subscription started."
+          "description": "Human-readable account name shown in the UI."
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "Email address of the signed-in account, shown in /status and used for account-switch detection."
+        },
+        "hasExtraUsageEnabled": {
+          "type": "boolean",
+          "description": "Whether the account may purchase usage beyond its plan limit. False means extra-usage entry points are hidden; cachedExtraUsageDisabledReason carries the explanation."
+        },
+        "organizationName": {
+          "type": "string",
+          "description": "Display name of the organization, shown alongside the account."
         },
         "organizationRole": {
           "type": "string",
           "description": "The user's role in the organization (for example admin or member); gates admin-only affordances."
         },
-        "workspaceRole": {
+        "organizationUuid": {
           "type": "string",
-          "description": "The user's role in the active workspace, applied on top of organizationRole."
+          "description": "Organization the account belongs to; null or absent for personal accounts. Used to scope org policy and cache slots."
         },
-        "organizationName": {
+        "profileFetchedAt": {
+          "type": "integer",
+          "description": "Epoch milliseconds at which the profile was last fetched from the server, written only when a fetch actually occurred. Read back as the staleness check that decides whether to refetch (lines 188064, 188095, 187879)."
+        },
+        "seatTier": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Seat tier assigned to the user by the organization (`organization.seat_tier`); null when unset (line 188009)."
+        },
+        "subscriptionCreatedAt": {
           "type": "string",
-          "description": "Display name of the organization, shown alongside the account."
+          "description": "ISO 8601 timestamp of when the current subscription started."
+        },
+        "workspaceRole": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The user's role in the active workspace, applied on top of organizationRole."
         }
       },
       "description": "Identity and entitlement snapshot for the signed-in OAuth account, refreshed from the server on bootstrap. Drives plan-specific behavior (model access, extra usage, org policy); clearing it forces re-authentication. Not written by default; the key only appears once there is something to record."
@@ -1351,14 +2645,6 @@
       "type": "boolean",
       "description": "Whether the \"Option acts as Meta key\" preference has been written into Apple Terminal — the Apple Terminal counterpart to shiftEnterKeyBindingInstalled. Not written by default; absent is falsy."
     },
-    "opus1mMergeNoticeSeenCount": {
-      "type": "integer",
-      "description": "How many times the Opus 1M context merge notice has been shown; capped. Not written by default; absent means the counter/timestamp has never been recorded."
-    },
-    "opus47LaunchSeenCount": {
-      "type": "integer",
-      "description": "How many times the Opus 4.7 launch notice has been displayed; incremented per show and compared against a cap so the notice stops repeating. Not written by default; absent means the counter/timestamp has never been recorded."
-    },
     "opusProMigrationComplete": {
       "type": "boolean",
       "description": "True once the Opus Pro model migration has run for this user; prevents the migration from executing again. Not written by default; an absent key is falsy and therefore behaves as false."
@@ -1382,7 +2668,10 @@
         "properties": {
           "referrer_reward": {},
           "remaining_passes": {
-            "type": "number"
+            "type": [
+              "number",
+              "null"
+            ]
           }
         }
       },
@@ -1499,35 +2788,74 @@
       "additionalProperties": {
         "type": "object",
         "properties": {
-          "allowedTools": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "default": [],
-            "description": "Tool permission rules pre-approved for this project, so matching tool calls run without prompting. One of the three PROJECT_CONFIG_KEYS writable through settings sync."
-          },
-          "mcpContextUris": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "default": [],
-            "description": "MCP resource URIs automatically attached as context in this project."
-          },
-          "mcpServers": {
+          "activeWorktreeSession": {
             "type": "object",
+            "properties": {
+              "sessionId": {
+                "type": "string",
+                "description": "Session id that owns this worktree."
+              },
+              "worktreeName": {
+                "type": "string",
+                "description": "Name of the git worktree."
+              },
+              "worktreePath": {
+                "type": "string",
+                "description": "Absolute path of the worktree checkout."
+              },
+              "worktreeBranch": {
+                "type": "string",
+                "description": "Branch checked out in the worktree."
+              },
+              "originalCwd": {
+                "type": "string",
+                "description": "Working directory to restore on exit."
+              },
+              "preEnterOriginalCwd": {
+                "type": "string",
+                "description": "Working directory recorded before entering the worktree."
+              },
+              "originalBranch": {
+                "type": "string",
+                "description": "Branch that was checked out before entering."
+              },
+              "originalHeadCommit": {
+                "type": "string",
+                "description": "HEAD commit before entering, for restore/diff."
+              },
+              "creationDurationMs": {
+                "type": "integer",
+                "description": "How long creating the worktree took, in milliseconds."
+              },
+              "usedSparsePaths": {
+                "type": "boolean",
+                "description": "Whether the worktree was created with a sparse checkout."
+              },
+              "enteredExisting": {
+                "type": "boolean",
+                "description": "True when an already-existing worktree was entered rather than created; suppresses recording the name as newly created (line 275757)."
+              }
+            },
             "additionalProperties": true,
-            "default": {},
-            "description": "Project-scope MCP server definitions, same value shape as the top-level mcpServers map. These are merged with user-scope servers for this project only."
+            "description": "State of the git worktree session active for this project, written by gle() at line 275768 and cleared by gle(null) (lines 277073, 277100). No read site goes through the config object - the value is mirrored into module state by Qir() at 275754 - so it functions as crash-recovery/restore state."
           },
-          "enabledMcpjsonServers": {
-            "type": "array",
+          "allowedTools": {
+            "type": [
+              "array",
+              "string"
+            ],
             "items": {
               "type": "string"
             },
             "default": [],
-            "description": "Names of servers from the project .mcp.json the user has approved. Approval is per-server, so a new server added to .mcp.json still prompts."
+            "description": "Pre-approved permission rules for this project. Normally an array; a legacy string value is still accepted and parsed into an array on read (lines 741979-741981), so both forms occur in real configs."
+          },
+          "disabledMcpServers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Individually rejected MCP servers that did not come from .mcp.json."
           },
           "disabledMcpjsonServers": {
             "type": "array",
@@ -1548,22 +2876,24 @@
             },
             "description": "Individually approved MCP servers that did not come from .mcp.json."
           },
-          "disabledMcpServers": {
+          "enabledMcpjsonServers": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Individually rejected MCP servers that did not come from .mcp.json."
+            "default": [],
+            "description": "Names of servers from the project .mcp.json the user has approved. Approval is per-server, so a new server added to .mcp.json still prompts."
           },
-          "hasTrustDialogAccepted": {
-            "type": "boolean",
-            "default": false,
-            "description": "Whether the user confirmed they trust this directory. Trust is resolved up the directory tree, so a parent path being trusted covers its children rather than requiring an exact match. While untrusted, Claude Code runs restricted and re-prompts on entry — this is the flag gating execution of project-supplied code."
+          "exampleFiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Cached representative source files used to build example prompt suggestions. Discarded and regenerated in the background once its age (per exampleFilesGeneratedAt) exceeds the refresh window. Not written by default."
           },
-          "projectOnboardingSeenCount": {
-            "type": "integer",
-            "default": 0,
-            "description": "How many times project onboarding has been shown. Once it reaches 4 onboarding stops being offered even if hasCompletedProjectOnboarding is still false."
+          "exampleFilesGeneratedAt": {
+            "type": "number",
+            "description": "Unix ms when exampleFiles was last generated; drives the staleness check. Not written by default."
           },
           "hasClaudeMdExternalIncludesApproved": {
             "type": "boolean",
@@ -1579,20 +2909,23 @@
             "type": "boolean",
             "description": "Set true when project onboarding finishes. Onboarding is also considered done once projectOnboardingSeenCount reaches 4, or when IS_DEMO is set."
           },
-          "exampleFiles": {
+          "hasTrustDialogAccepted": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether the user confirmed they trust this directory. Trust is resolved up the directory tree, so a parent path being trusted covers its children rather than requiring an exact match. While untrusted, Claude Code runs restricted and re-prompts on entry — this is the flag gating execution of project-supplied code."
+          },
+          "hasUnseenTeamArtifacts": {
+            "type": "boolean",
+            "description": "Whether a team artifact authored by someone else exists that has not yet been surfaced (lines 472864, 472969)."
+          },
+          "hasUsedRemoteSession": {
+            "type": "boolean",
+            "description": "One-way flag set the first time a remote session is linked from this project; gates a startup nudge and is forwarded in request metadata (lines 192301, 466445-466449)."
+          },
+          "history": {
             "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Cached representative source files used to build example prompt suggestions. Discarded and regenerated in the background once its age (per exampleFilesGeneratedAt) exceeds the refresh window. Not written by default."
-          },
-          "exampleFilesGeneratedAt": {
-            "type": "number",
-            "description": "Unix ms when exampleFiles was last generated; drives the staleness check. Not written by default."
-          },
-          "lastCost": {
-            "type": "number",
-            "description": "Total API cost in USD of the most recent session in this project. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+            "deprecated": true,
+            "description": "Legacy per-project input history. Actively stripped from every project entry whenever the global config is loaded and merged from disk, and never written by current code — it disappears on the next config round-trip."
           },
           "lastAPIDuration": {
             "type": "number",
@@ -1602,45 +2935,13 @@
             "type": "number",
             "description": "API call time in milliseconds excluding time spent on retried requests. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
           },
-          "lastToolDuration": {
+          "lastCost": {
             "type": "number",
-            "description": "Total tool-execution time in milliseconds of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+            "description": "Total API cost in USD of the most recent session in this project. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
           },
           "lastDuration": {
             "type": "number",
             "description": "Wall-clock duration in milliseconds of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastStartTime": {
-            "type": "number",
-            "description": "Unix ms start timestamp of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastLinesAdded": {
-            "type": "number",
-            "description": "Lines added during the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastLinesRemoved": {
-            "type": "number",
-            "description": "Lines removed during the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastTotalInputTokens": {
-            "type": "number",
-            "description": "Total input tokens consumed in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastTotalOutputTokens": {
-            "type": "number",
-            "description": "Total output tokens produced in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastTotalCacheCreationInputTokens": {
-            "type": "number",
-            "description": "Prompt-cache-creation input tokens in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastTotalCacheReadInputTokens": {
-            "type": "number",
-            "description": "Prompt-cache-read input tokens in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
-          },
-          "lastTotalWebSearchRequests": {
-            "type": "number",
-            "description": "WebSearch invocations in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
           },
           "lastFpsAverage": {
             "type": "number",
@@ -1654,13 +2955,17 @@
             "type": "boolean",
             "description": "Whether the most recent session exited cleanly rather than crashing or being killed. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
           },
-          "lastVersionBase": {
-            "type": "string",
-            "description": "CLI version string of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          "lastLinesAdded": {
+            "type": "number",
+            "description": "Lines added during the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastLinesRemoved": {
+            "type": "number",
+            "description": "Lines removed during the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
           },
           "lastModelUsage": {
-            "type": "array",
-            "items": {
+            "type": "object",
+            "additionalProperties": {
               "type": "object",
               "properties": {
                 "inputTokens": {
@@ -1682,18 +2987,109 @@
                   "type": "number"
                 }
               },
-              "additionalProperties": true
+              "additionalProperties": true,
+              "description": "Usage totals for one model over the most recent session."
             },
-            "description": "Per-model usage breakdown of the most recent session, one entry per model used. Part of the resume-summary bundle. Not written by default."
+            "description": "Per-model usage breakdown of the most recent session, as an object keyed by model id. Written by a mapValues over the session's per-model counters (line 449116), so the keys are model ids and each value carries inputTokens, outputTokens, cacheReadInputTokens, cacheCreationInputTokens, webSearchRequests and costUSD. On resume it is re-mapped to add contextWindow and maxOutputTokens per model (line 449065). Part of the resume-summary bundle; not written by default."
           },
           "lastSessionId": {
             "type": "string",
             "description": "Session id (UUID) the surrounding `last*` statistics belong to. The resume summary is suppressed unless this matches the session being resumed, so the stats are never shown against the wrong session. Not written by default."
           },
-          "history": {
+          "lastSessionMetrics": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "description": "Flat map of the previous session's metric counters, written from a process exit handler. Includes raw counters, per-histogram <name>_count/_min/_max/_avg/_p50/_p95/_p99 entries, and set-cardinality entries - all numeric (lines 863317-863363). Part of the resume-summary bundle."
+          },
+          "lastStartTime": {
+            "type": "number",
+            "description": "Unix ms start timestamp of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastToolDuration": {
+            "type": "number",
+            "description": "Total tool-execution time in milliseconds of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalCacheCreationInputTokens": {
+            "type": "number",
+            "description": "Prompt-cache-creation input tokens in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalCacheReadInputTokens": {
+            "type": "number",
+            "description": "Prompt-cache-read input tokens in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalInputTokens": {
+            "type": "number",
+            "description": "Total input tokens consumed in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalOutputTokens": {
+            "type": "number",
+            "description": "Total output tokens produced in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastTotalWebSearchRequests": {
+            "type": "number",
+            "description": "WebSearch invocations in the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "lastVersionBase": {
+            "type": "string",
+            "description": "CLI version string of the most recent session. Part of the resume-summary bundle written into the project entry at session end; validity is gated on lastSessionId matching. Not written by default."
+          },
+          "loggedAuthoredArtifactPaths": {
             "type": "array",
-            "deprecated": true,
-            "description": "Legacy per-project input history. Actively stripped from every project entry whenever the global config is loaded and merged from disk, and never written by current code — it disappears on the next config round-trip."
+            "items": {
+              "type": "string"
+            },
+            "description": "Own-authored team artifact paths already reported to telemetry, capped to the most recent 100 entries (lines 472970, 472990-472996)."
+          },
+          "mcpContextUris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "description": "MCP resource URIs automatically attached as context in this project."
+          },
+          "mcpServers": {
+            "type": "object",
+            "additionalProperties": true,
+            "default": {},
+            "description": "Project-scope MCP server definitions, same value shape as the top-level mcpServers map. These are merged with user-scope servers for this project only."
+          },
+          "orgMemoryRead": {
+            "type": "boolean",
+            "description": "Whether synced project-memory reads are enabled for this directory. Defaults to true via a `?? true` fallback; only false is ever persisted, and re-enabling writes undefined rather than true (lines 195433, 195483-195491)."
+          },
+          "orgMemorySelection": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Selected synced-project-memory target for this directory. Either \"public_projects\", the sentinel \"__explicit_off__\", a cagt_-prefixed silo id, or a project id. Read via ip() and discarded unless it matches /^[A-Za-z0-9_-]{1,128}$/ (lines 194768-194775)."
+          },
+          "orgMemorySelectionAccount": {
+            "type": "string",
+            "description": "Account UUID the orgMemorySelection was made under. A mismatch against the current account discards the selection outright (line 194769)."
+          },
+          "orgMemoryWrites": {
+            "type": "boolean",
+            "description": "Whether synced project-memory writes are consented to for this directory. Defaults to false and is gated on an explicit `=== true` (lines 195421-195424, 195437-195441)."
+          },
+          "orgMemoryWritesAccount": {
+            "type": "string",
+            "description": "Account UUID the write consent was granted under; the consent is ignored unless this still matches the current account (lines 195421-195422)."
+          },
+          "projectOnboardingSeenCount": {
+            "type": "integer",
+            "default": 0,
+            "description": "How many times project onboarding has been shown. Once it reaches 4 onboarding stops being offered even if hasCompletedProjectOnboarding is still false."
+          },
+          "seenTeamArtifactPaths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Team skill/command artifact paths already surfaced to the user, capped to the most recent 100 entries (lines 472856-472866, 472967)."
           }
         },
         "additionalProperties": true,
@@ -1815,10 +3211,6 @@
       "type": "boolean",
       "default": false,
       "description": "When true each transcript message is prefixed with its timestamp; default false. Synced via GLOBAL_CONFIG_KEYS."
-    },
-    "showSpinnerTree": {
-      "type": "boolean",
-      "description": "When true teammate activity renders as a nested spinner tree rather than a flat list. Not written by default; an absent key is falsy and therefore behaves as false."
     },
     "showStatusInTerminalTab": {
       "type": "boolean",
@@ -1957,10 +3349,6 @@
       "description": "How many times the voice language hint has been shown; capped, and paired with voiceLangHintLastLanguage. No entry is written at config creation; code reads it as 0 when absent.",
       "default": 0
     },
-    "voiceNoticeSeenCount": {
-      "type": "integer",
-      "description": "How many times the voice-input notice has been shown; capped. Not written by default; absent means the counter/timestamp has never been recorded."
-    },
     "workflowSizeGuideline": {
       "type": "string",
       "enum": [
@@ -1969,7 +3357,8 @@
         "medium",
         "large"
       ],
-      "description": "Advisory ceiling on how many agents a Claude-authored dynamic workflow should spawn: \"small\" targets fewer than 5, \"medium\" (the effective default) fewer than 15, \"large\" fewer than 50, and \"unrestricted\" sends no guidance at all. A value in any settings file overrides this key and hides the matching /config row. Advisory only, never enforced. Not written by default; absent means unset."
+      "description": "Advisory ceiling on how many agents a Claude-authored dynamic workflow should spawn: \"small\" targets fewer than 5, \"medium\" (the effective default) fewer than 15, \"large\" fewer than 50, and \"unrestricted\" sends no guidance at all. A value in any settings file overrides this key and hides the matching /config row. Advisory only, never enforced. Not written by default; absent means unset. Not seeded into DEFAULT_GLOBAL_CONFIG; the code-level fallback is \"medium\" (NXd at line 550732), applied by Ebt() at 550745 after checking settings.json first.",
+      "default": "medium"
     }
   },
   "$defs": {
